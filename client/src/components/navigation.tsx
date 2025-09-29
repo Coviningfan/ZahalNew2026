@@ -5,12 +5,13 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/co
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
 import { Menu, Search, ShoppingCart, X, Plus, Minus } from "lucide-react";
+import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 export default function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cartItems, updateQuantity, removeFromCart } = useCart();
+  const { cartItems, updateQuantity, removeItem } = useCart();
 
   const totalItems = cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
 
@@ -27,18 +28,12 @@ export default function Navigation() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3" data-testid="link-home">
-            <div className="flex items-center">
-              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl lg:text-2xl">Z</span>
-              </div>
-              <div className="ml-3 flex flex-col">
-                <span className="text-2xl lg:text-3xl font-bold text-primary" style={{ fontFamily: 'var(--font-serif)' }}>
-                  Zahal
-                </span>
-                <span className="text-xs text-muted-foreground tracking-wider">NATURAL</span>
-              </div>
-            </div>
+          <Link href="/" className="flex items-center" data-testid="link-home">
+            <img 
+              src={zahalLogo} 
+              alt="Zahal Natural" 
+              className="h-10 lg:h-14 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -122,7 +117,7 @@ export default function Navigation() {
                             <Button
                               size="icon"
                               variant="ghost"
-                              onClick={() => removeFromCart(item.productId)}
+                              onClick={() => removeItem(item.id)}
                               className="h-8 w-8 text-destructive hover:text-destructive"
                             >
                               <X className="h-4 w-4" />

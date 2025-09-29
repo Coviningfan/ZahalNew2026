@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Facebook, Instagram } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
+import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 const productLinks = [
   { href: "https://5b32c9-07.myshopify.com/collections/unisex", label: "Unisex", external: true },
@@ -22,7 +23,13 @@ export default function Footer() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
-            <div className="text-2xl font-bold text-secondary mb-4">Zahal</div>
+            <div className="mb-4">
+              <img 
+                src={zahalLogo} 
+                alt="Zahal Natural" 
+                className="h-10 w-auto object-contain brightness-0 invert"
+              />
+            </div>
             <p className="text-background/80 mb-4">
               Cuidado natural para tu piel con la pureza de la piedra de alumbre.
             </p>
