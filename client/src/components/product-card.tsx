@@ -15,6 +15,15 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
   const { toast } = useToast();
   const { addToCart } = useCart();
 
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Redirect to individual Shopify product checkout
+    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}?view=checkout`;
+    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -83,19 +92,30 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
           <p className="text-muted-foreground mb-4 line-clamp-2" data-testid={`text-product-description-${product.id}`}>
             {product.description}
           </p>
-          <div className="flex items-center justify-between">
+          <div className="space-y-3">
             <div className="text-2xl font-bold text-foreground" data-testid={`text-product-price-${product.id}`}>
               ${product.price}
             </div>
-            <Button
-              onClick={handleAddToCart}
-              disabled={!product.inStock}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              data-testid={`button-add-to-cart-${product.id}`}
-            >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              {product.inStock ? "Añadir al Carrito" : "Sin stock"}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleBuyNow}
+                disabled={!product.inStock}
+                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                data-testid={`button-buy-now-${product.id}`}
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                {product.inStock ? "Comprar Ahora" : "Sin stock"}
+              </Button>
+              <Button
+                onClick={handleAddToCart}
+                disabled={!product.inStock}
+                variant="outline"
+                size="icon"
+                data-testid={`button-add-to-cart-${product.id}`}
+              >
+                <ShoppingCart className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

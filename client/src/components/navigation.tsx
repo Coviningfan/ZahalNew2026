@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
-import { Menu, Search, ShoppingCart } from "lucide-react";
+import { Menu, Search, ShoppingCart, X, Plus, Minus } from "lucide-react";
 
 export default function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const { cartItems } = useCart();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cartItems, updateQuantity, removeFromCart } = useCart();
 
   const totalItems = cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
 
@@ -58,19 +59,85 @@ export default function Navigation() {
             >
               <Search className="h-5 w-5" />
             </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="hover:bg-muted relative"
-              data-testid="button-cart"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {totalItems > 0 && (
-                <Badge className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center p-0">
-                  {totalItems}
-                </Badge>
-              )}
-            </Button>
+            <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="hover:bg-muted relative"
+                  data-testid="button-cart"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  {totalItems > 0 && (
+                    <Badge className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center p-0">
+                      {totalItems}
+                    </Badge>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:max-w-lg">
+                <SheetHeader>
+                  <SheetTitle>Carrito de Compras</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6">
+                  {cartItems.length === 0 ? (
+                    <div className="text-center py-8">
+                      <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">Tu carrito está vacío</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {cartItems.map((item: any) => (
+                        <div key={item.productId} className="flex items-center space-x-4 p-4 border rounded-lg">
+                          <div className="flex-1">
+                            <h3 className="font-medium">{item.productName || item.productId}</h3>
+                            <p className="text-sm text-muted-foreground">${item.price || '0.00'}</p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              onClick={() => updateQuantity(item.productId, Math.max(0, item.quantity - 1))}
+                              className="h-8 w-8"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="w-8 text-center">{item.quantity}</span>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                              className="h-8 w-8"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => removeFromCart(item.productId)}
+                              className="h-8 w-8 text-destructive hover:text-destructive"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="pt-4 border-t">
+                        <Button 
+                          className="w-full" 
+                          onClick={() => {
+                            // Redirect to Shopify checkout with all cart items
+                            window.open('https://5b32c9-07.myshopify.com/cart', '_blank', 'noopener,noreferrer');
+                          }}
+                        >
+                          Proceder al Checkout
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
             
             {/* Mobile Menu Button */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
