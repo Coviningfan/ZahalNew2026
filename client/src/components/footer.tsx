@@ -3,10 +3,10 @@ import { Facebook, Instagram } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
 
 const productLinks = [
-  { href: "/productos?category=unisex", label: "Unisex" },
-  { href: "/productos?category=sport", label: "Sport" },
-  { href: "/productos?category=travel", label: "Travel" },
-  { href: "/productos?category=teens", label: "Teens" },
+  { href: "https://5b32c9-07.myshopify.com/collections/unisex", label: "Unisex", external: true },
+  { href: "https://5b32c9-07.myshopify.com/collections/sport", label: "Sport", external: true },
+  { href: "https://5b32c9-07.myshopify.com/collections/tamano-viaje", label: "Travel", external: true },
+  { href: "https://5b32c9-07.myshopify.com/collections/teens", label: "Teens", external: true },
 ];
 
 const infoLinks = [
@@ -62,13 +62,25 @@ export default function Footer() {
             <ul className="space-y-2">
               {productLinks.map((link) => (
                 <li key={link.href}>
-                  <Link 
-                    href={link.href} 
-                    className="text-background/80 hover:text-background transition-colors duration-200"
-                    data-testid={`link-product-${link.label.toLowerCase()}`}
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a 
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-background/80 hover:text-background transition-colors duration-200"
+                      data-testid={`link-product-${link.label.toLowerCase()}`}
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link 
+                      href={link.href} 
+                      className="text-background/80 hover:text-background transition-colors duration-200"
+                      data-testid={`link-product-${link.label.toLowerCase()}`}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

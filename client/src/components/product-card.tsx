@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "wouter";
-import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Heart, ShoppingCart } from "lucide-react";
 import type { Product } from "@shared/schema";
@@ -12,7 +10,6 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, showBadge = false }: ProductCardProps) {
-  const { addToCart } = useCart();
   const { toast } = useToast();
 
   const handleBuyNow = (e: React.MouseEvent) => {
@@ -21,7 +18,7 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
     
     // Redirect to Shopify product page
     const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
-    window.open(shopifyUrl, '_blank');
+    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -33,9 +30,22 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
     });
   };
 
+  const handleCardClick = () => {
+    // Redirect to Shopify product page
+    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
+    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
+  };
+
+  const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
+
   return (
-    <Link href={`/productos/${product.id}`}>
-      <div className="bg-background rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group" data-testid={`card-product-${product.id}`}>
+      <a 
+        href={shopifyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-background rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group cursor-pointer block" 
+        data-testid={`card-product-${product.id}`}
+      >
         <div className="relative overflow-hidden rounded-t-2xl">
           <img 
             src={product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400"}
@@ -87,7 +97,6 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
             </Button>
           </div>
         </div>
-      </div>
-    </Link>
+      </a>
   );
 }
