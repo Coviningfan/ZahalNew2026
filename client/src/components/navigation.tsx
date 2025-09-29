@@ -11,7 +11,7 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const { cartItems } = useCart();
 
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
 
   const navItems = [
     { href: "/", label: "Inicio" },
