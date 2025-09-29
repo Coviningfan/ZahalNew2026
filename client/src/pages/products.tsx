@@ -82,8 +82,8 @@ export default function Products() {
         <section className="py-16">
           <div className="container mx-auto px-4 lg:px-8">
             {isLoading ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {Array.from({ length: 8 }).map((_, i) => (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+                {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="bg-card rounded-2xl p-6">
                     <Skeleton className="w-full h-48 mb-4" />
                     <Skeleton className="h-6 w-3/4 mb-2" />
@@ -121,7 +121,7 @@ export default function Products() {
                 )}
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/hooks/use-cart";
 import { Heart, ShoppingCart } from "lucide-react";
 import type { Product } from "@shared/schema";
 
@@ -11,14 +13,25 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, showBadge = false }: ProductCardProps) {
   const { toast } = useToast();
+  const { addToCart } = useCart();
 
-  const handleBuyNow = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // Redirect to Shopify product page
-    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
-    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
+    try {
+      await addToCart(product.id, 1);
+      toast({
+        title: "Producto añadido",
+        description: `${product.name} se ha añadido al carrito`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo añadir el producto al carrito",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -30,22 +43,10 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
     });
   };
 
-  const handleCardClick = () => {
-    // Redirect to Shopify product page
-    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
-    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
-  };
-
-  const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
 
   return (
-      <a 
-        href={shopifyUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-background rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group cursor-pointer block" 
-        data-testid={`card-product-${product.id}`}
-      >
+    <Link href={`/productos/${product.id}`} data-testid={`card-product-${product.id}`}>
+      <div className="bg-background rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
         <div className="relative overflow-hidden rounded-t-2xl">
           <img 
             src={product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400"}
@@ -87,16 +88,17 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
               ${product.price}
             </div>
             <Button
-              onClick={handleBuyNow}
+              onClick={handleAddToCart}
               disabled={!product.inStock}
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              data-testid={`button-buy-now-${product.id}`}
+              data-testid={`button-add-to-cart-${product.id}`}
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
-              {product.inStock ? "COMPRA AHORA" : "Sin stock"}
+              {product.inStock ? "Añadir al Carrito" : "Sin stock"}
             </Button>
           </div>
         </div>
-      </a>
+      </div>
+    </Link>
   );
 }
