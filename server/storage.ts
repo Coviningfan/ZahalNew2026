@@ -139,6 +139,12 @@ export class MemStorage implements IStorage {
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const id = randomUUID();
     const product: Product = {
+      weight: null,
+      images: [],
+      features: [],
+      inStock: true,
+      isFeatured: false,
+      isNew: false,
       ...insertProduct,
       id,
       createdAt: new Date(),
@@ -169,13 +175,14 @@ export class MemStorage implements IStorage {
 
     if (existingItem) {
       // Update quantity
-      existingItem.quantity += insertItem.quantity;
+      existingItem.quantity += (insertItem.quantity || 1);
       this.cartItems.set(existingItem.id, existingItem);
       return existingItem;
     }
 
     const id = randomUUID();
     const cartItem: CartItem = {
+      quantity: 1,
       ...insertItem,
       id,
       createdAt: new Date(),
