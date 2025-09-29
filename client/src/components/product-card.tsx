@@ -15,23 +15,13 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
   const { addToCart } = useCart();
   const { toast } = useToast();
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleBuyNow = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    try {
-      await addToCart(product.id, 1);
-      toast({
-        title: "Producto añadido",
-        description: `${product.name} se ha añadido al carrito`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo añadir el producto al carrito",
-        variant: "destructive",
-      });
-    }
+    // Redirect to Shopify product page
+    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
+    window.open(shopifyUrl, '_blank');
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -87,13 +77,13 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
               ${product.price}
             </div>
             <Button
-              onClick={handleAddToCart}
+              onClick={handleBuyNow}
               disabled={!product.inStock}
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              data-testid={`button-add-to-cart-${product.id}`}
+              data-testid={`button-buy-now-${product.id}`}
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
-              {product.inStock ? "Comprar" : "Sin stock"}
+              {product.inStock ? "COMPRA AHORA" : "Sin stock"}
             </Button>
           </div>
         </div>

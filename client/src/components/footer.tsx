@@ -28,21 +28,27 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="https://facebook.com/zahal" 
+                href="https://www.facebook.com/CristalZahal" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-background/10 rounded-full flex items-center justify-center hover:bg-background/20 transition-colors duration-200"
                 data-testid="link-facebook"
               >
                 <Facebook className="h-5 w-5 text-background" />
               </a>
               <a 
-                href="https://instagram.com/zahal_mexico" 
+                href="https://www.instagram.com/zahal_mexico/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-background/10 rounded-full flex items-center justify-center hover:bg-background/20 transition-colors duration-200"
                 data-testid="link-instagram"
               >
                 <Instagram className="h-5 w-5 text-background" />
               </a>
               <a 
-                href="https://tiktok.com/@zahaloficial" 
+                href="https://www.tiktok.com/@zahaloficial?_t=ZM-8xt99kGDh7F&_r=1" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-background/10 rounded-full flex items-center justify-center hover:bg-background/20 transition-colors duration-200"
                 data-testid="link-tiktok"
               >

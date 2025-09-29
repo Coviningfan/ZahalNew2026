@@ -6,25 +6,29 @@ const categories = [
     id: "unisex",
     title: "UNISEX",
     description: "Para toda la familia",
-    image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
+    image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_12_d3f065e2-e2ed-47ce-b2d5-3e90a108f64a.jpg?v=1729194975&width=1500",
+    shopifyUrl: "https://5b32c9-07.myshopify.com/collections/unisex"
   },
   {
     id: "sport",
     title: "SPORT", 
     description: "Protección intensa",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
+    image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_15_39055246-6ec5-49ef-87a0-7e1de3b85b9a.jpg?v=1730323398&width=1500",
+    shopifyUrl: "https://5b32c9-07.myshopify.com/collections/sport"
   },
   {
-    id: "travel",
+    id: "tamano-viaje",
     title: "TRAVEL",
     description: "Tamaño perfecto",
-    image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
+    image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_13_959e9a9d-14fb-4d0b-bf05-9df00ec8fe20.jpg?v=1729194974&width=1500",
+    shopifyUrl: "https://5b32c9-07.myshopify.com/collections/tamano-viaje"
   },
   {
     id: "teens",
     title: "TEENS",
     description: "Suave y efectivo",
-    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
+    image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_14.jpg?v=1729193010&width=1500",
+    shopifyUrl: "https://5b32c9-07.myshopify.com/collections/teens"
   }
 ];
 
@@ -43,9 +47,11 @@ export default function ProductCategories() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {categories.map((category) => (
-            <Link 
+            <a 
               key={category.id} 
-              href={`/productos?category=${category.id}`}
+              href={category.shopifyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group cursor-pointer"
               data-testid={`link-category-${category.id}`}
             >
@@ -61,12 +67,12 @@ export default function ProductCategories() {
                   <p className="text-white/90 text-sm">{category.description}</p>
                 </div>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Link href="/productos">
+          <a href="https://5b32c9-07.myshopify.com/collections" target="_blank" rel="noopener noreferrer">
             <Button 
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -74,7 +80,7 @@ export default function ProductCategories() {
             >
               Ver Todas las Categorías
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
     </section>

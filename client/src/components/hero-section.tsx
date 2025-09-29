@@ -33,7 +33,7 @@ export default function HeroSection() {
               Sin químicos agresivos, sin manchas, solo cuidado puro para tu piel.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/productos">
+              <a href="https://5b32c9-07.myshopify.com/collections/all" target="_blank" rel="noopener noreferrer">
                 <Button 
                   size="lg" 
                   className="bg-accent hover:bg-accent/90 text-accent-foreground transform hover:scale-105 transition-all duration-200"
@@ -41,8 +41,8 @@ export default function HeroSection() {
                 >
                   Comprar Ahora
                 </Button>
-              </Link>
-              <Link href="/productos">
+              </a>
+              <a href="https://5b32c9-07.myshopify.com/collections/all" target="_blank" rel="noopener noreferrer">
                 <Button 
                   size="lg" 
                   variant="outline" 
@@ -51,7 +51,7 @@ export default function HeroSection() {
                 >
                   Ver Catálogo
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
 
