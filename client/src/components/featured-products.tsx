@@ -51,7 +51,7 @@ export default function FeaturedProducts() {
           <Link href="/productos">
             <Button 
               size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground"
+              className="bg-accent hover:bg-accent/90 text-black font-semibold"
               data-testid="button-view-all-products"
             >
               Ver Todos los Productos

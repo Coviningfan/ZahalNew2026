@@ -27,9 +27,17 @@ export default function Navigation() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-4" data-testid="link-home">
-            <div className="text-2xl lg:text-3xl font-bold text-primary">
-              Zahal
+          <Link href="/" className="flex items-center space-x-3" data-testid="link-home">
+            <div className="flex items-center">
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl lg:text-2xl">Z</span>
+              </div>
+              <div className="ml-3 flex flex-col">
+                <span className="text-2xl lg:text-3xl font-bold text-primary" style={{ fontFamily: 'var(--font-serif)' }}>
+                  Zahal
+                </span>
+                <span className="text-xs text-muted-foreground tracking-wider">NATURAL</span>
+              </div>
             </div>
           </Link>
 
@@ -126,8 +134,12 @@ export default function Navigation() {
                         <Button 
                           className="w-full" 
                           onClick={() => {
-                            // Redirect to Shopify checkout with all cart items
-                            window.open('https://5b32c9-07.myshopify.com/cart', '_blank', 'noopener,noreferrer');
+                            // Build Shopify cart URL with products
+                            const items = cartItems.map((item: any) => 
+                              `${item.productId}:${item.quantity}`
+                            ).join(',');
+                            const shopifyCartUrl = `https://5b32c9-07.myshopify.com/cart/${items}`;
+                            window.open(shopifyCartUrl, '_blank', 'noopener,noreferrer');
                           }}
                         >
                           Proceder al Checkout

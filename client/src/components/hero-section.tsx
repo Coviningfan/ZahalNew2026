@@ -36,7 +36,7 @@ export default function HeroSection() {
               <a href="https://5b32c9-07.myshopify.com/collections/all" target="_blank" rel="noopener noreferrer">
                 <Button 
                   size="lg" 
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground transform hover:scale-105 transition-all duration-200"
+                  className="bg-accent hover:bg-accent/90 text-black font-bold transform hover:scale-105 transition-all duration-200 shadow-xl"
                   data-testid="button-shop-now"
                 >
                   Comprar Ahora

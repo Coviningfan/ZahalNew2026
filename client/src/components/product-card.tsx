@@ -55,7 +55,7 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
 
   return (
     <Link href={`/productos/${product.id}`} data-testid={`card-product-${product.id}`}>
-      <div className="bg-background rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
+      <div className="bg-white rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group border border-border overflow-hidden">
         <div className="relative overflow-hidden rounded-t-2xl">
           <img 
             src={product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400"}
