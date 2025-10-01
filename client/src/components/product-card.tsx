@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/hooks/use-cart";
-import { Heart, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 interface ProductCardProps {
@@ -43,16 +43,6 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
     }
   };
 
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toast({
-      title: "Añadido a favoritos",
-      description: `${product.name} se ha añadido a tu lista de deseos`,
-    });
-  };
-
-
   return (
     <Link href={`/productos/${product.id}`} data-testid={`card-product-${product.id}`}>
       <div className="bg-white rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group border border-border overflow-hidden">
@@ -75,15 +65,6 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
               </Badge>
             )}
           </div>
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleWishlist}
-            className="absolute top-4 left-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white/30"
-            data-testid={`button-wishlist-${product.id}`}
-          >
-            <Heart className="h-5 w-5 text-white" />
-          </Button>
         </div>
         <div className="p-6">
           <h3 className="text-xl font-semibold mb-2" data-testid={`text-product-name-${product.id}`}>

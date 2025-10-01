@@ -20,7 +20,7 @@ export default function HeroSection() {
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in">
-            <Badge className="inline-flex items-center px-4 py-2 bg-white text-primary border-0 mb-6 font-semibold shadow-lg">
+            <Badge className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-md text-white border border-white/30 mb-6 font-semibold shadow-lg">
               <Leaf className="h-4 w-4 mr-2" />
               100% Natural y Orgánico
             </Badge>
