@@ -2,6 +2,32 @@
 
 This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application is built as a React frontend with an Express.js backend, featuring a product catalog, shopping cart functionality, and a clean, modern user interface focused on natural and organic skincare products.
 
+# Recent Changes (October 1, 2025)
+
+## Product Catalog Update
+- Replaced all mock products with 6 real Shopify products from zahal.com.mx
+- Products use clean, short display titles (e.g., "Desodorante Spray 15ml") for better UX
+- Product IDs are exact Shopify product handles for seamless checkout integration
+- All product images sourced from Shopify CDN
+
+## Real Products Added
+1. Desodorante Spray 15ml - $45.00
+2. Roll On con Aloe Vera 30ml - $56.00
+3. Pack Dúo Stick + Spray - $130.00
+4. Spray Corporal 240ml - $131.00
+5. Stick Natural 60g - $230.00
+6. Kit Eco Viajero - $150.00
+
+## Shopify Integration Improvements
+- Fixed product detail page "Comprar ahora" button to properly redirect to Shopify
+- Both product cards and product detail pages now correctly open Shopify checkout in new tabs
+- Checkout URL format: `https://5b32c9-07.myshopify.com/products/{product-handle}`
+
+## Homepage Display
+- Removed product filtering and limits - homepage now displays all 6 products
+- Updated section title from "Los más comprados" to "Nuestros Productos" for accuracy
+- All products tested and verified working with proper Shopify checkout integration
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
