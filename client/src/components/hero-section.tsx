@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { ChevronDown, Leaf } from "lucide-react";
+import heroImage from "@assets/ZAHAL_PROD_012_dfa9fd33-8688-41b6-ac9b-c6ca187d00fa_1759341695530.jpg";
 
 export default function HeroSection() {
   return (
@@ -19,7 +20,7 @@ export default function HeroSection() {
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in">
-            <Badge className="inline-flex items-center px-4 py-2 bg-secondary/20 text-primary border-primary/20 mb-6">
+            <Badge className="inline-flex items-center px-4 py-2 bg-white text-primary border-0 mb-6 font-semibold shadow-lg">
               <Leaf className="h-4 w-4 mr-2" />
               100% Natural y Orgánico
             </Badge>
@@ -46,7 +47,7 @@ export default function HeroSection() {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="border-2 border-white text-white hover:bg-white hover:text-primary"
+                  className="border-2 border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-primary font-semibold shadow-lg"
                   data-testid="button-view-catalog"
                 >
                   Ver Catálogo
@@ -58,14 +59,14 @@ export default function HeroSection() {
           <div className="relative animate-scale-in">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=800" 
-                alt="Natural deodorant stick with minimalist packaging" 
+                src={heroImage} 
+                alt="Zahal desodorante natural roll-on con piedra de alumbre y aloe vera" 
                 className="w-full h-auto rounded-2xl shadow-2xl" 
               />
-              <div className="absolute -bottom-4 -right-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4">
-                <div className="text-white text-center">
-                  <div className="text-2xl font-bold">120g</div>
-                  <div className="text-sm opacity-90">Duración extendida</div>
+              <div className="absolute -bottom-4 -right-4 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-xl">
+                <div className="text-primary text-center">
+                  <div className="text-2xl font-bold">30ml</div>
+                  <div className="text-sm opacity-80">Roll-On</div>
                 </div>
               </div>
             </div>
