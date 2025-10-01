@@ -8,7 +8,6 @@ import type { Product } from "@shared/schema";
 export default function FeaturedProducts() {
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ["/api/products"],
-    queryFn: () => fetch("/api/products?featured=true").then(res => res.json()),
   });
 
   return (
@@ -25,7 +24,7 @@ export default function FeaturedProducts() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {isLoading ? (
-            Array.from({ length: 3 }).map((_, i) => (
+            Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="bg-background rounded-2xl shadow-lg p-6">
                 <Skeleton className="w-full h-48 mb-4" />
                 <Skeleton className="h-6 w-3/4 mb-2" />
@@ -41,7 +40,7 @@ export default function FeaturedProducts() {
               <p className="text-destructive">Error al cargar los productos destacados</p>
             </div>
           ) : (
-            products?.slice(0, 3).map((product) => (
+            products?.map((product) => (
               <ProductCard key={product.id} product={product} showBadge />
             ))
           )}

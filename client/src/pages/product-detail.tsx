@@ -37,6 +37,14 @@ export default function ProductDetail() {
     }
   };
 
+  const handleBuyNow = () => {
+    if (!product) return;
+    
+    // Redirect to Shopify product checkout
+    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
+    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -173,8 +181,9 @@ export default function ProductDetail() {
                 </Button>
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="sm:w-auto"
+                  onClick={handleBuyNow}
+                  disabled={!product.inStock}
+                  className="sm:w-auto bg-primary hover:bg-primary/90"
                   data-testid="button-buy-now"
                 >
                   Comprar ahora
