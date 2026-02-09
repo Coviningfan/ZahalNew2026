@@ -113,22 +113,6 @@ export class MemStorage implements IStorage {
         isNew: false,
         createdAt: new Date(),
       },
-      {
-        id: "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
-        name: "Kit Eco Viajero",
-        description: "Kit completo de viaje con desodorantes naturales + limpiador de manos + jabón. Tamaños permitidos en puntos de revisión durante viajes. Permitido en aguas y playas protegidas. Sin aceites ni químicos que perjudiquen el medio ambiente.",
-        price: "150.00",
-        category: "travel",
-        weight: "Kit",
-        images: [
-          "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_momento_2.jpg?v=1753740213"
-        ],
-        features: ["Kit completo", "Tamaño viaje", "Eco-friendly", "Sin químicos", "Biodegradable", "Vegano", "Orgánico", "Ideal para viajeros"],
-        inStock: true,
-        isFeatured: true,
-        isNew: false,
-        createdAt: new Date(),
-      },
     ];
 
     initialProducts.forEach(product => {
