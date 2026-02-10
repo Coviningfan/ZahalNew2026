@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
-import { Menu, Search, ShoppingCart, X, Plus, Minus } from "lucide-react";
+import { Menu, ShoppingCart, X, Plus, Minus } from "lucide-react";
 import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 export default function Navigation() {
@@ -17,33 +17,33 @@ export default function Navigation() {
 
   const navItems = [
     { href: "/", label: "Inicio" },
-    { href: "/productos", label: "Catálogo" },
-    { href: "#categorias", label: "Categorías" },
-    { href: "#sobre-nosotros", label: "Nosotros" },
-    { href: "#contacto", label: "Contacto" },
+    { href: "/productos", label: "Productos" },
+    { href: "/nosotros", label: "Nosotros" },
+    { href: "/preguntas-frecuentes", label: "FAQ" },
+    { href: "/contacto", label: "Contacto" },
   ];
 
   return (
     <nav className="fixed top-0 w-full z-50 glass-card">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
+        <div className="flex items-center justify-between h-16 lg:h-18">
           <Link href="/" className="flex items-center" data-testid="link-home">
             <img 
               src={zahalLogo} 
               alt="Zahal Natural" 
-              className="h-10 lg:h-14 w-auto object-contain"
+              className="h-9 lg:h-12 w-auto object-contain"
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-foreground hover:text-primary transition-colors duration-200 ${
-                  location === item.href ? "text-primary font-medium" : ""
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  location === item.href 
+                    ? "text-primary" 
+                    : "text-foreground/70 hover:text-foreground"
                 }`}
                 data-testid={`link-${item.label.toLowerCase()}`}
               >
@@ -52,90 +52,81 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* Search and Cart */}
-          <div className="flex items-center space-x-4">
-            <Button
-              size="icon"
-              variant="ghost"
-              className="hover:bg-muted"
-              data-testid="button-search"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+          <div className="flex items-center space-x-3">
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
               <SheetTrigger asChild>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="hover:bg-muted relative"
+                  className="hover:bg-primary/10 relative h-9 w-9"
                   data-testid="button-cart"
                 >
                   <ShoppingCart className="h-5 w-5" />
                   {totalItems > 0 && (
-                    <Badge className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center p-0">
+                    <Badge className="absolute -top-1 -right-1 bg-accent text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center p-0">
                       {totalItems}
                     </Badge>
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:max-w-lg">
+              <SheetContent side="right" className="w-full sm:max-w-md">
                 <SheetHeader>
-                  <SheetTitle>Carrito de Compras</SheetTitle>
+                  <SheetTitle className="font-serif">Carrito de Compras</SheetTitle>
                 </SheetHeader>
                 <div className="mt-6">
                   {cartItems.length === 0 ? (
-                    <div className="text-center py-8">
-                      <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">Tu carrito está vacío</p>
+                    <div className="text-center py-12">
+                      <ShoppingCart className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                      <p className="text-muted-foreground text-sm">Tu carrito está vacío</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
                       {cartItems.map((item: any) => (
-                        <div key={item.productId} className="flex items-center space-x-4 p-4 border rounded-lg">
+                        <div key={item.productId} className="flex items-center space-x-4 p-4 bg-card rounded-xl border border-border/50">
                           <div className="flex-1">
-                            <h3 className="font-medium">{item.productName || item.productId}</h3>
-                            <p className="text-sm text-muted-foreground">${item.price || '0.00'}</p>
+                            <h3 className="font-medium text-sm">{item.productName || item.productId}</h3>
+                            <p className="text-sm text-muted-foreground">${item.price || '0.00'} MXN</p>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Button
                               size="icon"
                               variant="outline"
                               onClick={() => updateQuantity(item.productId, Math.max(0, item.quantity - 1))}
-                              className="h-8 w-8"
+                              className="h-7 w-7"
                             >
-                              <Minus className="h-4 w-4" />
+                              <Minus className="h-3 w-3" />
                             </Button>
-                            <span className="w-8 text-center">{item.quantity}</span>
+                            <span className="w-6 text-center text-sm">{item.quantity}</span>
                             <Button
                               size="icon"
                               variant="outline"
                               onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                              className="h-8 w-8"
+                              className="h-7 w-7"
                             >
-                              <Plus className="h-4 w-4" />
+                              <Plus className="h-3 w-3" />
                             </Button>
                             <Button
                               size="icon"
                               variant="ghost"
                               onClick={() => removeItem(item.id)}
-                              className="h-8 w-8 text-destructive hover:text-destructive"
+                              className="h-7 w-7 text-destructive hover:text-destructive"
                             >
-                              <X className="h-4 w-4" />
+                              <X className="h-3 w-3" />
                             </Button>
                           </div>
                         </div>
                       ))}
-                      <div className="pt-4 border-t">
+                      <div className="pt-4 border-t border-border/50">
                         <Button 
-                          className="w-full" 
+                          className="w-full bg-primary hover:bg-primary/90 text-white h-11 font-semibold" 
                           onClick={() => {
-                            // Build Shopify cart URL with products
                             const items = cartItems.map((item: any) => 
                               `${item.productId}:${item.quantity}`
                             ).join(',');
                             const shopifyCartUrl = `https://5b32c9-07.myshopify.com/cart/${items}`;
                             window.open(shopifyCartUrl, '_blank', 'noopener,noreferrer');
                           }}
+                          data-testid="button-checkout"
                         >
                           Proceder al Checkout
                         </Button>
@@ -146,26 +137,30 @@ export default function Navigation() {
               </SheetContent>
             </Sheet>
             
-            {/* Mobile Menu Button */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="lg:hidden hover:bg-muted"
+                  className="lg:hidden hover:bg-primary/10 h-9 w-9"
                   data-testid="button-menu"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex flex-col space-y-4 mt-8">
+              <SheetContent side="right" className="w-[280px]">
+                <SheetHeader>
+                  <SheetTitle className="font-serif text-left">Menú</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col space-y-1 mt-6">
                   {navItems.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`text-lg py-2 text-foreground hover:text-primary transition-colors duration-200 ${
-                        location === item.href ? "text-primary font-medium" : ""
+                      className={`text-base py-3 px-3 rounded-lg transition-colors duration-200 ${
+                        location === item.href 
+                          ? "text-primary bg-primary/5 font-medium" 
+                          : "text-foreground/70 hover:text-foreground hover:bg-muted"
                       }`}
                       onClick={() => setIsOpen(false)}
                       data-testid={`link-mobile-${item.label.toLowerCase()}`}

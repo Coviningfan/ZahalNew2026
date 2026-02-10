@@ -4,48 +4,39 @@ const features = [
   {
     icon: Leaf,
     title: "100% Natural",
-    description: "Sin químicos agresivos ni parabenos"
+    description: "Piedra de alumbre pura, sin químicos agresivos ni parabenos"
   },
   {
     icon: Shield,
-    title: "Protección Duradera",
-    description: "24 horas de frescura natural"
+    title: "Protección 24hrs",
+    description: "Frescura antibacterial natural que dura todo el día"
   },
   {
     icon: Shirt,
     title: "No Mancha",
-    description: "Cuida tu ropa y tu piel"
+    description: "Cuida tu ropa y tu piel sin dejar residuos"
   },
   {
     icon: Recycle,
     title: "Eco-Friendly",
-    description: "Empaque sostenible y biodegradable"
+    description: "Empaque sostenible y biodegradable, libre de crueldad"
   }
 ];
 
 export default function FeaturesSection() {
   return (
-    <section className="py-16 lg:py-24 bg-card">
+    <section className="py-16 lg:py-20 bg-white">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-            ¿Por qué elegir Zahal?
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Nuestros productos están formulados con la pureza de la naturaleza
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div key={index} className="text-center group">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors duration-200">
-                  <Icon className="h-8 w-8 text-primary" />
+              <div key={index} className="text-center group" data-testid={`feature-${index}`}>
+                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <Icon className="h-7 w-7 text-primary group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
+                <h3 className="text-base font-semibold text-foreground mb-1.5">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
               </div>
             );
           })}

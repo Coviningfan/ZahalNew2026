@@ -1,0 +1,204 @@
+import { useState } from "react";
+import Navigation from "@/components/navigation";
+import Footer from "@/components/footer";
+import { ChevronDown } from "lucide-react";
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface FAQSection {
+  title: string;
+  icon: string;
+  items: FAQItem[];
+}
+
+const faqSections: FAQSection[] = [
+  {
+    title: "Sobre los productos ZAHAL",
+    icon: "🌿",
+    items: [
+      {
+        question: "¿De qué están hechos los productos ZAHAL?",
+        answer: "Están hechos a base de piedra de alumbre, un mineral 100% natural que se extrae directamente de la tierra. No usamos químicos agresivos ni ingredientes raros: lo natural funciona mejor."
+      },
+      {
+        question: "¿Qué es la piedra de alumbre?",
+        answer: "Es un mineral natural que ayuda a evitar el mal olor sin bloquear el sudor. Su molécula es más grande que el poro de la piel, por eso no se absorbe ni entra al cuerpo."
+      },
+      {
+        question: "¿De dónde sale la piedra de alumbre?",
+        answer: "Se encuentra en yacimientos naturales alrededor del mundo. En ZAHAL usamos alumbre puro, sin químicos añadidos."
+      },
+      {
+        question: "¿Para qué sirve la piedra de alumbre?",
+        answer: "Sirve como desodorante natural: elimina bacterias, controla el mal olor, reduce la sudoración y deja la piel fresca todo el día. ¡Sin irritaciones ni residuos!"
+      },
+      {
+        question: "¿Dónde puedo usar el desodorante?",
+        answer: "No solo en las axilas. También puedes aplicarlo en manos, pies, espalda, pecho, cara e ingles. Es seguro y efectivo para todo el cuerpo."
+      }
+    ]
+  },
+  {
+    title: "¿Qué NO tienen los productos ZAHAL?",
+    icon: "🚫",
+    items: [
+      {
+        question: "¿Por qué ZAHAL no usa parabenos?",
+        answer: "Porque son conservadores sintéticos que pueden alterar el equilibrio natural del cuerpo. Se han relacionado con problemas hormonales y, en algunos estudios, hasta con cáncer de mama. Por eso, preferimos lo natural."
+      },
+      {
+        question: "¿Qué es el clorhidrato de aluminio?",
+        answer: "Es un químico que usan muchos antitranspirantes para tapar los poros y evitar que sudes. Se han encontrado residuos de este compuesto en tejidos mamarios. En ZAHAL no usamos este ingrediente."
+      },
+      {
+        question: "¿ZAHAL es seguro para personas con cáncer?",
+        answer: "Sí. Por no contener clorhidrato de aluminio ni parabenos, es una opción segura durante tratamientos como quimioterapias o mastografías."
+      }
+    ]
+  },
+  {
+    title: "Beneficios de usar ZAHAL",
+    icon: "💚",
+    items: [
+      {
+        question: "¿Qué beneficios tiene usar los desodorantes ZAHAL?",
+        answer: "Evita el mal olor sin tapar los poros, es suave con la piel (incluso sensible), no mancha la ropa y respeta el equilibrio natural del cuerpo."
+      },
+      {
+        question: "¿ZAHAL ayuda a purificar el cuerpo?",
+        answer: "Sí. Al no bloquear los poros, tu cuerpo puede eliminar toxinas naturalmente a través del sudor. Así, el hígado y los riñones no tienen que trabajar de más."
+      },
+      {
+        question: "¿Qué diferencia hay entre un desodorante y un antitranspirante?",
+        answer: "Los antitranspirantes bloquean el sudor, lo cual impide que el cuerpo libere toxinas. El desodorante ZAHAL deja que tu cuerpo respire y elimina las bacterias que causan mal olor."
+      }
+    ]
+  },
+  {
+    title: "Aplicación y duración",
+    icon: "🧴",
+    items: [
+      {
+        question: "¿Cómo se usa el desodorante en piedra o en stick?",
+        answer: "Solo humedece la piedra con un poco de agua y frótala suavemente sobre la piel limpia."
+      },
+      {
+        question: "¿Cómo aplicar el spray recargable?",
+        answer: "Aplica directamente en la zona deseada. Si se tapa, enjuaga el dispensador con agua tibia y presiona unas cuantas veces para destaparlo."
+      },
+      {
+        question: "¿En qué partes del cuerpo puedo usar el spray?",
+        answer: "En axilas, pecho, espalda y pies. Es fresco y cómodo de usar."
+      },
+      {
+        question: "¿Cuánto dura la protección?",
+        answer: "Hasta 24 horas de frescura natural."
+      }
+    ]
+  },
+  {
+    title: "Duración de cada producto",
+    icon: "⏳",
+    items: [
+      {
+        question: "¿Cuánto dura cada producto ZAHAL?",
+        answer: "Stick 120g: hasta 4 años. Stick 60g en corcho: alrededor de 2 años. Roll-on: como un desodorante convencional, unos 2 meses. Spray Eco3: puedes rellenarlo hasta 3 veces. ¡Después de eso, reutiliza el envase para otra cosa útil!"
+      }
+    ]
+  },
+  {
+    title: "Efecto y adaptación",
+    icon: "🧪",
+    items: [
+      {
+        question: "¿Cuánto tiempo tarda en hacer efecto?",
+        answer: "Normalmente entre 2 y 3 días. Si haces mucho ejercicio o comes mucha carne roja, podría tardar un poco más."
+      },
+      {
+        question: "¿Quita el mal olor?",
+        answer: "Sí. Elimina el mal olor tanto en la piel como en la ropa."
+      },
+      {
+        question: "¿Por qué sudamos y a qué se debe el mal olor?",
+        answer: "Sudamos para regular la temperatura y eliminar toxinas. El sudor en sí no huele mal, pero cuando se mezcla con bacterias en la piel, aparece el mal olor. ZAHAL controla las bacterias sin tapar los poros."
+      }
+    ]
+  }
+];
+
+function FAQAccordion({ item, index }: { item: FAQItem; index: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div className="border-b border-border/50 last:border-0" data-testid={`faq-item-${index}`}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between py-5 text-left hover:text-primary transition-colors duration-200"
+        data-testid={`button-faq-${index}`}
+      >
+        <span className="text-base font-medium text-foreground pr-4">{item.question}</span>
+        <ChevronDown className={`h-5 w-5 text-muted-foreground flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-5' : 'max-h-0'}`}>
+        <p className="text-muted-foreground text-sm leading-relaxed">{item.answer}</p>
+      </div>
+    </div>
+  );
+}
+
+export default function FAQ() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      
+      <main className="pt-20">
+        <section className="relative py-20 lg:py-28 overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <img 
+              src="https://cdn.shopify.com/s/files/1/0622/1004/8065/articles/ZAHAL_Shopify_17_0cf49831-3460-4132-9add-19bbeb41a922_1100x.jpg?v=1753817454" 
+              alt="Desodorantes naturales ZAHAL" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
+          </div>
+          <div className="container mx-auto px-4 lg:px-8 relative z-10">
+            <div className="max-w-2xl">
+              <p className="text-white/70 font-semibold text-sm tracking-wider uppercase mb-4">FAQ</p>
+              <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-serif leading-tight" data-testid="text-faq-title">
+                Preguntas Frecuentes
+              </h1>
+              <p className="text-white/90 text-lg leading-relaxed">
+                Todo lo que necesitas saber sobre los desodorantes naturales de piedra de alumbre ZAHAL.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 lg:py-24 bg-white">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-3xl mx-auto space-y-12">
+              {faqSections.map((section, sectionIndex) => (
+                <div key={sectionIndex} data-testid={`faq-section-${sectionIndex}`}>
+                  <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-3 font-serif">
+                    <span className="text-2xl">{section.icon}</span>
+                    {section.title}
+                  </h2>
+                  <div className="bg-card rounded-2xl border border-border/50 px-6">
+                    {section.items.map((item, itemIndex) => (
+                      <FAQAccordion key={itemIndex} item={item} index={sectionIndex * 10 + itemIndex} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

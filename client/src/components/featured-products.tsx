@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import ProductCard from "@/components/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ArrowRight } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 export default function FeaturedProducts() {
@@ -11,33 +12,34 @@ export default function FeaturedProducts() {
   });
 
   return (
-    <section id="productos" className="py-16 lg:py-24 bg-card">
+    <section id="productos" className="py-16 lg:py-24 bg-white">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+        <div className="text-center mb-12">
+          <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Catálogo</p>
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 font-serif">
             Nuestros Productos
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Descubre nuestra línea completa de desodorantes naturales
+          <p className="text-muted-foreground text-base max-w-xl mx-auto">
+            Desodorantes naturales de piedra de alumbre para toda la familia
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {isLoading ? (
             Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-background rounded-2xl shadow-lg p-6">
-                <Skeleton className="w-full h-48 mb-4" />
-                <Skeleton className="h-6 w-3/4 mb-2" />
+              <div key={i} className="bg-white rounded-2xl border border-border/50 p-5">
+                <Skeleton className="w-full h-64 mb-4 rounded-xl" />
+                <Skeleton className="h-5 w-3/4 mb-2" />
                 <Skeleton className="h-4 w-full mb-4" />
                 <div className="flex justify-between items-center">
-                  <Skeleton className="h-8 w-24" />
-                  <Skeleton className="h-10 w-20" />
+                  <Skeleton className="h-6 w-20" />
+                  <Skeleton className="h-9 w-24" />
                 </div>
               </div>
             ))
           ) : error ? (
-            <div className="col-span-full text-center py-8">
-              <p className="text-destructive">Error al cargar los productos destacados</p>
+            <div className="col-span-full text-center py-12">
+              <p className="text-destructive">Error al cargar los productos</p>
             </div>
           ) : (
             products?.map((product) => (
@@ -47,15 +49,17 @@ export default function FeaturedProducts() {
         </div>
 
         <div className="text-center mt-12">
-          <Link href="/productos">
+          <a href="https://5b32c9-07.myshopify.com/collections/all" target="_blank" rel="noopener noreferrer">
             <Button 
               size="lg"
-              className="bg-accent hover:bg-accent/90 text-black font-semibold"
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-white font-semibold gap-2"
               data-testid="button-view-all-products"
             >
-              Ver Todos los Productos
+              Ver Tienda Completa
+              <ArrowRight className="h-4 w-4" />
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
     </section>

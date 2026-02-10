@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Facebook, Instagram } from "lucide-react";
+import { Facebook, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
 import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
@@ -11,97 +11,69 @@ const productLinks = [
 ];
 
 const infoLinks = [
-  { href: "#sobre-nosotros", label: "Sobre Nosotros" },
-  { href: "#contacto", label: "Contacto" },
-  { href: "#envios", label: "Envíos" },
-  { href: "#devoluciones", label: "Devoluciones" },
+  { href: "/nosotros", label: "Sobre Nosotros" },
+  { href: "/contacto", label: "Contacto" },
+  { href: "/preguntas-frecuentes", label: "Preguntas Frecuentes" },
 ];
 
 export default function Footer() {
   return (
-    <footer id="contacto" className="bg-foreground text-background py-16">
+    <footer className="bg-foreground text-white py-16">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div>
-            <div className="mb-4">
+            <div className="mb-5">
               <img 
                 src={zahalLogo} 
                 alt="Zahal Natural" 
                 className="h-10 w-auto object-contain brightness-0 invert"
               />
             </div>
-            <p className="text-background/80 mb-4">
-              Cuidado natural para tu piel con la pureza de la piedra de alumbre.
+            <p className="text-white/70 text-sm leading-relaxed mb-5">
+              Marca mexicana comprometida con la salud, el bienestar y el medio ambiente. Cuidado natural con la pureza de la piedra de alumbre.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               <a 
                 href="https://www.facebook.com/CristalZahal" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-background/10 rounded-full flex items-center justify-center hover:bg-background/20 transition-colors duration-200"
+                className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors duration-200"
                 data-testid="link-facebook"
               >
-                <Facebook className="h-5 w-5 text-background" />
+                <Facebook className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.instagram.com/zahal_mexico/" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-background/10 rounded-full flex items-center justify-center hover:bg-background/20 transition-colors duration-200"
+                className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors duration-200"
                 data-testid="link-instagram"
               >
-                <Instagram className="h-5 w-5 text-background" />
+                <Instagram className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.tiktok.com/@zahaloficial?_t=ZM-8xt99kGDh7F&_r=1" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-background/10 rounded-full flex items-center justify-center hover:bg-background/20 transition-colors duration-200"
+                className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors duration-200"
                 data-testid="link-tiktok"
               >
-                <SiTiktok className="h-5 w-5 text-background" />
+                <SiTiktok className="h-4 w-4" />
               </a>
             </div>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Productos</h3>
-            <ul className="space-y-2">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Productos</h3>
+            <ul className="space-y-2.5">
               {productLinks.map((link) => (
                 <li key={link.href}>
-                  {link.external ? (
-                    <a 
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-background/80 hover:text-background transition-colors duration-200"
-                      data-testid={`link-product-${link.label.toLowerCase()}`}
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link 
-                      href={link.href} 
-                      className="text-background/80 hover:text-background transition-colors duration-200"
-                      data-testid={`link-product-${link.label.toLowerCase()}`}
-                    >
-                      {link.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Información</h3>
-            <ul className="space-y-2">
-              {infoLinks.map((link) => (
-                <li key={link.href}>
                   <a 
-                    href={link.href} 
-                    className="text-background/80 hover:text-background transition-colors duration-200"
-                    data-testid={`link-info-${link.label.toLowerCase().replace(" ", "-")}`}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+                    data-testid={`link-product-${link.label.toLowerCase()}`}
                   >
                     {link.label}
                   </a>
@@ -111,28 +83,49 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contacto</h3>
-            <ul className="space-y-2 text-background/80">
-              <li className="flex items-center">
-                <span className="mr-2">✉</span>
-                <span>info@zahal.com.mx</span>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Información</h3>
+            <ul className="space-y-2.5">
+              {infoLinks.map((link) => (
+                <li key={link.href}>
+                  <Link 
+                    href={link.href} 
+                    className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+                    data-testid={`link-info-${link.label.toLowerCase().replace(/ /g, "-")}`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Contacto</h3>
+            <ul className="space-y-3 text-white/70 text-sm">
+              <li className="flex items-center gap-2.5">
+                <Mail className="h-4 w-4 text-primary flex-shrink-0" />
+                <span>contacto@zahal.com.mx</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">📞</span>
-                <span>+52 55 1234 5678</span>
+              <li className="flex items-center gap-2.5">
+                <Phone className="h-4 w-4 text-primary flex-shrink-0" />
+                <span>55 4532 7249</span>
               </li>
-              <li className="flex items-center">
-                <span className="mr-2">📍</span>
-                <span>México, CDMX</span>
+              <li className="flex items-center gap-2.5">
+                <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+                <span>México</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-background/20 pt-8 text-center">
-          <p className="text-background/60">
-            &copy; 2024 Zahal. Todos los derechos reservados.
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-white/50 text-sm">
+            &copy; {new Date().getFullYear()} Zahal. Todos los derechos reservados.
           </p>
+          <div className="flex gap-6 text-white/50 text-sm">
+            <a href="https://5b32c9-07.myshopify.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacidad</a>
+            <a href="https://5b32c9-07.myshopify.com/policies/terms-of-service" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Términos</a>
+          </div>
         </div>
       </div>
     </footer>
