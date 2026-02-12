@@ -39,22 +39,14 @@ export default function Contact() {
       <Navigation />
       
       <main className="pt-20">
-        <section className="relative py-20 lg:py-28 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <img 
-              src="https://cdn.shopify.com/s/files/1/0622/1004/8065/files/WhatsApp_Image_2024-11-26_at_09.09.05.jpg?v=1732636829&width=1500" 
-              alt="Contacto Zahal" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
-          </div>
-          <div className="container mx-auto px-4 lg:px-8 relative z-10">
-            <div className="max-w-2xl">
-              <p className="text-white/70 font-semibold text-sm tracking-wider uppercase mb-4">Contáctanos</p>
-              <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-serif leading-tight" data-testid="text-contact-title">
+        <section className="py-16 lg:py-20 bg-card">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-2xl mx-auto text-center">
+              <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-4">Contáctanos</p>
+              <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-6 font-serif leading-tight" data-testid="text-contact-title">
                 ¿Cómo podemos ayudarte?
               </h1>
-              <p className="text-white/90 text-lg leading-relaxed">
+              <p className="text-muted-foreground text-lg leading-relaxed">
                 Estamos aquí para resolver tus dudas. Llena el formulario o contáctanos directamente.
               </p>
             </div>
