@@ -44,7 +44,7 @@ export default function About() {
           <div className="container mx-auto px-4 lg:px-8 relative z-10">
             <div className="max-w-2xl">
               <p className="text-white/70 font-semibold text-sm tracking-wider uppercase mb-4">Quiénes Somos</p>
-              <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-serif leading-tight" data-testid="text-about-title">
+              <h1 className="text-4xl lg:text-5xl font-bold mb-6 font-serif leading-tight text-[#14674e]" data-testid="text-about-title">
                 Natural. Consciente. Real.
               </h1>
               <p className="text-white/90 text-lg leading-relaxed">
