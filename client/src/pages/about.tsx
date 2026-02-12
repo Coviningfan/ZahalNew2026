@@ -1,30 +1,7 @@
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Heart, Leaf, Users, Sparkles, ArrowRight } from "lucide-react";
-
-const values = [
-  {
-    icon: Heart,
-    title: "Natural y Consciente",
-    description: "Creamos alternativas saludables para tu piel que cuidan de ti y del planeta, con productos libres de químicos agresivos."
-  },
-  {
-    icon: Leaf,
-    title: "Sostenible",
-    description: "Mejoramos constantemente nuestros procesos y productos con tecnología limpia y metodologías sustentables."
-  },
-  {
-    icon: Users,
-    title: "Trabajo en Equipo",
-    description: "Nuestro equipo está formado por personas apasionadas, proactivas y creativas comprometidas con cuidarte naturalmente."
-  },
-  {
-    icon: Sparkles,
-    title: "Innovación",
-    description: "La innovación no se detiene. Combinamos tradición y ciencia para crear productos auténticos, eficaces y confiables."
-  }
-];
+import { Heart, Leaf, Users, Sparkles, ArrowRight, CheckCircle, Mail } from "lucide-react";
 
 export default function About() {
   return (
@@ -32,60 +9,32 @@ export default function About() {
       <Navigation />
       
       <main className="pt-20">
-        <section className="relative py-20 lg:py-28 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <img 
-              src="https://cdn.shopify.com/s/files/1/0622/1004/8065/articles/banner_2_promo_1_738f2117-970e-4120-bdf7-8c3db4c24eab_1100x.jpg?v=1753817472" 
-              alt="Filosofía Zahal" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
-          </div>
-          <div className="container mx-auto px-4 lg:px-8 relative z-10">
-            <div className="max-w-2xl">
-              <p className="text-white/70 font-semibold text-sm tracking-wider uppercase mb-4">Quiénes Somos</p>
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6 font-serif leading-tight text-[#14674e]" data-testid="text-about-title">
-                Natural. Consciente. Real.
-              </h1>
-              <p className="text-white/90 text-lg leading-relaxed">
-                En Zahal creemos que el cuidado personal puede ser natural, consciente y poderoso. 
-                Somos una marca mexicana comprometida con la salud, el bienestar y el medio ambiente.
-              </p>
-            </div>
-          </div>
-        </section>
-
         <section className="py-16 lg:py-24 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="max-w-3xl mx-auto">
-              <div className="grid md:grid-cols-2 gap-12 items-start mb-16">
-                <div>
-                  <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Nuestra Misión</p>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-4 font-serif">
-                    Cuidarte naturalmente
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    Cada producto que desarrollamos tiene una razón: ayudarte a sentirte bien en tu piel todos los días, 
-                    mientras contribuimos a un mundo más limpio.
-                  </p>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Creamos alternativas saludables para tu piel que cuidan de ti y del planeta, 
-                    con productos libres de químicos agresivos, elaborados con ingredientes naturales y sostenibles.
-                  </p>
-                </div>
-                <div>
-                  <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Nuestra Filosofía</p>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-4 font-serif">
-                    Más que una marca
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    Somos una comunidad que inspira a cambiar. Creemos en las personas que se atreven, 
-                    que transforman su vida y la de los demás.
-                  </p>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Personas que eligen lo natural, que buscan sentirse bien y vivir en equilibrio. 
-                    En Zahal, cada decisión tiene un propósito: servir con conciencia, crear con sentido y vivir con propósito.
-                  </p>
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-6xl mx-auto">
+              <div>
+                <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-4">Quiénes Somos</p>
+                <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-6 font-serif leading-tight" data-testid="text-about-title">
+                  Natural.<br />Consciente.<br />Real.
+                </h1>
+                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                  En Zahal creemos que el cuidado personal puede ser natural, consciente y poderoso. 
+                  Somos una marca mexicana comprometida con la salud, el bienestar y el medio ambiente.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Cada producto que desarrollamos tiene una razón: ayudarte a sentirte bien en tu piel todos los días, 
+                  mientras contribuimos a un mundo más limpio.
+                </p>
+              </div>
+              <div className="relative">
+                <img 
+                  src="https://cdn.shopify.com/s/files/1/0622/1004/8065/articles/banner_2_promo_1_738f2117-970e-4120-bdf7-8c3db4c24eab_1100x.jpg?v=1753817472" 
+                  alt="Filosofía Zahal" 
+                  className="w-full h-[400px] lg:h-[500px] object-cover rounded-2xl"
+                />
+                <div className="absolute -bottom-6 -left-6 bg-primary text-white rounded-2xl p-6 shadow-xl hidden md:block">
+                  <div className="text-3xl font-bold font-serif">100%</div>
+                  <div className="text-sm text-white/80">Natural y Orgánico</div>
                 </div>
               </div>
             </div>
@@ -94,22 +43,69 @@ export default function About() {
 
         <section className="py-16 lg:py-24 bg-card">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="text-center mb-12">
-              <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Nuestros Valores</p>
-              <h2 className="text-2xl lg:text-3xl font-bold text-foreground font-serif">
-                Lo que nos mueve
-              </h2>
+            <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-16 items-center">
+                <div className="order-2 md:order-1">
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0622/1004/8065/files/WhatsApp_Image_2024-11-26_at_09.09.05.jpg?v=1732636829&width=1500"
+                    alt="Equipo Zahal"
+                    className="w-full h-[350px] object-cover rounded-2xl"
+                  />
+                </div>
+                <div className="order-1 md:order-2">
+                  <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Nuestra Esencia</p>
+                  <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-5 font-serif">
+                    Cuidarte naturalmente y sorprenderte cada día
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed mb-5">
+                    Creamos alternativas saludables para tu piel que cuidan de ti y del planeta, 
+                    con productos libres de químicos agresivos, elaborados con ingredientes naturales y sostenibles.
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    La innovación no se detiene. Mejoramos constantemente nuestros procesos y productos 
+                    con tecnología limpia, metodologías sustentables y mucho amor por lo que hacemos.
+                  </p>
+                  <div className="space-y-3">
+                    {["Sin químicos agresivos", "Ingredientes naturales", "Procesos sustentables", "Libre de crueldad animal"].map((item, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                        <span className="text-sm text-foreground">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-              {values.map((value, index) => {
+          </div>
+        </section>
+
+        <section className="py-16 lg:py-24 bg-white">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="text-center mb-14 max-w-xl mx-auto">
+              <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Nuestros Valores</p>
+              <h2 className="text-2xl lg:text-3xl font-bold text-foreground font-serif mb-4">
+                Lo que nos mueve cada día
+              </h2>
+              <p className="text-muted-foreground text-sm">
+                Nos mueve el trabajo en equipo, la empatía, la comunicación y el respeto. 
+                Esa energía colectiva hace que nuestros productos sean auténticos.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+              {[
+                { icon: Heart, title: "Consciente", desc: "Creamos con propósito, cuidando de ti y del planeta con cada decisión que tomamos." },
+                { icon: Leaf, title: "Sostenible", desc: "Tecnología limpia y procesos sustentables para un mundo más limpio y saludable." },
+                { icon: Users, title: "Comunidad", desc: "Más que una marca, somos una comunidad que inspira a vivir en equilibrio." },
+                { icon: Sparkles, title: "Innovación", desc: "Combinamos tradición y ciencia para productos auténticos, eficaces y confiables." }
+              ].map((value, index) => {
                 const Icon = value.icon;
                 return (
-                  <div key={index} className="text-center" data-testid={`value-card-${index}`}>
-                    <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <Icon className="h-7 w-7 text-primary" />
+                  <div key={index} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-md transition-shadow duration-300" data-testid={`value-card-${index}`}>
+                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                      <Icon className="h-6 w-6 text-primary" />
                     </div>
                     <h3 className="text-base font-semibold text-foreground mb-2">{value.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{value.desc}</p>
                   </div>
                 );
               })}
@@ -117,31 +113,73 @@ export default function About() {
           </div>
         </section>
 
+        <section className="py-16 lg:py-24 bg-primary">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-xl mx-auto text-center">
+              <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4 font-serif">
+                Más que una marca
+              </h2>
+              <p className="text-white/80 leading-relaxed mb-3">
+                Somos una comunidad que inspira a cambiar. Creemos en las personas que se atreven, 
+                que transforman su vida y la de los demás.
+              </p>
+              <p className="text-white/80 leading-relaxed text-sm">
+                Personas que eligen lo natural, que buscan sentirse bien y vivir en equilibrio. 
+                En Zahal, cada decisión tiene un propósito: servir con conciencia, crear con sentido y vivir con propósito.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 lg:py-24 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="max-w-3xl mx-auto">
-              <div className="bg-primary/5 border border-primary/10 rounded-2xl p-8 lg:p-12">
-                <div className="text-center">
+            <div className="max-w-4xl mx-auto">
+              <div className="grid md:grid-cols-5 gap-10 items-center">
+                <div className="md:col-span-3">
+                  <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Programa</p>
                   <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-4 font-serif" data-testid="text-ambassadors-title">
                     Embajadores de Marca
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    Son personas identificadas con los valores y filosofía de Zahal que quieren representar nuestra marca en su ámbito de influencia.
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    Son personas identificadas con los valores y filosofía de Zahal que quieren representar 
+                    nuestra marca en su ámbito de influencia.
                   </p>
-                  <div className="bg-white rounded-xl p-6 mb-6 text-left space-y-3">
-                    <p className="text-foreground text-sm">
-                      <strong>Envío gratis</strong> a cualquier parte de la República Mexicana en la compra mínima de $3,000.00 de productos Zahal.
-                    </p>
-                    <p className="text-foreground text-sm">
-                      <strong>Descuento del 30%</strong> sobre los precios de la tienda, con una ganancia del 30% sobre cada producto.
-                    </p>
+                  <div className="space-y-4 mb-8">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-8 h-8 bg-accent/15 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-accent font-bold text-sm">1</span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">Envío gratis</p>
+                        <p className="text-sm text-muted-foreground">A cualquier parte de la República Mexicana en la compra mínima de $3,000.00</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-4 items-start">
+                      <div className="w-8 h-8 bg-accent/15 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-accent font-bold text-sm">2</span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">30% de descuento</p>
+                        <p className="text-sm text-muted-foreground">Sobre los precios de la tienda, con ganancia del 30% sobre cada producto</p>
+                      </div>
+                    </div>
                   </div>
                   <a href="mailto:contacto@zahal.com.mx">
                     <Button className="bg-primary hover:bg-primary/90 text-white gap-2" data-testid="button-ambassador-contact">
-                      Contáctanos
-                      <ArrowRight className="h-4 w-4" />
+                      <Mail className="h-4 w-4" />
+                      contacto@zahal.com.mx
                     </Button>
                   </a>
+                </div>
+                <div className="md:col-span-2">
+                  <div className="bg-primary/5 border border-primary/10 rounded-2xl p-8 text-center">
+                    <div className="text-5xl font-bold text-primary font-serif mb-2">30%</div>
+                    <p className="text-sm text-muted-foreground mb-4">de descuento para embajadores</p>
+                    <div className="w-16 h-px bg-primary/20 mx-auto mb-4"></div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Inicia tu negocio representando una marca natural, consciente y mexicana.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
