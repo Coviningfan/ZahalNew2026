@@ -49,7 +49,7 @@ export default function FeaturedProducts() {
         </div>
 
         <div className="text-center mt-12">
-          <a href="https://5b32c9-07.myshopify.com/collections/all" target="_blank" rel="noopener noreferrer">
+          <Link href="/productos">
             <Button 
               size="lg"
               variant="outline"
@@ -59,7 +59,7 @@ export default function FeaturedProducts() {
               Ver Tienda Completa
               <ArrowRight className="h-4 w-4" />
             </Button>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

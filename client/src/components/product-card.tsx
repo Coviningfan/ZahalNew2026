@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "wouter";
-import { useToast } from "@/hooks/use-toast";
-import { useCart } from "@/hooks/use-cart";
-import { ShoppingCart, ExternalLink } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Eye } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 interface ProductCardProps {
@@ -12,32 +10,12 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, showBadge = false }: ProductCardProps) {
-  const { toast } = useToast();
-  const { addToCart } = useCart();
+  const [, setLocation] = useLocation();
 
-  const handleBuyNow = (e: React.MouseEvent) => {
+  const handleViewDetails = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
-    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
-  };
-
-  const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      await addToCart(product.id, 1);
-      toast({
-        title: "Producto añadido",
-        description: `${product.name} se ha añadido al carrito`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo añadir el producto al carrito",
-        variant: "destructive",
-      });
-    }
+    setLocation(`/productos/${product.id}`);
   };
 
   return (
@@ -75,14 +53,14 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
               ${product.price} <span className="text-xs font-normal text-muted-foreground">MXN</span>
             </div>
             <Button
-              onClick={handleBuyNow}
+              onClick={handleViewDetails}
               disabled={!product.inStock}
               size="sm"
               className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5"
-              data-testid={`button-buy-now-${product.id}`}
+              data-testid={`button-view-details-${product.id}`}
             >
-              <ExternalLink className="h-3.5 w-3.5" />
-              {product.inStock ? "Comprar" : "Sin stock"}
+              <Eye className="h-3.5 w-3.5" />
+              {product.inStock ? "Ver Detalles" : "Sin stock"}
             </Button>
           </div>
         </div>

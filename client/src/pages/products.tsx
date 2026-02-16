@@ -13,10 +13,10 @@ import type { Product } from "@shared/schema";
 const categories = [
   { value: "all", label: "Todas las categorías" },
   { value: "unisex", label: "Unisex" },
+  { value: "hombre", label: "Hombre" },
   { value: "sport", label: "Sport" },
-  { value: "travel", label: "Travel" },
   { value: "teens", label: "Teens" },
-  { value: "soap", label: "Jabones" },
+  { value: "travel", label: "Travel" },
 ];
 
 export default function Products() {
@@ -24,13 +24,15 @@ export default function Products() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: products, isLoading, error } = useQuery<Product[]>({
-    queryKey: ["/api/products", selectedCategory === "all" ? "" : selectedCategory],
+    queryKey: ["/api/products"],
   });
 
-  const filteredProducts = products?.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
+  const filteredProducts = products?.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  }) || [];
 
   return (
     <div className="min-h-screen bg-background">

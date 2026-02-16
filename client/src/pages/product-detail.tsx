@@ -70,6 +70,7 @@ export default function ProductDetail() {
 
   const categoryLabels: Record<string, string> = {
     unisex: "Unisex",
+    hombre: "Hombre",
     sport: "Sport",
     travel: "Travel",
     teens: "Teens",
