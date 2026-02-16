@@ -1,15 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { useLocation } from "wouter";
 import ProductCard from "@/components/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 export default function FeaturedProducts() {
+  const [, setLocation] = useLocation();
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
+
+  const featuredProducts = products?.slice(0, 3);
+
+  const handleNavigate = () => {
+    const overlay = document.createElement("div");
+    overlay.style.cssText = "position:fixed;inset:0;background:white;opacity:0;z-index:9999;transition:opacity 150ms ease;pointer-events:none;backdrop-filter:blur(4px);";
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      setLocation("/productos");
+      setTimeout(() => {
+        overlay.style.opacity = "0";
+        overlay.addEventListener("transitionend", () => overlay.remove());
+      }, 50);
+    }, 150);
+  };
 
   return (
     <section id="productos" className="py-16 lg:py-24 bg-white">
@@ -26,7 +44,7 @@ export default function FeaturedProducts() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {isLoading ? (
-            Array.from({ length: 6 }).map((_, i) => (
+            Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="bg-white rounded-2xl border border-border/50 p-5">
                 <Skeleton className="w-full h-64 mb-4 rounded-xl" />
                 <Skeleton className="h-5 w-3/4 mb-2" />
@@ -42,24 +60,23 @@ export default function FeaturedProducts() {
               <p className="text-destructive">Error al cargar los productos</p>
             </div>
           ) : (
-            products?.map((product) => (
+            featuredProducts?.map((product) => (
               <ProductCard key={product.id} product={product} showBadge />
             ))
           )}
         </div>
 
         <div className="text-center mt-12">
-          <Link href="/productos">
-            <Button 
-              size="lg"
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary hover:text-white font-semibold gap-2"
-              data-testid="button-view-all-products"
-            >
-              Ver Tienda Completa
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+          <Button 
+            size="lg"
+            variant="outline"
+            className="border-primary text-primary hover:bg-primary hover:text-white font-semibold gap-2"
+            data-testid="button-view-all-products"
+            onClick={handleNavigate}
+          >
+            Ver Tienda Completa
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </section>
