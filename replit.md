@@ -2,33 +2,41 @@
 
 This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application is a hybrid solution: a custom React frontend displays products with premium UI/UX, while redirecting to Shopify for purchases, cart management, and order processing.
 
-# Recent Changes (February 10, 2026)
+# Recent Changes (February 16, 2026)
 
-## UI/UX Redesign
-- Complete color theme overhaul for better contrast: deep green primary (#2B6B3D), amber accent, clean white backgrounds
-- Refined typography with Playfair Display for headings, Inter for body text
-- Cleaner product cards with improved layout, MXN labels, and "Comprar" buttons
-- Streamlined navigation with proper page links
-- Professional footer with real contact info from Shopify
+## Product Catalog Expansion & Navigation Update
+- Expanded product catalog from 6 to 12 products matching full Shopify store
+- "Ver Tienda Completa" button now navigates to /productos (internal) instead of Shopify
+- Product card buttons changed from "Comprar" (Shopify redirect) to "Ver Detalles" (internal navigation)
+- Category filtering on /productos page now works client-side
+- Added new categories: hombre, sport, teens
+- Updated Stick 60g with correct Shopify handle and price ($189)
+- Contact page hero redesigned with clean centered layout (no background image)
 
-## New Pages Created
-- **About Us** (/nosotros): Brand story, mission, philosophy, values, and brand ambassador program — all sourced from Shopify blog content
-- **FAQ** (/preguntas-frecuentes): Comprehensive FAQ with accordion sections covering product ingredients, safety, benefits, application, and duration — all from Shopify blog content
-- **Contact** (/contacto): Contact form with real phone (55 4532 7249), emails (contacto@zahal.com.mx, pedidos@zahal.com.mx), and social media links
-
-## Product Catalog (6 Products)
+## Product Catalog (12 Products)
 1. Desodorante Spray 15ml - $45.00
 2. Roll On con Aloe Vera 30ml - $56.00
-3. Pack Dúo Stick + Spray - $130.00
-4. Spray Corporal 240ml - $131.00
-5. Stick Natural 60g - $230.00
-6. Kit Eco Viajero - $150.00
+3. Roll On Teens con Aroma 30ml - $66.00
+4. Roll On For Men 90ml - $115.00
+5. Roll On Teens 90ml - $115.00
+6. Roll On Sport 90ml - $120.00
+7. Pack Dúo Stick + Spray - $130.00
+8. Spray Corporal 240ml - $131.00
+9. Kit Eco Viajero - $150.00
+10. Stick Natural 60g - $189.00
+11. Stick Natural 120g - $275.00
 
 ## Shopify Integration
 - Product IDs are exact Shopify product handles for seamless checkout
 - Checkout URL format: `https://5b32c9-07.myshopify.com/products/{product-handle}`
-- All "Comprar" buttons open Shopify in new tabs
+- "Comprar en Shopify" button only on product detail page (purchase flow to be configured later)
 - Product images sourced from Shopify CDN
+
+## Previous Changes (February 10, 2026)
+- Complete UI/UX redesign: deep green primary (#2B6B3D), amber accent, clean white backgrounds
+- Playfair Display for headings, Inter for body text
+- New pages: About Us (/nosotros), FAQ (/preguntas-frecuentes), Contact (/contacto)
+- Professional footer with real contact info from Shopify
 
 # User Preferences
 
