@@ -1,30 +1,22 @@
 import { type Product } from "@shared/schema";
-import pg from "pg";
+import { getStripeClient } from "./stripeClient";
 
-const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 5,
-});
-
-function mapRowToProduct(row: any, priceRow?: any): Product {
-  const metadata = typeof row.metadata === 'string' ? JSON.parse(row.metadata) : (row.metadata || {});
+function mapStripeProductToProduct(product: any, price: any): Product {
+  const metadata = product.metadata || {};
   let features: string[] = [];
   try {
     features = typeof metadata.features === 'string' ? JSON.parse(metadata.features) : (metadata.features || []);
   } catch { features = []; }
 
-  let images: string[] = [];
-  if (row.images) {
-    images = typeof row.images === 'string' ? JSON.parse(row.images) : row.images;
-  }
+  let images: string[] = product.images || [];
 
-  const unitAmount = priceRow?.unit_amount || row.unit_amount;
-  const priceStr = unitAmount ? (Number(unitAmount) / 100).toFixed(2) : "0.00";
+  const unitAmount = price?.unit_amount || 0;
+  const priceStr = (unitAmount / 100).toFixed(2);
 
   return {
-    id: metadata.slug || row.id,
-    name: row.name || '',
-    description: row.description || '',
+    id: metadata.slug || product.id,
+    name: product.name || '',
+    description: product.description || '',
     price: priceStr,
     category: metadata.category || 'unisex',
     weight: metadata.weight || null,
@@ -33,10 +25,14 @@ function mapRowToProduct(row: any, priceRow?: any): Product {
     inStock: metadata.inStock !== 'false',
     isFeatured: metadata.isFeatured === 'true',
     isNew: metadata.isNew === 'true',
-    stripePriceId: priceRow?.price_id || priceRow?.id || row.price_id || '',
-    stripeProductId: row.id || row.product_id || '',
+    stripePriceId: price?.id || '',
+    stripeProductId: product.id || '',
   };
 }
+
+let cachedProducts: Product[] | null = null;
+let cacheTimestamp = 0;
+const CACHE_TTL = 60000;
 
 export interface IStorage {
   getProducts(): Promise<Product[]>;
@@ -45,67 +41,51 @@ export interface IStorage {
   getFeaturedProducts(): Promise<Product[]>;
 }
 
-class StripeStorage implements IStorage {
-  async getProducts(): Promise<Product[]> {
-    const result = await pool.query(`
-      SELECT p.id, p.name, p.description, p.images, p.metadata, p.active,
-             pr.id as price_id, pr.unit_amount, pr.currency
-      FROM stripe.products p
-      LEFT JOIN stripe.prices pr ON pr.product = p.id AND pr.active = true
-      WHERE p.active = true
-      ORDER BY pr.unit_amount ASC
-    `);
+class StripeApiStorage implements IStorage {
+  private async fetchAllProducts(): Promise<Product[]> {
+    const now = Date.now();
+    if (cachedProducts && (now - cacheTimestamp) < CACHE_TTL) {
+      return cachedProducts;
+    }
 
-    const productsMap = new Map<string, Product>();
-    for (const row of result.rows) {
-      const product = mapRowToProduct(row, { id: row.price_id, unit_amount: row.unit_amount });
-      if (!productsMap.has(product.id)) {
-        productsMap.set(product.id, product);
+    const stripe = getStripeClient();
+    const products: Product[] = [];
+
+    const stripeProducts = await stripe.products.list({ active: true, limit: 100 });
+
+    for (const product of stripeProducts.data) {
+      const prices = await stripe.prices.list({ product: product.id, active: true, limit: 1 });
+      const price = prices.data[0];
+      if (price) {
+        products.push(mapStripeProductToProduct(product, price));
       }
     }
-    return Array.from(productsMap.values());
+
+    products.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+
+    cachedProducts = products;
+    cacheTimestamp = now;
+    return products;
+  }
+
+  async getProducts(): Promise<Product[]> {
+    return this.fetchAllProducts();
   }
 
   async getProductById(id: string): Promise<Product | undefined> {
-    const result = await pool.query(`
-      SELECT p.id, p.name, p.description, p.images, p.metadata, p.active,
-             pr.id as price_id, pr.unit_amount, pr.currency
-      FROM stripe.products p
-      LEFT JOIN stripe.prices pr ON pr.product = p.id AND pr.active = true
-      WHERE p.active = true AND (p.metadata->>'slug' = $1 OR p.id = $1)
-      LIMIT 1
-    `, [id]);
-
-    if (result.rows.length === 0) return undefined;
-    const row = result.rows[0];
-    return mapRowToProduct(row, { id: row.price_id, unit_amount: row.unit_amount });
+    const products = await this.fetchAllProducts();
+    return products.find(p => p.id === id);
   }
 
   async getProductsByCategory(category: string): Promise<Product[]> {
-    const result = await pool.query(`
-      SELECT p.id, p.name, p.description, p.images, p.metadata, p.active,
-             pr.id as price_id, pr.unit_amount, pr.currency
-      FROM stripe.products p
-      LEFT JOIN stripe.prices pr ON pr.product = p.id AND pr.active = true
-      WHERE p.active = true AND p.metadata->>'category' = $1
-      ORDER BY pr.unit_amount ASC
-    `, [category]);
-
-    return result.rows.map(row => mapRowToProduct(row, { id: row.price_id, unit_amount: row.unit_amount }));
+    const products = await this.fetchAllProducts();
+    return products.filter(p => p.category === category);
   }
 
   async getFeaturedProducts(): Promise<Product[]> {
-    const result = await pool.query(`
-      SELECT p.id, p.name, p.description, p.images, p.metadata, p.active,
-             pr.id as price_id, pr.unit_amount, pr.currency
-      FROM stripe.products p
-      LEFT JOIN stripe.prices pr ON pr.product = p.id AND pr.active = true
-      WHERE p.active = true AND p.metadata->>'isFeatured' = 'true'
-      ORDER BY pr.unit_amount ASC
-    `);
-
-    return result.rows.map(row => mapRowToProduct(row, { id: row.price_id, unit_amount: row.unit_amount }));
+    const products = await this.fetchAllProducts();
+    return products.filter(p => p.isFeatured);
   }
 }
 
-export const storage = new StripeStorage();
+export const storage = new StripeApiStorage();

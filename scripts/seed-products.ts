@@ -1,4 +1,4 @@
-import { getUncachableStripeClient } from '../server/stripeClient';
+import { getStripeClient } from '../server/stripeClient';
 
 const products = [
   {
@@ -200,7 +200,7 @@ const products = [
 ];
 
 async function seedProducts() {
-  const stripe = await getUncachableStripeClient();
+  const stripe = getStripeClient();
 
   for (const product of products) {
     const existing = await stripe.products.search({ query: `name:'${product.name.replace(/'/g, "\\'")}'` });

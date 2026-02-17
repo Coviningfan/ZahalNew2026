@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { checkoutSchema } from "@shared/schema";
-import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { getStripeClient, getStripePublishableKey } from "./stripeClient";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -41,7 +41,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/stripe/publishable-key", async (req, res) => {
     try {
-      const key = await getStripePublishableKey();
+      const key = getStripePublishableKey();
       res.json({ publishableKey: key });
     } catch (error) {
       console.error("Error getting publishable key:", error);
@@ -52,7 +52,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/checkout", async (req, res) => {
     try {
       const { items } = checkoutSchema.parse(req.body);
-      const stripe = await getUncachableStripeClient();
+      const stripe = getStripeClient();
 
       const lineItems = items.map(item => ({
         price: item.stripePriceId,
