@@ -246,101 +246,178 @@ export default function MomentosZahal() {
         </div>
 
         <div className="relative mb-16">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* Mobile: vertical list with inline expansion */}
+          <div className="md:hidden space-y-4">
             {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category)}
-                className={`group cursor-pointer text-left transition-all duration-300 ${
-                  selectedCategory && selectedCategory.id !== category.id ? "opacity-40 grayscale" : ""
-                }`}
-              >
-                <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1 aspect-[3/4]">
-                  <img
-                    src={category.image}
-                    alt={`${category.title} lifestyle`}
-                    className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="text-lg font-bold text-white mb-0.5 tracking-wide">{category.title}</h3>
-                    <p className="text-white/75 text-sm">{category.description}</p>
-                  </div>
-                  {selectedCategory?.id === category.id && (
-                    <div className="absolute top-4 right-4 bg-primary text-white p-1 rounded-full">
-                      <ChevronRight className="h-4 w-4 rotate-90" />
+              <div key={category.id}>
+                <button
+                  onClick={() => setSelectedCategory(selectedCategory?.id === category.id ? null : category)}
+                  className={`group cursor-pointer text-left w-full transition-all duration-300 ${
+                    selectedCategory && selectedCategory.id !== category.id ? "opacity-40 grayscale" : ""
+                  }`}
+                >
+                  <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 aspect-[16/9]">
+                    <img
+                      src={category.image}
+                      alt={`${category.title} lifestyle`}
+                      className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <h3 className="text-lg font-bold text-white mb-0.5 tracking-wide">{category.title}</h3>
+                      <p className="text-white/75 text-sm">{category.description}</p>
                     </div>
-                  )}
-                </div>
-              </button>
+                    {selectedCategory?.id === category.id && (
+                      <div className="absolute top-3 right-3 bg-primary text-white p-1 rounded-full">
+                        <ChevronRight className="h-4 w-4 rotate-90" />
+                      </div>
+                    )}
+                  </div>
+                </button>
+
+                {selectedCategory?.id === category.id && (
+                  <div className="mt-3 bg-white rounded-2xl p-5 border border-primary/10 shadow-lg relative animate-fade-in">
+                    <button
+                      onClick={() => setSelectedCategory(null)}
+                      className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-muted transition-colors z-10"
+                    >
+                      <X className="h-5 w-5 text-muted-foreground" />
+                    </button>
+
+                    <div className="flex gap-4 items-start">
+                      <img
+                        src={category.featuredProduct.image}
+                        alt={category.featuredProduct.name}
+                        className="w-28 h-28 rounded-xl object-cover shrink-0"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-primary font-bold text-[11px] uppercase tracking-widest mb-1">
+                          Momento {category.title}
+                        </p>
+                        <h3 className="text-lg font-bold text-foreground font-serif leading-tight mb-1">
+                          {category.featuredProduct.name}
+                        </h3>
+                        <div className="text-xl font-bold text-primary mb-1">
+                          {category.featuredProduct.price} <span className="text-xs font-normal text-muted-foreground">MXN</span>
+                        </div>
+                        <div className="flex gap-0.5 mb-2">
+                          <StarRating rating={5} />
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-muted-foreground text-sm leading-relaxed mt-3 mb-4">
+                      {category.featuredProduct.description}
+                    </p>
+                    <Button
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold h-11 gap-2"
+                      onClick={() => navigateTo(`/productos/${category.featuredProduct.id}`)}
+                    >
+                      Ver Detalles
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
-          {/* Expanded Product View */}
-          <div 
-            className={`mt-8 overflow-hidden transition-all duration-500 ease-in-out ${
-              selectedCategory ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            {selectedCategory && (
-              <div className="bg-white rounded-3xl p-8 lg:p-12 border border-primary/10 shadow-xl relative overflow-hidden">
-                <button 
-                  onClick={() => setSelectedCategory(null)}
-                  className="absolute top-6 right-6 p-2 rounded-full hover:bg-muted transition-colors z-10"
+          {/* Tablet/Desktop: grid with panel below */}
+          <div className="hidden md:block">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(selectedCategory?.id === category.id ? null : category)}
+                  className={`group cursor-pointer text-left transition-all duration-300 ${
+                    selectedCategory && selectedCategory.id !== category.id ? "opacity-40 grayscale" : ""
+                  }`}
                 >
-                  <X className="h-6 w-6 text-muted-foreground" />
-                </button>
-                
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  <div className="relative order-2 lg:order-1">
-                    <div className="absolute -inset-4 bg-primary/5 rounded-full blur-3xl"></div>
-                    <img 
-                      src={selectedCategory.featuredProduct.image} 
-                      alt={selectedCategory.featuredProduct.name}
-                      className="relative w-full max-w-sm mx-auto h-auto rounded-2xl drop-shadow-2xl"
+                  <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1 aspect-[3/4]">
+                    <img
+                      src={category.image}
+                      alt={`${category.title} lifestyle`}
+                      className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
-                  </div>
-                  
-                  <div className="order-1 lg:order-2">
-                    <p className="text-primary font-bold text-sm uppercase tracking-widest mb-4">
-                      Recomendado para momento {selectedCategory.title}
-                    </p>
-                    <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 font-serif">
-                      {selectedCategory.featuredProduct.name}
-                    </h3>
-                    <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                      {selectedCategory.featuredProduct.description}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-6 mb-10">
-                      <div className="text-3xl font-bold text-primary">
-                        {selectedCategory.featuredProduct.price} <span className="text-lg font-normal text-muted-foreground">MXN</span>
-                      </div>
-                      <div className="flex gap-1">
-                        <StarRating rating={5} />
-                      </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <h3 className="text-lg font-bold text-white mb-0.5 tracking-wide">{category.title}</h3>
+                      <p className="text-white/75 text-sm">{category.description}</p>
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <Button 
-                        size="lg" 
-                        className="bg-primary hover:bg-primary/90 text-white font-semibold h-13 px-8 gap-2"
-                        onClick={() => navigateTo(`/productos/${selectedCategory.featuredProduct.id}`)}
-                      >
-                        Ver Detalles
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        size="lg" 
-                        variant="outline"
-                        className="border-primary/20 hover:bg-primary/5 text-primary font-semibold h-13 px-8"
-                        onClick={() => setSelectedCategory(null)}
-                      >
-                        Cerrar Momentos
-                      </Button>
+                    {selectedCategory?.id === category.id && (
+                      <div className="absolute top-4 right-4 bg-primary text-white p-1 rounded-full">
+                        <ChevronRight className="h-4 w-4 rotate-90" />
+                      </div>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div
+              className={`mt-8 overflow-hidden transition-all duration-500 ease-in-out ${
+                selectedCategory ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              {selectedCategory && (
+                <div className="bg-white rounded-3xl p-8 lg:p-12 border border-primary/10 shadow-xl relative overflow-hidden">
+                  <button
+                    onClick={() => setSelectedCategory(null)}
+                    className="absolute top-6 right-6 p-2 rounded-full hover:bg-muted transition-colors z-10"
+                  >
+                    <X className="h-6 w-6 text-muted-foreground" />
+                  </button>
+
+                  <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    <div className="relative order-2 lg:order-1">
+                      <div className="absolute -inset-4 bg-primary/5 rounded-full blur-3xl"></div>
+                      <img
+                        src={selectedCategory.featuredProduct.image}
+                        alt={selectedCategory.featuredProduct.name}
+                        className="relative w-full max-w-sm mx-auto h-auto rounded-2xl drop-shadow-2xl"
+                      />
+                    </div>
+
+                    <div className="order-1 lg:order-2">
+                      <p className="text-primary font-bold text-sm uppercase tracking-widest mb-4">
+                        Recomendado para momento {selectedCategory.title}
+                      </p>
+                      <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 font-serif">
+                        {selectedCategory.featuredProduct.name}
+                      </h3>
+                      <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+                        {selectedCategory.featuredProduct.description}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-6 mb-10">
+                        <div className="text-3xl font-bold text-primary">
+                          {selectedCategory.featuredProduct.price} <span className="text-lg font-normal text-muted-foreground">MXN</span>
+                        </div>
+                        <div className="flex gap-1">
+                          <StarRating rating={5} />
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <Button
+                          size="lg"
+                          className="bg-primary hover:bg-primary/90 text-white font-semibold h-13 px-8 gap-2"
+                          onClick={() => navigateTo(`/productos/${selectedCategory.featuredProduct.id}`)}
+                        >
+                          Ver Detalles
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="lg"
+                          variant="outline"
+                          className="border-primary/20 hover:bg-primary/5 text-primary font-semibold h-13 px-8"
+                          onClick={() => setSelectedCategory(null)}
+                        >
+                          Cerrar
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
