@@ -75,16 +75,72 @@ interface Momento {
 
 const momentos: Momento[] = [
   {
+    name: "Ricardo Q.",
+    location: "Ciudad de México",
+    text: "Excelente opción para el problema de mal olor, lo compré para mis hijos adolescentes y desde el primer momento quedaron contentos con el olor y con el resultado. Fácil de usar y práctico envase. Recomendado al 100%.",
+    rating: 5,
+    avatar: "RQ",
+    timeAgo: "hace 2 semanas",
+    relatedProduct: {
+      id: "zahal-desodorante-natural-roll-on-teens-90-ml",
+      name: "Roll On Teens 90ml",
+      price: "$115",
+      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/20_03593599-4a47-4229-9ab9-13ddd0b88349.png?v=1753748140"
+    }
+  },
+  {
+    name: "Nohemi P.",
+    location: "Estado de México",
+    text: "Excelente producto, protege muy bien, ya no tengo manchas en la ropa y aclaró mi axila. Desde que lo encontré no lo cambio. Super recomendado.",
+    rating: 5,
+    avatar: "NP",
+    timeAgo: "hace 1 mes",
+    relatedProduct: {
+      id: "zahal-desodorante-natural-roll-on-con-aloe-vera-30-ml",
+      name: "Roll On con Aloe Vera 30ml",
+      price: "$56",
+      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/4_92b57410-71ea-4240-8827-cb1106f7cc70.png?v=1753748770"
+    }
+  },
+  {
+    name: "Eduardo G.",
+    location: "Mérida",
+    text: "A lo largo de mi vida he usado desodorantes que han provocado irritación, buscaba una opción natural y encontré ZAHAL. Es una maravilla, puedo andar con alta actividad física, incluso después de ir al gimnasio y sigo sin mal olor. Recomendado.",
+    rating: 5,
+    avatar: "EG",
+    timeAgo: "hace 3 semanas",
+    relatedProduct: {
+      id: "zahal-desodorante-natural-roll-on-sport-con-carbon-activado-90-ml",
+      name: "Roll On Sport 90ml",
+      price: "$120",
+      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/22_ff2e0357-efb6-461e-afc0-46f05cc19f51.png?v=1753751451"
+    }
+  },
+  {
+    name: "Kenia R.",
+    location: "Sonora",
+    text: "Hace cuatro años que uso la piedra ZAHAL, me siento súper segura durante el día. Me encanta que es natural y no tiene daños para mi salud. Dura muchísimo. Cómprenlo, es maravilloso.",
+    rating: 5,
+    avatar: "KR",
+    timeAgo: "hace 2 meses",
+    relatedProduct: {
+      id: "zahal-desodorante-natural-stik-120-g",
+      name: "Stick Natural 120g",
+      price: "$275",
+      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242"
+    }
+  },
+  {
     name: "Mariana G.",
     location: "CDMX",
     text: "Llevaba años buscando algo que no me irritara la piel después de depilarme. Con ZAHAL puedo aplicarlo al instante, sin ardor. Mi esposo también se cambió y ya van 8 meses sin volver a lo convencional.",
     rating: 5,
     avatar: "MG",
-    timeAgo: "hace 2 semanas",
+    timeAgo: "hace 1 mes",
     relatedProduct: {
-      id: "zahal-desodorante-natural-stik-120-g",
-      name: "Stick Natural 120g",
-      price: "$275",
+      id: "zahal-desodorante-natural-stik-60-g",
+      name: "Stick Natural 60g",
+      price: "$189",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242"
     }
   },
@@ -94,7 +150,7 @@ const momentos: Momento[] = [
     text: "Trabajo en obra y sudaba mucho. Me daba pena el olor. Un compa me recomendó ZAHAL y la neta no mancha mis camisas y aguanta todo el turno. Ya no me preocupo.",
     rating: 5,
     avatar: "RL",
-    timeAgo: "hace 1 mes",
+    timeAgo: "hace 3 semanas",
     relatedProduct: {
       id: "zahal-desodorante-natural-roll-on-men-90-ml",
       name: "Roll On For Men 90ml",
@@ -108,7 +164,7 @@ const momentos: Momento[] = [
     text: "Lo uso después del gym y me encanta la sensación de frescura. No tiene olor artificial, simplemente te deja limpia. Mis amigas ya me preguntan qué uso y les paso el dato.",
     rating: 5,
     avatar: "ST",
-    timeAgo: "hace 3 semanas",
+    timeAgo: "hace 2 semanas",
     relatedProduct: {
       id: "zahal-desodorante-corporal-natural-en-spray-240-ml",
       name: "Spray Corporal 240ml",
