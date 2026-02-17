@@ -59,7 +59,8 @@ export default function Navigation() {
             <Link href="/productos">
               <Button
                 size="sm"
-                className="hidden lg:inline-flex bg-primary hover:bg-primary/90 text-white font-semibold h-9 px-5 text-sm gap-1.5"
+                variant="outline"
+                className="hidden lg:inline-flex border-primary/25 text-primary hover:bg-primary hover:text-white font-medium h-9 px-5 text-sm gap-1.5 transition-colors duration-200"
                 data-testid="button-nav-shop"
               >
                 Tienda

@@ -68,17 +68,17 @@ export default function FeaturedProducts() {
           )}
         </div>
 
-        <div className="text-center mt-12 space-y-3">
+        <div className="text-center mt-12">
           <Button 
             size="lg"
-            className="bg-primary hover:bg-primary/90 text-white font-semibold gap-2 h-13 px-10 shadow-sm"
+            variant="outline"
+            className="border-primary/30 text-primary hover:bg-primary hover:text-white font-semibold gap-2 h-12 px-8"
             data-testid="button-view-all-products"
             onClick={handleNavigate}
           >
-            Ver los {products?.length || 11} Productos
+            Ver Tienda Completa
             <ArrowRight className="h-4 w-4" />
           </Button>
-          <p className="text-muted-foreground/60 text-xs">Desde $45 MXN — Envío a todo México</p>
         </div>
       </div>
     </section>

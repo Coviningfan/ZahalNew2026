@@ -57,7 +57,7 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
               onClick={handleViewDetails}
               disabled={!product.inStock}
               size="sm"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 text-xs group-hover:shadow-md group-hover:scale-[1.03] transition-all duration-300"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 text-xs"
               data-testid={`button-view-details-${product.id}`}
             >
               <Eye className="h-3.5 w-3.5" />
