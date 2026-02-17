@@ -1,13 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Leaf, ArrowRight } from "lucide-react";
-
-const featuredProduct = {
-  id: "zahal-desodorante-natural-stik-120-g",
-  name: "Stick Natural 120g",
-  price: "$275",
-  image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242",
-};
+import heroImage from "@assets/ZAHAL_PROD_012_dfa9fd33-8688-41b6-ac9b-c6ca187d00fa_1759341695530.jpg";
 
 export default function HeroSection() {
   const [, setLocation] = useLocation();
@@ -43,7 +37,7 @@ export default function HeroSection() {
       }}></div>
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in">
             <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide" data-testid="badge-natural">
               <Leaf className="h-4 w-4 mr-2 text-emerald-300" />
@@ -54,7 +48,7 @@ export default function HeroSection() {
               <span className="italic text-emerald-200">respeta</span>{" "}
               tu cuerpo
             </h1>
-            <p className="text-lg lg:text-xl text-white/80 mb-10 leading-relaxed max-w-lg">
+            <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">
               Desodorantes de piedra de alumbre: protección natural que dura 24 horas,
               sin químicos que dañen tu piel ni tu ropa.
             </p>
@@ -80,66 +74,20 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Product Square — Desktop */}
           <div className="relative animate-scale-in hidden lg:flex justify-center" data-testid="hero-product-square">
-            <div
-              className="relative bg-white/[0.07] backdrop-blur-lg border border-white/12 rounded-3xl p-8 max-w-sm w-full cursor-pointer group"
-              onClick={() => navigateTo(`/productos/${featuredProduct.id}`)}
-            >
-              <div className="relative rounded-2xl p-6 mb-6">
-                <img
-                  src={featuredProduct.image}
-                  alt={featuredProduct.name}
-                  className="w-full h-72 object-contain drop-shadow-lg group-hover:scale-[1.03] transition-transform duration-500"
-                />
-              </div>
-
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-white mb-1 font-serif">
-                  {featuredProduct.name}
-                </h3>
-                <p className="text-white/50 text-sm mb-5">Nuestro más vendido</p>
-                <div className="flex items-center justify-center gap-3 mb-6">
-                  <span className="text-2xl font-bold text-white">{featuredProduct.price}</span>
-                  <span className="text-white/40 text-sm">MXN</span>
+            <div className="relative">
+              <div className="absolute -inset-6 bg-white/5 rounded-3xl blur-xl"></div>
+              <img
+                src={heroImage}
+                alt="Zahal desodorante natural de piedra de alumbre"
+                className="relative w-full max-w-md h-auto rounded-2xl shadow-2xl shadow-black/20"
+              />
+              <div className="absolute -bottom-4 -right-4 bg-white rounded-xl p-4 shadow-xl animate-float">
+                <div className="text-primary text-center">
+                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Desde</div>
+                  <div className="text-2xl font-bold">$45</div>
+                  <div className="text-xs text-muted-foreground">MXN</div>
                 </div>
-                <Button
-                  className="w-full bg-white/10 hover:bg-white/20 text-white font-medium h-11 gap-2 text-sm border border-white/15 backdrop-blur-sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigateTo(`/productos/${featuredProduct.id}`);
-                  }}
-                  data-testid="button-hero-product-cta"
-                >
-                  Ver Producto
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Product Square — Mobile */}
-          <div className="lg:hidden animate-fade-in mt-2" data-testid="hero-product-square-mobile">
-            <div
-              className="bg-white/[0.07] backdrop-blur-lg border border-white/12 rounded-2xl p-3.5 cursor-pointer"
-              onClick={() => navigateTo(`/productos/${featuredProduct.id}`)}
-            >
-              <div className="flex gap-4 items-center">
-                <div className="rounded-xl p-1.5 shrink-0">
-                  <img
-                    src={featuredProduct.image}
-                    alt={featuredProduct.name}
-                    className="w-20 h-20 object-contain"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-white/40 text-[11px] uppercase tracking-wider mb-0.5">Más vendido</p>
-                  <h3 className="text-sm font-semibold text-white font-serif mb-1">
-                    {featuredProduct.name}
-                  </h3>
-                  <span className="text-lg font-bold text-white">{featuredProduct.price} <span className="text-white/40 text-xs font-normal">MXN</span></span>
-                </div>
-                <ArrowRight className="h-4 w-4 text-white/30 shrink-0" />
               </div>
             </div>
           </div>
