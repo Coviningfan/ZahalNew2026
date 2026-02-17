@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useLocation } from "wouter";
-import { Eye } from "lucide-react";
+import { ShoppingCart, Zap } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
+import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@shared/schema";
 
 interface ProductCardProps {
@@ -11,11 +13,23 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, showBadge = false }: ProductCardProps) {
   const [, setLocation] = useLocation();
+  const { addToCart, buyNow, isCheckingOut } = useCart();
+  const { toast } = useToast();
 
-  const handleViewDetails = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setLocation(`/productos/${product.id}`);
+    addToCart(product);
+    toast({
+      title: "Producto agregado",
+      description: `${product.name} se ha agregado a tu carrito.`,
+    });
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    buyNow(product);
   };
 
   return (
@@ -48,20 +62,32 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
           <p className="text-muted-foreground text-sm mb-4 line-clamp-2 leading-relaxed" data-testid={`text-product-description-${product.id}`}>
             {product.description}
           </p>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-3">
             <div data-testid={`text-product-price-${product.id}`}>
               <span className="text-xl font-bold text-foreground">${product.price}</span>
               <span className="text-xs font-normal text-muted-foreground ml-1">MXN</span>
             </div>
+          </div>
+          <div className="flex gap-2">
             <Button
-              onClick={handleViewDetails}
+              onClick={handleBuyNow}
+              disabled={!product.inStock || isCheckingOut}
+              size="sm"
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 text-xs font-semibold"
+              data-testid={`button-buy-now-${product.id}`}
+            >
+              <Zap className="h-3.5 w-3.5" />
+              Comprar Ahora
+            </Button>
+            <Button
+              onClick={handleAddToCart}
               disabled={!product.inStock}
               size="sm"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 text-xs"
-              data-testid={`button-view-details-${product.id}`}
+              variant="outline"
+              className="gap-1.5 text-xs border-primary/30 text-primary hover:bg-primary/5"
+              data-testid={`button-add-cart-${product.id}`}
             >
-              <Eye className="h-3.5 w-3.5" />
-              {product.inStock ? "Ver Detalles" : "Sin stock"}
+              <ShoppingCart className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>

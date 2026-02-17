@@ -11,6 +11,7 @@ interface CartContextType {
   totalPrice: number;
   isCheckingOut: boolean;
   checkout: () => Promise<void>;
+  buyNow: (product: Product) => Promise<void>;
 }
 
 const CART_KEY = "zahal_cart";
@@ -128,10 +129,32 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [rawItems]);
 
+  const buyNow = useCallback(async (product: Product) => {
+    setIsCheckingOut(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: [{ stripePriceId: product.stripePriceId, quantity: 1 }] }),
+      });
+
+      if (!res.ok) throw new Error("Checkout failed");
+
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error("Buy now error:", error);
+    } finally {
+      setIsCheckingOut(false);
+    }
+  }, []);
+
   return (
     <CartContext.Provider value={{
       cartItems, addToCart, updateQuantity, removeItem, clearCart,
-      totalItems, totalPrice, isCheckingOut, checkout,
+      totalItems, totalPrice, isCheckingOut, checkout, buyNow,
     }}>
       {children}
     </CartContext.Provider>
