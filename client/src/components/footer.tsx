@@ -132,11 +132,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/40 text-xs">
-            &copy; {new Date().getFullYear()} Zahal Productos Naturales. Todos los derechos reservados.
+        <div className="border-t border-white/8 py-6 flex flex-col items-center gap-2">
+          <p className="text-white/60 text-[10px] font-medium tracking-widest uppercase">
+            Powered by JABVLabs
           </p>
-          <div className="flex gap-6 text-white/40 text-xs">
+          <p className="text-white/40 text-xs">
+            &copy; 2026 Zahal Productos Naturales. Todos los derechos reservados.
+          </p>
+          <div className="flex gap-6 text-white/40 text-xs mt-2">
             <span className="hover:text-white/70 transition-colors cursor-pointer">Privacidad</span>
             <span className="hover:text-white/70 transition-colors cursor-pointer">Términos</span>
           </div>
