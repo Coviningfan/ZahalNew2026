@@ -3,6 +3,7 @@ import HeroSection from "@/components/hero-section";
 import FeaturesSection from "@/components/features-section";
 import ProofSection from "@/components/proof-section";
 import FeaturedProducts from "@/components/featured-products";
+import BrandsCarousel from "@/components/brands-carousel";
 import MomentosZahal from "@/components/momentos-zahal";
 import AboutSection from "@/components/about-section";
 import Newsletter from "@/components/newsletter";
@@ -15,6 +16,7 @@ export default function Home() {
       <HeroSection />
       <FeaturesSection />
       <ProofSection />
+      <BrandsCarousel />
       <MomentosZahal />
       <FeaturedProducts />
       <AboutSection />
