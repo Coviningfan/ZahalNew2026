@@ -236,9 +236,11 @@ function MomentoCard({ momento, index, onNavigate }: { momento: Momento; index: 
 
 export default function MomentosZahal() {
   const [, setLocation] = useLocation();
-  const [currentPage, setCurrentPage] = useState(0);
-  const [cardsPerPage, setCardsPerPage] = useState(3);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<typeof categories[0] | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const navigateTo = (path: string) => {
     const overlay = document.createElement("div");
@@ -255,36 +257,51 @@ export default function MomentosZahal() {
     }, 150);
   };
 
-  useEffect(() => {
-    const updateCardsPerPage = () => {
-      if (window.innerWidth < 640) setCardsPerPage(1);
-      else if (window.innerWidth < 1024) setCardsPerPage(2);
-      else setCardsPerPage(3);
-    };
-    updateCardsPerPage();
-    window.addEventListener("resize", updateCardsPerPage);
-    return () => window.removeEventListener("resize", updateCardsPerPage);
-  }, []);
-
-  const totalPages = Math.ceil(momentos.length / cardsPerPage);
+  const slideTo = useCallback((index: number) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex(index);
+    setTimeout(() => setIsTransitioning(false), 500);
+  }, [isTransitioning]);
 
   const next = useCallback(() => {
-    setCurrentPage((p) => (p + 1) % totalPages);
-  }, [totalPages]);
+    slideTo((currentIndex + 1) % momentos.length);
+  }, [currentIndex, slideTo]);
 
   const prev = useCallback(() => {
-    setCurrentPage((p) => (p - 1 + totalPages) % totalPages);
-  }, [totalPages]);
+    slideTo((currentIndex - 1 + momentos.length) % momentos.length);
+  }, [currentIndex, slideTo]);
 
   useEffect(() => {
-    const interval = setInterval(next, 6000);
+    const interval = setInterval(next, 5000);
     return () => clearInterval(interval);
   }, [next]);
 
-  const visibleMomentos = momentos.slice(
-    currentPage * cardsPerPage,
-    currentPage * cardsPerPage + cardsPerPage
-  );
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (Math.abs(distance) > 50) {
+      if (distance > 0) next();
+      else prev();
+    }
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  const getVisibleIndices = (count: number) => {
+    const indices: number[] = [];
+    for (let i = 0; i < count; i++) {
+      indices.push((currentIndex + i) % momentos.length);
+    }
+    return indices;
+  };
 
   return (
     <section className="py-16 lg:py-24 bg-card linen-texture overflow-hidden">
@@ -477,22 +494,63 @@ export default function MomentosZahal() {
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto pt-8">
+        <div className="max-w-6xl mx-auto pt-8">
           <div className="text-center mb-8">
             <p className="text-muted-foreground text-sm font-medium">
               Lo que dicen quienes ya hicieron el cambio
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {visibleMomentos.map((momento, i) => (
-              <MomentoCard
-                key={currentPage * cardsPerPage + i}
-                momento={momento}
-                index={currentPage * cardsPerPage + i}
-                onNavigate={navigateTo}
-              />
-            ))}
+          <div
+            className="relative"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="hidden lg:grid grid-cols-3 gap-5">
+              {getVisibleIndices(3).map((idx, pos) => (
+                <div
+                  key={`${currentIndex}-${pos}`}
+                  className="animate-carousel-fade"
+                  style={{ animationDelay: `${pos * 80}ms` }}
+                >
+                  <MomentoCard
+                    momento={momentos[idx]}
+                    index={idx}
+                    onNavigate={navigateTo}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden sm:grid lg:hidden grid-cols-2 gap-5">
+              {getVisibleIndices(2).map((idx, pos) => (
+                <div
+                  key={`${currentIndex}-${pos}`}
+                  className="animate-carousel-fade"
+                  style={{ animationDelay: `${pos * 80}ms` }}
+                >
+                  <MomentoCard
+                    momento={momentos[idx]}
+                    index={idx}
+                    onNavigate={navigateTo}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="sm:hidden">
+              <div
+                key={`${currentIndex}-mobile`}
+                className="animate-carousel-fade"
+              >
+                <MomentoCard
+                  momento={momentos[currentIndex]}
+                  index={currentIndex}
+                  onNavigate={navigateTo}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center justify-center gap-4 mt-10">
@@ -500,21 +558,23 @@ export default function MomentosZahal() {
               onClick={prev}
               className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors duration-200"
               aria-label="Anterior"
+              data-testid="button-testimonial-prev"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
 
             <div className="flex gap-2">
-              {Array.from({ length: totalPages }).map((_, i) => (
+              {momentos.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setCurrentPage(i)}
+                  onClick={() => slideTo(i)}
                   className={`h-2 rounded-full transition-all duration-300 ${
-                    i === currentPage
+                    i === currentIndex
                       ? "w-6 bg-primary"
                       : "w-2 bg-border hover:bg-primary/40"
                   }`}
-                  aria-label={`Página ${i + 1}`}
+                  aria-label={`Testimonio ${i + 1}`}
+                  data-testid={`dot-testimonial-${i}`}
                 />
               ))}
             </div>
@@ -523,6 +583,7 @@ export default function MomentosZahal() {
               onClick={next}
               className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors duration-200"
               aria-label="Siguiente"
+              data-testid="button-testimonial-next"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
