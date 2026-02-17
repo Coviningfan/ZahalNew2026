@@ -7,7 +7,7 @@ import walmartLogo from "@assets/Walmart-Logo_1771350421242.jpg";
 import superNaturistaLogo from "@assets/Super_naturista_logo_1771350421243.webp";
 import getmeLogo from "@assets/getme_by_ola_logo_1771350421244.webp";
 import amazonLogo from "@assets/amazon_logo_1771350421246.png";
-import mercadoLibreLogo from "@assets/Mercado_libre_logo_1771350421247.jpg";
+import mercadoLibreLogo from "@assets/mercado-libre-logo-png_seeklogo-472565_1771351576967.png";
 import sorianaLogo from "@assets/soriana-logo-png_seeklogo-284960_1771350650256.png";
 import bodegaAurreraLogo from "@assets/png-transparent-logo-brand-green-bodega-aurrera-product-line-t_1771350657131.png";
 
