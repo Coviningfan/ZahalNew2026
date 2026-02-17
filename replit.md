@@ -1,8 +1,20 @@
 # Overview
 
-This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application is a hybrid solution: a custom React frontend displays products with premium UI/UX, while redirecting to Shopify for purchases, cart management, and order processing.
+This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application uses a custom React frontend with direct Stripe payment processing — no Shopify dependency.
 
 # Recent Changes (February 17, 2026)
+
+## Stripe Integration (Replacing Shopify)
+- Complete migration from Shopify checkout to native Stripe Checkout
+- All 11 products created in Stripe with prices, metadata (category, weight, features, inStock, isFeatured, isNew)
+- Backend reads products from Stripe sync tables (stripe.products, stripe.prices) via PostgreSQL
+- Client-side shopping cart using React Context + localStorage
+- Cart sidebar in navigation with add/remove items, quantity controls, checkout button
+- POST /api/checkout creates Stripe Checkout session and redirects to Stripe-hosted checkout
+- Success page at /checkout/exito, cancel page at /checkout/cancelado
+- Stripe webhooks auto-sync product/price changes to local database
+- "Agregar al Carrito" replaces old "Comprar en Shopify" button on product detail pages
+- Removed all Shopify checkout/cart URLs; only legacy CDN image URLs remain (still functional)
 
 ## Premium + Earthy Redesign
 - Complete visual overhaul: removed amber/yellow accent, replaced with all-green palette
@@ -32,14 +44,12 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 10. Stick Natural 60g - $189.00
 11. Stick Natural 120g - $275.00
 
-## Shopify Integration
-- Product IDs are exact Shopify product handles for seamless checkout
-- Checkout URL format: `https://5b32c9-07.myshopify.com/products/{product-handle}`
-- "Comprar en Shopify" button only on product detail page
-- "Preguntar por WhatsApp" button on product detail page
-- Product images sourced from Shopify CDN
-
 ## Key Components
+- `use-cart.tsx`: CartProvider context with localStorage persistence, checkout via Stripe
+- `navigation.tsx`: Glass-blur nav with cart sidebar (Sheet component)
+- `product-detail.tsx`: Product page with "Agregar al Carrito", WhatsApp, trust badges
+- `checkout-success.tsx`: Order confirmation page, clears cart
+- `checkout-cancel.tsx`: Payment cancelled page
 - `proof-section.tsx`: Trust/reassurance component with highlights and stats
 - `hero-section.tsx`: Full-screen hero with green gradient overlay
 - `featured-products.tsx`: Shows first 3 products with "Ver Tienda Completa" CTA
@@ -55,15 +65,29 @@ Mexican market UX: WhatsApp integration, trust signals, Spanish-first copy.
 
 ## Frontend Architecture
 - **React SPA**: Single-page application built with React 18 and TypeScript
-- **Routing**: Wouter — routes: /, /productos, /productos/:id, /nosotros, /preguntas-frecuentes, /contacto
-- **State Management**: TanStack Query (React Query) v5
+- **Routing**: Wouter — routes: /, /productos, /productos/:id, /nosotros, /preguntas-frecuentes, /contacto, /checkout/exito, /checkout/cancelado
+- **State Management**: TanStack Query v5 (product data) + React Context (cart)
+- **Cart**: Client-side localStorage-based cart via CartProvider
 - **UI Framework**: Shadcn/ui + Radix UI + Tailwind CSS
 - **Build Tool**: Vite
 
 ## Backend Architecture
 - **Express.js Server**: RESTful API server with TypeScript
-- **Storage Layer**: In-memory MemStorage implementation
-- **API Endpoints**: GET /api/products, GET /api/products/:id, cart CRUD operations
+- **Storage Layer**: Reads products from Stripe sync tables (stripe.products, stripe.prices) in PostgreSQL
+- **Stripe Integration**: Managed webhook + backfill sync for products/prices
+- **API Endpoints**:
+  - GET /api/products — list all products
+  - GET /api/products/:id — single product by slug
+  - POST /api/checkout — create Stripe Checkout session
+  - GET /api/stripe/publishable-key — frontend Stripe key
+
+## Payment Flow
+1. User adds items to cart (client-side localStorage)
+2. User clicks "Proceder al pago" in cart sidebar
+3. Frontend POSTs to /api/checkout with { items: [{ stripePriceId, quantity }] }
+4. Backend creates Stripe Checkout Session with line items, MX shipping
+5. User is redirected to Stripe-hosted checkout page
+6. On success → /checkout/exito (cart cleared), on cancel → /checkout/cancelado
 
 ## Design System
 - **Primary**: Deep green hsl(152 45% 28%) — brand color
@@ -76,6 +100,12 @@ Mexican market UX: WhatsApp integration, trust signals, Spanish-first copy.
 - **Texture**: Subtle linen-like SVG pattern via `.linen-texture` class
 
 ## External Dependencies
-- Neon Database (PostgreSQL), Radix UI, Tailwind CSS, Lucide React, React Icons, React Hook Form, Zod, date-fns
+- Stripe (payments), Neon Database (PostgreSQL), Radix UI, Tailwind CSS, Lucide React, React Icons, React Hook Form, Zod, date-fns
 
-The application follows a monorepo structure with shared TypeScript types between frontend and backend. The design emphasizes premium, organic aesthetics with warm earthy tones aligned with the brand's natural positioning and Mexican market focus.
+## Important Files
+- `server/stripeClient.ts` — Stripe client initialization
+- `server/webhookHandlers.ts` — Stripe webhook event handlers
+- `server/storage.ts` — Product storage reading from Stripe sync tables
+- `server/routes.ts` — API routes including checkout
+- `client/src/hooks/use-cart.tsx` — Cart context provider
+- `scripts/seed-products.ts` — Script to seed products in Stripe
