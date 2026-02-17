@@ -79,7 +79,7 @@ export default function HeroSection() {
               <div className="absolute -inset-6 bg-white/5 rounded-3xl blur-xl"></div>
               <img 
                 src={heroImage} 
-                alt="Zahal desodorante natural roll-on con piedra de alumbre y aloe vera" 
+                alt="Zahal desodorante natural de piedra de alumbre" 
                 className="relative w-full max-w-md h-auto rounded-2xl shadow-2xl shadow-black/20" 
               />
               <div className="absolute -bottom-4 -right-4 bg-white rounded-xl p-4 shadow-xl animate-float">

@@ -41,7 +41,7 @@ export default function ProofSection() {
               Menos químicos, más tranquilidad en tu rutina diaria
             </h2>
             <p className="text-muted-foreground text-base lg:text-lg leading-relaxed mb-6">
-              Diseñamos nuestro desodorante con piedra de alumbre y aloe vera para que te sientas
+              Diseñamos nuestros desodorantes con piedra de alumbre para que te sientas
               protegido sin comprometer la salud de tu piel ni arriesgar tu ropa.
             </p>
 
