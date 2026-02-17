@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
-import { Menu, ShoppingCart, X, Plus, Minus } from "lucide-react";
+import { Menu, ShoppingCart, X, Plus, Minus, ArrowRight } from "lucide-react";
 import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 export default function Navigation() {
@@ -55,7 +55,17 @@ export default function Navigation() {
             ))}
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            <Link href="/productos">
+              <Button
+                size="sm"
+                className="hidden lg:inline-flex bg-primary hover:bg-primary/90 text-white font-semibold h-9 px-5 text-sm gap-1.5"
+                data-testid="button-nav-shop"
+              >
+                Tienda
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
               <SheetTrigger asChild>
                 <Button

@@ -51,6 +51,7 @@ export default function Newsletter() {
               Suscribirme
             </Button>
           </form>
+          <p className="text-white/35 text-xs mt-4">Sin spam. Solo tips y ofertas. Cancela cuando quieras.</p>
         </div>
       </div>
     </section>

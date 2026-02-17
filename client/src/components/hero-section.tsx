@@ -60,9 +60,19 @@ export default function HeroSection() {
               <span className="italic text-emerald-200">respeta</span>{" "}
               tu cuerpo
             </h1>
-            <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">
+            <p className="text-lg lg:text-xl text-white/85 mb-6 leading-relaxed max-w-lg">
               Desodorantes de piedra de alumbre: protección natural que dura 24 horas,
               sin químicos que dañen tu piel ni tu ropa.
+            </p>
+            <p className="text-white/50 text-sm mb-8 flex items-center gap-2">
+              <span className="flex -space-x-1.5">
+                {["MG", "RL", "ST"].map((initials) => (
+                  <span key={initials} className="w-6 h-6 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-[9px] font-semibold text-white/80">
+                    {initials}
+                  </span>
+                ))}
+              </span>
+              <span>Más de 2,000 familias mexicanas confían en ZAHAL</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
@@ -192,7 +202,9 @@ export default function HeroSection() {
                     <span className="text-white/50 text-xs">MXN</span>
                   </div>
                 </div>
-                <ArrowRight className="h-5 w-5 text-white/40 shrink-0" />
+                <span className="bg-white/10 rounded-full p-1.5 shrink-0">
+                  <ArrowRight className="h-4 w-4 text-white/70" />
+                </span>
               </div>
             </div>
           </div>

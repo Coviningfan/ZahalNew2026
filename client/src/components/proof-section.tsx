@@ -64,20 +64,28 @@ export default function ProofSection() {
           </div>
 
           <div className="grid gap-4">
-            {proofStats.map((item) => {
+            {proofStats.map((item, index) => {
               const Icon = item.icon;
+              const isFirst = index === 0;
               return (
                 <article
                   key={item.label}
-                  className="bg-white rounded-2xl border border-primary/10 shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition-shadow duration-300"
+                  className={`rounded-2xl border shadow-sm flex items-center gap-4 hover:shadow-md transition-all duration-300 ${
+                    isFirst 
+                      ? "bg-primary text-white p-6 border-primary shadow-md" 
+                      : "bg-white p-5 border-primary/10"
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                   data-testid="proof-stat"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/8 flex items-center justify-center">
-                    <Icon className="h-6 w-6 text-primary" />
+                  <div className={`rounded-xl flex items-center justify-center shrink-0 ${
+                    isFirst ? "w-14 h-14 bg-white/15" : "w-12 h-12 bg-primary/8"
+                  }`}>
+                    <Icon className={`${isFirst ? "h-7 w-7 text-white" : "h-6 w-6 text-primary"}`} />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-foreground">{item.value}</div>
-                    <p className="text-sm text-muted-foreground">{item.label}</p>
+                    <div className={`font-bold ${isFirst ? "text-3xl" : "text-2xl text-foreground"}`}>{item.value}</div>
+                    <p className={`text-sm ${isFirst ? "text-white/80" : "text-muted-foreground"}`}>{item.label}</p>
                   </div>
                 </article>
               );
