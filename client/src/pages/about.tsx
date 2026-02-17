@@ -52,7 +52,7 @@ export default function About() {
                     <img
                       src="https://cdn.shopify.com/s/files/1/0622/1004/8065/files/WhatsApp_Image_2024-11-26_at_09.09.05.jpg?v=1732636829&width=1500"
                       alt="Equipo Zahal"
-                      className="w-full h-[350px] object-cover rounded-2xl"
+                      className="w-full h-auto max-h-[500px] object-cover object-top rounded-2xl"
                     />
                   </div>
                 </div>
