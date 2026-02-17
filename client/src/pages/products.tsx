@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSearch } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
@@ -20,8 +21,18 @@ const categories = [
 ];
 
 export default function Products() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const searchString = useSearch();
+  const urlParams = new URLSearchParams(searchString);
+  const categoriaParam = urlParams.get("categoria");
+
+  const [selectedCategory, setSelectedCategory] = useState(categoriaParam || "all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    if (categoriaParam && categories.some(c => c.value === categoriaParam)) {
+      setSelectedCategory(categoriaParam);
+    }
+  }, [categoriaParam]);
 
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ["/api/products"],

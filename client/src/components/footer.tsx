@@ -5,9 +5,10 @@ import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 const productLinks = [
   { href: "/productos", label: "Todos los productos" },
-  { href: "/productos", label: "Unisex" },
-  { href: "/productos", label: "Sport" },
-  { href: "/productos", label: "Teens" },
+  { href: "/productos?categoria=unisex", label: "Unisex" },
+  { href: "/productos?categoria=sport", label: "Sport" },
+  { href: "/productos?categoria=teens", label: "Teens" },
+  { href: "/productos/eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon", label: "Kit Eco Viajero" },
 ];
 
 const infoLinks = [
