@@ -22,7 +22,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="inicio" className="relative min-h-[75vh] lg:min-h-[80vh] flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080"

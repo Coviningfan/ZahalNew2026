@@ -33,38 +33,27 @@ export default function Navigation() {
             />
           </Link>
 
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-7">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors duration-200 relative ${
+                className={`text-[13px] font-medium tracking-wide uppercase transition-colors duration-200 relative py-1 ${
                   location === item.href 
                     ? "text-primary" 
-                    : "text-foreground/60 hover:text-foreground"
+                    : "text-foreground/55 hover:text-foreground"
                 }`}
                 data-testid={`link-${item.label.toLowerCase()}`}
               >
                 {item.label}
                 {location === item.href && (
-                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+                  <span className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-primary rounded-full"></span>
                 )}
               </Link>
             ))}
           </div>
 
-          <div className="flex items-center space-x-3">
-            <Link href="/productos">
-              <Button
-                size="sm"
-                variant="outline"
-                className="hidden lg:inline-flex border-primary/25 text-primary hover:bg-primary hover:text-white font-medium h-9 px-5 text-sm gap-1.5 transition-colors duration-200"
-                data-testid="button-nav-shop"
-              >
-                Tienda
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </Link>
+          <div className="flex items-center space-x-2">
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
               <SheetTrigger asChild>
                 <Button

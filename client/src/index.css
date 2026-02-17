@@ -85,9 +85,10 @@
 }
 
 .glass-card {
-  backdrop-filter: blur(16px) saturate(180%);
-  background: hsl(80 20% 98% / 0.88);
-  border-bottom: 1px solid hsl(140 15% 88% / 0.5);
+  backdrop-filter: blur(20px) saturate(180%);
+  background: hsl(80 20% 98% / 0.92);
+  border-bottom: 1px solid hsl(140 15% 85% / 0.6);
+  box-shadow: 0 1px 3px hsl(150 10% 20% / 0.04);
 }
 
 .linen-texture {
