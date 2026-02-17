@@ -273,7 +273,7 @@ export default function MomentosZahal() {
   }, [currentIndex, slideTo]);
 
   useEffect(() => {
-    const interval = setInterval(next, 5000);
+    const interval = setInterval(next, 8000);
     return () => clearInterval(interval);
   }, [next]);
 
