@@ -82,11 +82,11 @@ export default function HeroSection() {
                 alt="Zahal desodorante natural de piedra de alumbre"
                 className="relative w-full max-w-md h-auto rounded-2xl shadow-2xl shadow-black/20"
               />
-              <div className="absolute -bottom-4 -right-4 bg-white rounded-xl p-4 shadow-xl animate-float">
-                <div className="text-primary text-center">
-                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Desde</div>
-                  <div className="text-2xl font-bold">$45</div>
-                  <div className="text-xs text-muted-foreground">MXN</div>
+              <div className="absolute -bottom-4 -right-4 bg-white/15 backdrop-blur-xl border border-white/20 rounded-xl p-4 shadow-xl animate-float">
+                <div className="text-center">
+                  <div className="text-xs font-medium text-white/60 uppercase tracking-wider">Desde</div>
+                  <div className="text-2xl font-bold text-white">$45</div>
+                  <div className="text-xs text-white/60">MXN</div>
                 </div>
               </div>
             </div>
