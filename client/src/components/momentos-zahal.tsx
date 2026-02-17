@@ -255,11 +255,11 @@ export default function MomentosZahal() {
                   selectedCategory && selectedCategory.id !== category.id ? "opacity-40 grayscale" : ""
                 }`}
               >
-                <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1">
+                <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1 aspect-[3/4]">
                   <img
                     src={category.image}
                     alt={`${category.title} lifestyle`}
-                    className="w-full h-56 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-5">
