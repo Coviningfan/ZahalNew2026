@@ -40,8 +40,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const productIds = rawItems.map(i => i.productId).filter(id => !productCache.has(id));
-    if (productIds.length === 0) return;
-
+    
+    // Always refresh product data to ensure price IDs are up to date
     fetch("/api/products")
       .then(r => r.json())
       .then((products: Product[]) => {
@@ -50,6 +50,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           products.forEach(p => next.set(p.id, p));
           return next;
         });
+        
+        // Sync rawItems with fresh price IDs if they differ
+        setRawItems(prev => prev.map(item => {
+          const p = products.find(prod => prod.id === item.productId);
+          if (p && p.stripePriceId !== item.stripePriceId) {
+            return { ...item, stripePriceId: p.stripePriceId };
+          }
+          return item;
+        }));
       })
       .catch(() => {});
   }, [rawItems.length]);

@@ -57,7 +57,15 @@ class StripeApiStorage implements IStorage {
       const prices = await stripe.prices.list({ product: product.id, active: true, limit: 1 });
       const price = prices.data[0];
       if (price) {
-        products.push(mapStripeProductToProduct(product, price));
+        const p = mapStripeProductToProduct(product, price);
+        products.push(p);
+        // Ensure the cache is updated with the correct price ID
+        if (cachedProducts) {
+          const index = cachedProducts.findIndex(cp => cp.id === p.id);
+          if (index !== -1) {
+            cachedProducts[index] = p;
+          }
+        }
       }
     }
 
