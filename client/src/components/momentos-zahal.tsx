@@ -85,7 +85,7 @@ const momentos: Momento[] = [
       id: "zahal-desodorante-natural-stik-120-g",
       name: "Stick Natural 120g",
       price: "$275",
-      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_Shopify_3_299bbd31-41a7-48db-84b3-6d1dd4b99721.jpg?v=1729192268&width=200"
+      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242"
     }
   },
   {
@@ -99,7 +99,7 @@ const momentos: Momento[] = [
       id: "zahal-desodorante-natural-roll-on-men-90-ml",
       name: "Roll On For Men 90ml",
       price: "$115",
-      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/18_b12bb71f-34f5-474a-b9dc-9bd50802f32c_533x.png?v=1753750893"
+      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/18_b12bb71f-34f5-474a-b9dc-9bd50802f32c.png?v=1753750893"
     }
   },
   {
@@ -113,7 +113,7 @@ const momentos: Momento[] = [
       id: "zahal-desodorante-corporal-natural-en-spray-240-ml",
       name: "Spray Corporal 240ml",
       price: "$131",
-      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_Shopify_17_0cf49831-3460-4132-9add-19bbeb41a922_1100x.jpg?v=1753817454"
+      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/1_c7be3dfa-4d93-46ce-836c-67dbe4a66b92.png?v=1753753301"
     }
   },
 ];
