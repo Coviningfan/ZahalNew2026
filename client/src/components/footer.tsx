@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Facebook, Instagram, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import { SiTiktok, SiWhatsapp } from "react-icons/si";
 import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
@@ -18,6 +18,13 @@ const infoLinks = [
 ];
 
 export default function Footer() {
+  const [, setLocation] = useLocation();
+
+  const handleProductLink = (href: string) => {
+    setLocation(href);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <footer className="bg-foreground text-white">
       <div className="container mx-auto px-4 lg:px-8">
@@ -78,13 +85,17 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {productLinks.map((link, i) => (
                 <li key={i}>
-                  <Link 
+                  <a 
                     href={link.href}
-                    className="text-white/60 hover:text-white text-sm transition-colors duration-200"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleProductLink(link.href);
+                    }}
+                    className="text-white/60 hover:text-white text-sm transition-colors duration-200 cursor-pointer"
                     data-testid={`link-product-${link.label.toLowerCase().replace(/ /g, "-")}`}
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
