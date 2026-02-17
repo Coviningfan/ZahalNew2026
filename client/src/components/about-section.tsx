@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { CheckCircle, ArrowRight } from "lucide-react";
+import alumbreNatural from "@assets/image_16_1771348502523.png";
 
 const benefits = [
   "Sin clorhidrato de aluminio",
@@ -48,8 +49,8 @@ export default function AboutSection() {
           <div className="relative">
             <div className="absolute -inset-4 bg-primary/5 rounded-3xl -z-10"></div>
             <img 
-              src="https://cdn.shopify.com/s/files/1/0622/1004/8065/files/WhatsApp_Image_2024-11-26_at_09.09.05.jpg?v=1732636829&width=1500" 
-              alt="Embajadores de marca Zahal" 
+              src={alumbreNatural} 
+              alt="Piedra de Alumbre Natural Zahal" 
               className="w-full h-auto rounded-2xl shadow-lg" 
             />
             <div className="absolute -bottom-5 -left-5 bg-primary rounded-xl p-5 shadow-xl">
