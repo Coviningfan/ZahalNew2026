@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, Leaf, Award, ExternalLink, ArrowLeft, Check, Truck, ShieldCheck } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
+import { Shield, Leaf, Award, ArrowLeft, Check, Truck, ShieldCheck, ShoppingCart } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { Link } from "wouter";
 import type { Product } from "@shared/schema";
@@ -14,15 +15,19 @@ import type { Product } from "@shared/schema";
 export default function ProductDetail() {
   const { id } = useParams();
   const { toast } = useToast();
+  const { addToCart } = useCart();
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ["/api/products", id],
   });
 
-  const handleBuyNow = () => {
+  const handleAddToCart = () => {
     if (!product) return;
-    const shopifyUrl = `https://5b32c9-07.myshopify.com/products/${product.id}`;
-    window.open(shopifyUrl, '_blank', 'noopener,noreferrer');
+    addToCart(product);
+    toast({
+      title: "Producto agregado",
+      description: `${product.name} se ha agregado a tu carrito.`,
+    });
   };
 
   if (isLoading) {
@@ -167,13 +172,13 @@ export default function ProductDetail() {
               <div className="flex flex-col gap-3 pt-2">
                 <Button
                   size="lg"
-                  onClick={handleBuyNow}
+                  onClick={handleAddToCart}
                   disabled={!product.inStock}
                   className="w-full bg-primary hover:bg-primary/90 text-white h-12 gap-2 font-semibold"
-                  data-testid="button-buy-now"
+                  data-testid="button-add-to-cart"
                 >
-                  <ExternalLink className="h-4 w-4" />
-                  {product.inStock ? "Comprar en Shopify" : "Sin stock"}
+                  <ShoppingCart className="h-4 w-4" />
+                  {product.inStock ? "Agregar al Carrito" : "Sin stock"}
                 </Button>
                 <a
                   href={`https://wa.me/5215545327249?text=Hola, me interesa el producto: ${product.name}`}

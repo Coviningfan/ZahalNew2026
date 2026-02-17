@@ -4,16 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
-import { Menu, ShoppingCart, X, Plus, Minus, ArrowRight } from "lucide-react";
+import { Menu, ShoppingCart, X, Plus, Minus, ArrowRight, Loader2 } from "lucide-react";
 import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 export default function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cartItems, updateQuantity, removeItem } = useCart();
-
-  const totalItems = cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
+  const { cartItems, updateQuantity, removeItem, totalItems, totalPrice, checkout, isCheckingOut } = useCart();
 
   const navItems = [
     { href: "/", label: "Inicio" },
@@ -87,65 +85,87 @@ export default function Navigation() {
                 <SheetHeader>
                   <SheetTitle className="font-serif">Carrito de Compras</SheetTitle>
                 </SheetHeader>
-                <div className="mt-6">
+                <div className="mt-6 flex flex-col h-[calc(100vh-8rem)]">
                   {cartItems.length === 0 ? (
                     <div className="text-center py-12">
                       <ShoppingCart className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
                       <p className="text-muted-foreground text-sm">Tu carrito está vacío</p>
+                      <Link href="/productos" onClick={() => setIsCartOpen(false)}>
+                        <Button variant="outline" size="sm" className="mt-4 gap-1.5" data-testid="button-browse-products">
+                          Ver productos
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </Button>
+                      </Link>
                     </div>
                   ) : (
-                    <div className="space-y-4">
-                      {cartItems.map((item: any) => (
-                        <div key={item.productId} className="flex items-center space-x-4 p-4 bg-card rounded-xl border border-border/50">
-                          <div className="flex-1">
-                            <h3 className="font-medium text-sm">{item.productName || item.productId}</h3>
-                            <p className="text-sm text-muted-foreground">${item.price || '0.00'} MXN</p>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              size="icon"
-                              variant="outline"
-                              onClick={() => updateQuantity(item.productId, Math.max(0, item.quantity - 1))}
-                              className="h-7 w-7"
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-6 text-center text-sm">{item.quantity}</span>
-                            <Button
-                              size="icon"
-                              variant="outline"
-                              onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                              className="h-7 w-7"
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
+                    <>
+                      <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+                        {cartItems.map((item) => (
+                          <div key={item.productId} className="flex items-start gap-3 p-3 bg-card rounded-xl border border-border/50" data-testid={`cart-item-${item.productId}`}>
+                            <img 
+                              src={item.product.images[0]} 
+                              alt={item.product.name}
+                              className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-medium text-sm leading-snug truncate">{item.product.name}</h3>
+                              <p className="text-sm text-primary font-semibold mt-0.5">${item.product.price} MXN</p>
+                              <div className="flex items-center gap-2 mt-2">
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                                  className="h-7 w-7"
+                                  data-testid={`button-decrease-${item.productId}`}
+                                >
+                                  <Minus className="h-3 w-3" />
+                                </Button>
+                                <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                                  className="h-7 w-7"
+                                  data-testid={`button-increase-${item.productId}`}
+                                >
+                                  <Plus className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
                             <Button
                               size="icon"
                               variant="ghost"
-                              onClick={() => removeItem(item.id)}
-                              className="h-7 w-7 text-destructive hover:text-destructive"
+                              onClick={() => removeItem(item.productId)}
+                              className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0"
+                              data-testid={`button-remove-${item.productId}`}
                             >
-                              <X className="h-3 w-3" />
+                              <X className="h-3.5 w-3.5" />
                             </Button>
                           </div>
+                        ))}
+                      </div>
+                      <div className="pt-4 border-t border-border/50 space-y-3 mt-auto">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">Total ({totalItems} {totalItems === 1 ? 'producto' : 'productos'})</span>
+                          <span className="text-lg font-bold" data-testid="text-cart-total">${totalPrice.toFixed(2)} MXN</span>
                         </div>
-                      ))}
-                      <div className="pt-4 border-t border-border/50">
-                        <Button 
-                          className="w-full bg-primary hover:bg-primary/90 text-white h-11 font-semibold" 
-                          onClick={() => {
-                            const items = cartItems.map((item: any) => 
-                              `${item.productId}:${item.quantity}`
-                            ).join(',');
-                            const shopifyCartUrl = `https://5b32c9-07.myshopify.com/cart/${items}`;
-                            window.open(shopifyCartUrl, '_blank', 'noopener,noreferrer');
-                          }}
+                        <Button
+                          className="w-full bg-primary hover:bg-primary/90 text-white h-11 font-semibold gap-2"
+                          onClick={checkout}
+                          disabled={isCheckingOut}
                           data-testid="button-checkout"
                         >
-                          Proceder al Checkout
+                          {isCheckingOut ? (
+                            <>
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Procesando...
+                            </>
+                          ) : (
+                            "Proceder al pago"
+                          )}
                         </Button>
                       </div>
-                    </div>
+                    </>
                   )}
                 </div>
               </SheetContent>

@@ -1,82 +1,145 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/api";
-import type { CartItemWithProduct, InsertCartItem } from "@shared/schema";
+import { useState, useEffect, useCallback, createContext, useContext } from "react";
+import type { Product, CartItem } from "@shared/schema";
+
+interface CartContextType {
+  cartItems: (CartItem & { product: Product })[];
+  addToCart: (product: Product, quantity?: number) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string) => void;
+  clearCart: () => void;
+  totalItems: number;
+  totalPrice: number;
+  isCheckingOut: boolean;
+  checkout: () => Promise<void>;
+}
+
+const CART_KEY = "zahal_cart";
+
+function loadCart(): CartItem[] {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveCart(items: CartItem[]) {
+  localStorage.setItem(CART_KEY, JSON.stringify(items));
+}
+
+const CartContext = createContext<CartContextType | null>(null);
+
+export function CartProvider({ children }: { children: React.ReactNode }) {
+  const [rawItems, setRawItems] = useState<CartItem[]>(loadCart);
+  const [productCache, setProductCache] = useState<Map<string, Product>>(new Map());
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  useEffect(() => {
+    saveCart(rawItems);
+  }, [rawItems]);
+
+  useEffect(() => {
+    const productIds = rawItems.map(i => i.productId).filter(id => !productCache.has(id));
+    if (productIds.length === 0) return;
+
+    fetch("/api/products")
+      .then(r => r.json())
+      .then((products: Product[]) => {
+        setProductCache(prev => {
+          const next = new Map(prev);
+          products.forEach(p => next.set(p.id, p));
+          return next;
+        });
+      })
+      .catch(() => {});
+  }, [rawItems.length]);
+
+  const cartItems = rawItems
+    .map(item => {
+      const product = productCache.get(item.productId);
+      if (!product) return null;
+      return { ...item, product };
+    })
+    .filter(Boolean) as (CartItem & { product: Product })[];
+
+  const addToCart = useCallback((product: Product, quantity = 1) => {
+    setProductCache(prev => {
+      const next = new Map(prev);
+      next.set(product.id, product);
+      return next;
+    });
+
+    setRawItems(prev => {
+      const existing = prev.find(i => i.productId === product.id);
+      if (existing) {
+        return prev.map(i =>
+          i.productId === product.id ? { ...i, quantity: i.quantity + quantity } : i
+        );
+      }
+      return [...prev, { productId: product.id, quantity, stripePriceId: product.stripePriceId }];
+    });
+  }, []);
+
+  const updateQuantity = useCallback((productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      setRawItems(prev => prev.filter(i => i.productId !== productId));
+    } else {
+      setRawItems(prev => prev.map(i =>
+        i.productId === productId ? { ...i, quantity } : i
+      ));
+    }
+  }, []);
+
+  const removeItem = useCallback((productId: string) => {
+    setRawItems(prev => prev.filter(i => i.productId !== productId));
+  }, []);
+
+  const clearCart = useCallback(() => {
+    setRawItems([]);
+  }, []);
+
+  const totalItems = rawItems.reduce((sum, i) => sum + i.quantity, 0);
+  const totalPrice = cartItems.reduce((sum, i) => sum + (parseFloat(i.product.price) * i.quantity), 0);
+
+  const checkout = useCallback(async () => {
+    if (rawItems.length === 0) return;
+    setIsCheckingOut(true);
+    try {
+      const items = rawItems.map(i => ({
+        stripePriceId: i.stripePriceId,
+        quantity: i.quantity,
+      }));
+
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      });
+
+      if (!res.ok) throw new Error("Checkout failed");
+
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+    } finally {
+      setIsCheckingOut(false);
+    }
+  }, [rawItems]);
+
+  return (
+    <CartContext.Provider value={{
+      cartItems, addToCart, updateQuantity, removeItem, clearCart,
+      totalItems, totalPrice, isCheckingOut, checkout,
+    }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
 
 export function useCart() {
-  const queryClient = useQueryClient();
-
-  const { data: cartItems = [], isLoading } = useQuery<CartItemWithProduct[]>({
-    queryKey: ["/api/cart"],
-  });
-
-  const addToCartMutation = useMutation({
-    mutationFn: async (item: Omit<InsertCartItem, "sessionId">) => {
-      const response = await apiRequest("POST", "/api/cart", item);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
-    },
-  });
-
-  const updateQuantityMutation = useMutation({
-    mutationFn: async ({ id, quantity }: { id: string; quantity: number }) => {
-      const response = await apiRequest("PUT", `/api/cart/${id}`, { quantity });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
-    },
-  });
-
-  const removeItemMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await apiRequest("DELETE", `/api/cart/${id}`);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
-    },
-  });
-
-  const clearCartMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiRequest("DELETE", "/api/cart");
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
-    },
-  });
-
-  const addToCart = async (productId: string, quantity: number = 1) => {
-    return addToCartMutation.mutateAsync({ productId, quantity });
-  };
-
-  const updateQuantity = async (id: string, quantity: number) => {
-    return updateQuantityMutation.mutateAsync({ id, quantity });
-  };
-
-  const removeItem = async (id: string) => {
-    return removeItemMutation.mutateAsync(id);
-  };
-
-  const clearCart = async () => {
-    return clearCartMutation.mutateAsync();
-  };
-
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cartItems.reduce((sum, item) => sum + (parseFloat(item.product.price) * item.quantity), 0);
-
-  return {
-    cartItems,
-    isLoading,
-    addToCart,
-    updateQuantity,
-    removeItem,
-    clearCart,
-    totalItems,
-    totalPrice,
-    isUpdating: addToCartMutation.isPending || updateQuantityMutation.isPending || removeItemMutation.isPending,
-  };
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be used within CartProvider");
+  return ctx;
 }

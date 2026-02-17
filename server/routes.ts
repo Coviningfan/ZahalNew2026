@@ -1,15 +1,15 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCartItemSchema } from "@shared/schema";
+import { checkoutSchema } from "@shared/schema";
+import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Product routes
   app.get("/api/products", async (req, res) => {
     try {
       const { category, featured } = req.query;
-      
+
       let products;
       if (category) {
         products = await storage.getProductsByCategory(category as string);
@@ -18,9 +18,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } else {
         products = await storage.getProducts();
       }
-      
+
       res.json(products);
     } catch (error) {
+      console.error("Error fetching products:", error);
       res.status(500).json({ message: "Failed to fetch products" });
     }
   });
@@ -33,76 +34,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(product);
     } catch (error) {
+      console.error("Error fetching product:", error);
       res.status(500).json({ message: "Failed to fetch product" });
     }
   });
 
-  // Cart routes
-  app.get("/api/cart", async (req, res) => {
+  app.get("/api/stripe/publishable-key", async (req, res) => {
     try {
-      const sessionId = (req as any).sessionID || 'anonymous';
-      const cartItems = await storage.getCartItems(sessionId);
-      res.json(cartItems);
+      const key = await getStripePublishableKey();
+      res.json({ publishableKey: key });
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch cart items" });
+      console.error("Error getting publishable key:", error);
+      res.status(500).json({ message: "Failed to get Stripe configuration" });
     }
   });
 
-  app.post("/api/cart", async (req, res) => {
+  app.post("/api/checkout", async (req, res) => {
     try {
-      const sessionId = (req as any).sessionID || 'anonymous';
-      const validatedData = insertCartItemSchema.parse({
-        ...req.body,
-        sessionId,
+      const { items } = checkoutSchema.parse(req.body);
+      const stripe = await getUncachableStripeClient();
+
+      const lineItems = items.map(item => ({
+        price: item.stripePriceId,
+        quantity: item.quantity,
+      }));
+
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: lineItems,
+        mode: 'payment',
+        success_url: `${baseUrl}/checkout/exito?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/checkout/cancelado`,
+        shipping_address_collection: {
+          allowed_countries: ['MX'],
+        },
+        locale: 'es',
       });
-      
-      const cartItem = await storage.addToCart(validatedData);
-      res.json(cartItem);
+
+      res.json({ url: session.url });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid cart item data", errors: error.errors });
+        return res.status(400).json({ message: "Invalid checkout data", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to add item to cart" });
-    }
-  });
-
-  app.put("/api/cart/:id", async (req, res) => {
-    try {
-      const { quantity } = req.body;
-      if (typeof quantity !== 'number' || quantity < 0) {
-        return res.status(400).json({ message: "Invalid quantity" });
-      }
-      
-      const updatedItem = await storage.updateCartItemQuantity(req.params.id, quantity);
-      if (!updatedItem) {
-        return res.status(404).json({ message: "Cart item not found" });
-      }
-      
-      res.json(updatedItem);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to update cart item" });
-    }
-  });
-
-  app.delete("/api/cart/:id", async (req, res) => {
-    try {
-      const success = await storage.removeFromCart(req.params.id);
-      if (!success) {
-        return res.status(404).json({ message: "Cart item not found" });
-      }
-      res.json({ message: "Item removed from cart" });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to remove item from cart" });
-    }
-  });
-
-  app.delete("/api/cart", async (req, res) => {
-    try {
-      const sessionId = (req as any).sessionID || 'anonymous';
-      await storage.clearCart(sessionId);
-      res.json({ message: "Cart cleared" });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to clear cart" });
+      console.error("Checkout error:", error);
+      res.status(500).json({ message: "Failed to create checkout session" });
     }
   });
 

@@ -137,8 +137,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Zahal Productos Naturales. Todos los derechos reservados.
           </p>
           <div className="flex gap-6 text-white/40 text-xs">
-            <a href="https://5b32c9-07.myshopify.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-white/70 transition-colors">Privacidad</a>
-            <a href="https://5b32c9-07.myshopify.com/policies/terms-of-service" target="_blank" rel="noopener noreferrer" className="hover:text-white/70 transition-colors">Términos</a>
+            <span className="hover:text-white/70 transition-colors cursor-pointer">Privacidad</span>
+            <span className="hover:text-white/70 transition-colors cursor-pointer">Términos</span>
           </div>
         </div>
       </div>
