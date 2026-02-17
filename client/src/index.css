@@ -161,7 +161,7 @@
   }
 
   .animate-scroll-brands {
-    animation: scrollBrands 30s linear infinite;
+    animation: scrollBrands 50s linear infinite;
   }
 
   .animate-scroll-brands:hover {

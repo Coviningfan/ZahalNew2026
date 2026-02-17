@@ -12,18 +12,18 @@ import sorianaLogo from "@assets/soriana-logo-png_seeklogo-284960_1771350650256.
 import bodegaAurreraLogo from "@assets/png-transparent-logo-brand-green-bodega-aurrera-product-line-t_1771350657131.png";
 
 const brands = [
-  { name: "Walmart", logo: walmartLogo, height: "h-8 md:h-11" },
-  { name: "Amazon", logo: amazonLogo, height: "h-10 md:h-14" },
-  { name: "Mercado Libre", logo: mercadoLibreLogo, height: "h-10 md:h-14" },
-  { name: "H-E-B", logo: hebLogo, height: "h-8 md:h-11" },
-  { name: "Chedraui", logo: chedrauiLogo, height: "h-10 md:h-14" },
-  { name: "Soriana", logo: sorianaLogo, height: "h-10 md:h-14" },
-  { name: "Bodega Aurrera", logo: bodegaAurreraLogo, height: "h-8 md:h-11" },
-  { name: "Sears", logo: searsLogo, height: "h-8 md:h-11" },
-  { name: "Sanborns", logo: sanbornsLogo, height: "h-10 md:h-14" },
-  { name: "Nutrisa", logo: nutrisaLogo, height: "h-10 md:h-14" },
-  { name: "Super Naturista", logo: superNaturistaLogo, height: "h-10 md:h-14" },
-  { name: "Get Me by Ola", logo: getmeLogo, height: "h-8 md:h-11" },
+  { name: "Walmart", logo: walmartLogo, height: "h-12 md:h-16" },
+  { name: "Amazon", logo: amazonLogo, height: "h-14 md:h-20" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, height: "h-14 md:h-20" },
+  { name: "H-E-B", logo: hebLogo, height: "h-12 md:h-16" },
+  { name: "Chedraui", logo: chedrauiLogo, height: "h-14 md:h-20" },
+  { name: "Soriana", logo: sorianaLogo, height: "h-14 md:h-20" },
+  { name: "Bodega Aurrera", logo: bodegaAurreraLogo, height: "h-12 md:h-16" },
+  { name: "Sears", logo: searsLogo, height: "h-8 md:h-10" },
+  { name: "Sanborns", logo: sanbornsLogo, height: "h-14 md:h-20" },
+  { name: "Nutrisa", logo: nutrisaLogo, height: "h-14 md:h-20" },
+  { name: "Super Naturista", logo: superNaturistaLogo, height: "h-14 md:h-20" },
+  { name: "Get Me by Ola", logo: getmeLogo, height: "h-12 md:h-16" },
 ];
 
 function BrandItem({ brand, index }: { brand: typeof brands[0]; index: number }) {
