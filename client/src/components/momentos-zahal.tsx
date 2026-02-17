@@ -259,7 +259,7 @@ export default function MomentosZahal() {
                   <img
                     src={category.image}
                     alt={`${category.title} lifestyle`}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-56 object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-5">
