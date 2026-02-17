@@ -4,6 +4,7 @@ import FeaturesSection from "@/components/features-section";
 import ProofSection from "@/components/proof-section";
 import ProductCategories from "@/components/product-categories";
 import FeaturedProducts from "@/components/featured-products";
+import MomentosZahal from "@/components/momentos-zahal";
 import AboutSection from "@/components/about-section";
 import Newsletter from "@/components/newsletter";
 import Footer from "@/components/footer";
@@ -17,6 +18,7 @@ export default function Home() {
       <ProofSection />
       <ProductCategories />
       <FeaturedProducts />
+      <MomentosZahal />
       <AboutSection />
       <Newsletter />
       <Footer />
