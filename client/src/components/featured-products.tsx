@@ -16,7 +16,7 @@ export default function FeaturedProducts() {
 
   const handleNavigate = () => {
     const overlay = document.createElement("div");
-    overlay.style.cssText = "position:fixed;inset:0;background:white;opacity:0;z-index:9999;transition:opacity 150ms ease;pointer-events:none;backdrop-filter:blur(4px);";
+    overlay.style.cssText = "position:fixed;inset:0;background:hsl(80 20% 98%);opacity:0;z-index:9999;transition:opacity 150ms ease;pointer-events:none;backdrop-filter:blur(4px);";
     document.body.appendChild(overlay);
     requestAnimationFrame(() => { overlay.style.opacity = "1"; });
     setTimeout(() => {
@@ -35,23 +35,25 @@ export default function FeaturedProducts() {
         <div className="text-center mb-12">
           <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Catálogo</p>
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 font-serif">
-            Nuestros Productos
+            Nuestros Más Vendidos
           </h2>
           <p className="text-muted-foreground text-base max-w-xl mx-auto">
-            Desodorantes naturales de piedra de alumbre para toda la familia
+            Los favoritos de nuestra comunidad — protección natural para toda la familia
           </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-border/50 p-5">
-                <Skeleton className="w-full h-64 mb-4 rounded-xl" />
-                <Skeleton className="h-5 w-3/4 mb-2" />
-                <Skeleton className="h-4 w-full mb-4" />
-                <div className="flex justify-between items-center">
-                  <Skeleton className="h-6 w-20" />
-                  <Skeleton className="h-9 w-24" />
+              <div key={i} className="bg-white rounded-2xl border border-border/40 overflow-hidden">
+                <Skeleton className="w-full h-64" />
+                <div className="p-5">
+                  <Skeleton className="h-5 w-3/4 mb-2" />
+                  <Skeleton className="h-4 w-full mb-4" />
+                  <div className="flex justify-between items-center">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-9 w-24" />
+                  </div>
                 </div>
               </div>
             ))
@@ -70,7 +72,7 @@ export default function FeaturedProducts() {
           <Button 
             size="lg"
             variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-white font-semibold gap-2"
+            className="border-primary/30 text-primary hover:bg-primary hover:text-white font-semibold gap-2 h-12 px-8"
             data-testid="button-view-all-products"
             onClick={handleNavigate}
           >

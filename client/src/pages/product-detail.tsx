@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { ShoppingCart, Shield, Leaf, Award, ExternalLink, ArrowLeft, Check } from "lucide-react";
+import { Shield, Leaf, Award, ExternalLink, ArrowLeft, Check, Truck, ShieldCheck } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
 import { Link } from "wouter";
 import type { Product } from "@shared/schema";
 
@@ -88,20 +89,22 @@ export default function ProductDetail() {
             Volver a productos
           </Link>
 
-          <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 max-w-5xl mx-auto">
             <div className="relative">
-              <img
-                src={product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"}
-                alt={product.name}
-                className="w-full aspect-square object-cover rounded-2xl bg-card"
-                data-testid="img-product"
-              />
+              <div className="bg-card/50 rounded-2xl overflow-hidden">
+                <img
+                  src={product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"}
+                  alt={product.name}
+                  className="w-full aspect-square object-cover"
+                  data-testid="img-product"
+                />
+              </div>
               <div className="absolute top-4 right-4 flex gap-2">
                 {product.isNew && (
-                  <Badge className="bg-primary text-white px-3 py-1">Nuevo</Badge>
+                  <Badge className="bg-emerald-600/90 backdrop-blur-sm text-white px-3 py-1">Nuevo</Badge>
                 )}
                 {product.isFeatured && (
-                  <Badge className="bg-accent text-white px-3 py-1">Popular</Badge>
+                  <Badge className="bg-primary/90 backdrop-blur-sm text-white px-3 py-1">Popular</Badge>
                 )}
               </div>
               {product.images.length > 1 && (
@@ -121,7 +124,7 @@ export default function ProductDetail() {
 
             <div className="space-y-6">
               <div>
-                <Badge variant="secondary" className="mb-3 text-xs">
+                <Badge variant="secondary" className="mb-3 text-xs font-medium">
                   {categoryLabels[product.category] || product.category}
                 </Badge>
                 <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3 font-serif" data-testid="text-product-name">
@@ -145,7 +148,7 @@ export default function ProductDetail() {
               )}
 
               {product.features.length > 0 && (
-                <div className="bg-card rounded-xl p-5 border border-border/50">
+                <div className="bg-card rounded-xl p-5 border border-border/40">
                   <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
                     <Shield className="h-4 w-4 text-primary" />
                     Características
@@ -161,17 +164,48 @@ export default function ProductDetail() {
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <div className="flex flex-col gap-3 pt-2">
                 <Button
                   size="lg"
                   onClick={handleBuyNow}
                   disabled={!product.inStock}
-                  className="flex-1 bg-primary hover:bg-primary/90 text-white h-12 gap-2 font-semibold"
+                  className="w-full bg-primary hover:bg-primary/90 text-white h-12 gap-2 font-semibold"
                   data-testid="button-buy-now"
                 >
                   <ExternalLink className="h-4 w-4" />
                   {product.inStock ? "Comprar en Shopify" : "Sin stock"}
                 </Button>
+                <a
+                  href={`https://wa.me/5215545327249?text=Hola, me interesa el producto: ${product.name}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full"
+                >
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full h-12 gap-2 border-emerald-600/30 text-emerald-700 hover:bg-emerald-50"
+                    data-testid="button-whatsapp"
+                  >
+                    <SiWhatsapp className="h-4 w-4" />
+                    Preguntar por WhatsApp
+                  </Button>
+                </a>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 pt-2">
+                <div className="text-center p-3 bg-card rounded-xl border border-border/30">
+                  <Truck className="h-4 w-4 text-primary mx-auto mb-1" />
+                  <p className="text-xs text-muted-foreground">Envío a todo México</p>
+                </div>
+                <div className="text-center p-3 bg-card rounded-xl border border-border/30">
+                  <ShieldCheck className="h-4 w-4 text-primary mx-auto mb-1" />
+                  <p className="text-xs text-muted-foreground">Pago seguro</p>
+                </div>
+                <div className="text-center p-3 bg-card rounded-xl border border-border/30">
+                  <Leaf className="h-4 w-4 text-primary mx-auto mb-1" />
+                  <p className="text-xs text-muted-foreground">100% Natural</p>
+                </div>
               </div>
 
               {!product.inStock && (

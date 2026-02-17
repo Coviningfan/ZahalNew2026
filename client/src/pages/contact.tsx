@@ -4,8 +4,8 @@ import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin, Send, Facebook, Instagram } from "lucide-react";
-import { SiTiktok } from "react-icons/si";
+import { Mail, Phone, MapPin, Send, Facebook, Instagram, MessageCircle } from "lucide-react";
+import { SiTiktok, SiWhatsapp } from "react-icons/si";
 
 export default function Contact() {
   const { toast } = useToast();
@@ -39,29 +39,48 @@ export default function Contact() {
       <Navigation />
       
       <main className="pt-20">
-        <section className="py-16 lg:py-20 bg-card">
+        <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-2xl mx-auto text-center">
               <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-4">Contáctanos</p>
-              <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-6 font-serif leading-tight" data-testid="text-contact-title">
+              <h1 className="text-3xl lg:text-5xl font-bold text-foreground mb-5 font-serif leading-tight" data-testid="text-contact-title">
                 ¿Cómo podemos ayudarte?
               </h1>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Estamos aquí para resolver tus dudas. Llena el formulario o contáctanos directamente.
+              <p className="text-muted-foreground text-base lg:text-lg leading-relaxed">
+                Estamos aquí para resolver tus dudas. Escríbenos por WhatsApp para una respuesta rápida, o llena el formulario.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-white">
+        <section className="py-12 lg:py-16 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-5xl mx-auto mb-10">
+              <a
+                href="https://wa.me/5215545327249?text=Hola, tengo una pregunta sobre los productos Zahal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-5 bg-emerald-50 border border-emerald-200/60 rounded-2xl hover:bg-emerald-100/70 transition-colors group"
+                data-testid="link-whatsapp-contact"
+              >
+                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <SiWhatsapp className="h-6 w-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-foreground">Escríbenos por WhatsApp</p>
+                  <p className="text-sm text-muted-foreground">Respuesta rápida de lunes a viernes — 55 4532 7249</p>
+                </div>
+                <span className="text-emerald-600 font-medium text-sm hidden sm:block group-hover:underline">Abrir chat →</span>
+              </a>
+            </div>
+
             <div className="grid lg:grid-cols-5 gap-12 max-w-5xl mx-auto">
               <div className="lg:col-span-2 space-y-8">
                 <div>
                   <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-4">Información de Contacto</p>
                   <div className="space-y-5">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center flex-shrink-0">
                         <Phone className="h-5 w-5 text-primary" />
                       </div>
                       <div>
@@ -71,7 +90,7 @@ export default function Contact() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center flex-shrink-0">
                         <Mail className="h-5 w-5 text-primary" />
                       </div>
                       <div>
@@ -81,7 +100,7 @@ export default function Contact() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center flex-shrink-0">
                         <Mail className="h-5 w-5 text-primary" />
                       </div>
                       <div>
@@ -91,12 +110,12 @@ export default function Contact() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center flex-shrink-0">
                         <MapPin className="h-5 w-5 text-primary" />
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-foreground mb-0.5">Ubicación</p>
-                        <p className="text-sm text-muted-foreground">México</p>
+                        <p className="text-sm text-muted-foreground">Ciudad de México, México</p>
                       </div>
                     </div>
                   </div>
@@ -104,30 +123,30 @@ export default function Contact() {
 
                 <div>
                   <p className="text-sm font-semibold text-foreground mb-3">Síguenos</p>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2.5">
                     <a 
                       href="https://www.facebook.com/CristalZahal" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200"
+                      className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200"
                       data-testid="link-contact-facebook"
                     >
-                      <Facebook className="h-5 w-5 text-primary hover:text-white" />
+                      <Facebook className="h-5 w-5 text-primary" />
                     </a>
                     <a 
                       href="https://www.instagram.com/zahal_mexico/" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200"
+                      className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200"
                       data-testid="link-contact-instagram"
                     >
-                      <Instagram className="h-5 w-5 text-primary hover:text-white" />
+                      <Instagram className="h-5 w-5 text-primary" />
                     </a>
                     <a 
                       href="https://www.tiktok.com/@zahaloficial" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200"
+                      className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200"
                       data-testid="link-contact-tiktok"
                     >
                       <SiTiktok className="h-5 w-5 text-primary" />
@@ -137,7 +156,7 @@ export default function Contact() {
               </div>
 
               <div className="lg:col-span-3">
-                <div className="bg-card rounded-2xl border border-border/50 p-8">
+                <div className="bg-card rounded-2xl border border-border/40 p-8">
                   <h2 className="text-xl font-bold text-foreground mb-2 font-serif" data-testid="text-form-title">
                     Envíanos un mensaje
                   </h2>
@@ -152,7 +171,7 @@ export default function Contact() {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Tu nombre"
-                        className="h-11"
+                        className="h-11 bg-white"
                         data-testid="input-name"
                       />
                     </div>
@@ -166,7 +185,7 @@ export default function Contact() {
                         onChange={handleChange}
                         placeholder="tu@email.com"
                         required
-                        className="h-11"
+                        className="h-11 bg-white"
                         data-testid="input-email"
                       />
                     </div>
@@ -179,7 +198,7 @@ export default function Contact() {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="55 1234 5678"
-                        className="h-11"
+                        className="h-11 bg-white"
                         data-testid="input-phone"
                       />
                     </div>
@@ -192,7 +211,7 @@ export default function Contact() {
                         onChange={handleChange}
                         placeholder="¿En qué podemos ayudarte?"
                         rows={4}
-                        className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none"
+                        className="flex w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none"
                         data-testid="input-message"
                       />
                     </div>

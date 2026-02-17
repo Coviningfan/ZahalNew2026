@@ -1,7 +1,7 @@
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Heart, Leaf, Users, Sparkles, ArrowRight, CheckCircle, Mail } from "lucide-react";
+import { Heart, Leaf, Users, Sparkles, CheckCircle, Mail } from "lucide-react";
 
 export default function About() {
   return (
@@ -15,7 +15,7 @@ export default function About() {
               <div>
                 <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-4">Quiénes Somos</p>
                 <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-6 font-serif leading-tight" data-testid="text-about-title">
-                  Natural.<br />Consciente.<br />Real.
+                  Natural.<br />Consciente.<br /><span className="italic text-primary/70">Real.</span>
                 </h1>
                 <p className="text-muted-foreground text-lg leading-relaxed mb-6">
                   En Zahal creemos que el cuidado personal puede ser natural, consciente y poderoso. 
@@ -27,6 +27,7 @@ export default function About() {
                 </p>
               </div>
               <div className="relative">
+                <div className="absolute -inset-4 bg-primary/5 rounded-3xl -z-10"></div>
                 <img 
                   src="https://cdn.shopify.com/s/files/1/0622/1004/8065/articles/banner_2_promo_1_738f2117-970e-4120-bdf7-8c3db4c24eab_1100x.jpg?v=1753817472" 
                   alt="Filosofía Zahal" 
@@ -41,16 +42,19 @@ export default function About() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-card">
+        <section className="py-16 lg:py-24 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <div className="grid md:grid-cols-2 gap-16 items-center">
                 <div className="order-2 md:order-1">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/0622/1004/8065/files/WhatsApp_Image_2024-11-26_at_09.09.05.jpg?v=1732636829&width=1500"
-                    alt="Equipo Zahal"
-                    className="w-full h-[350px] object-cover rounded-2xl"
-                  />
+                  <div className="relative">
+                    <div className="absolute -inset-3 bg-primary/5 rounded-3xl -z-10"></div>
+                    <img
+                      src="https://cdn.shopify.com/s/files/1/0622/1004/8065/files/WhatsApp_Image_2024-11-26_at_09.09.05.jpg?v=1732636829&width=1500"
+                      alt="Equipo Zahal"
+                      className="w-full h-[350px] object-cover rounded-2xl"
+                    />
+                  </div>
                 </div>
                 <div className="order-1 md:order-2">
                   <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Nuestra Esencia</p>
@@ -91,7 +95,7 @@ export default function About() {
                 Esa energía colectiva hace que nuestros productos sean auténticos.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
               {[
                 { icon: Heart, title: "Consciente", desc: "Creamos con propósito, cuidando de ti y del planeta con cada decisión que tomamos." },
                 { icon: Leaf, title: "Sostenible", desc: "Tecnología limpia y procesos sustentables para un mundo más limpio y saludable." },
@@ -100,8 +104,8 @@ export default function About() {
               ].map((value, index) => {
                 const Icon = value.icon;
                 return (
-                  <div key={index} className="bg-card rounded-2xl p-6 border border-border/50 hover:shadow-md transition-shadow duration-300" data-testid={`value-card-${index}`}>
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                  <div key={index} className="bg-card rounded-2xl p-6 border border-border/40 hover:shadow-md transition-shadow duration-300" data-testid={`value-card-${index}`}>
+                    <div className="w-12 h-12 bg-primary/8 rounded-xl flex items-center justify-center mb-4">
                       <Icon className="h-6 w-6 text-primary" />
                     </div>
                     <h3 className="text-base font-semibold text-foreground mb-2">{value.title}</h3>
@@ -113,17 +117,17 @@ export default function About() {
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-primary">
+        <section className="py-16 lg:py-24 bg-primary linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-xl mx-auto text-center">
               <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4 font-serif">
                 Más que una marca
               </h2>
-              <p className="text-white/80 leading-relaxed mb-3">
+              <p className="text-white/75 leading-relaxed mb-3">
                 Somos una comunidad que inspira a cambiar. Creemos en las personas que se atreven, 
                 que transforman su vida y la de los demás.
               </p>
-              <p className="text-white/80 leading-relaxed text-sm">
+              <p className="text-white/75 leading-relaxed text-sm">
                 Personas que eligen lo natural, que buscan sentirse bien y vivir en equilibrio. 
                 En Zahal, cada decisión tiene un propósito: servir con conciencia, crear con sentido y vivir con propósito.
               </p>
@@ -146,8 +150,8 @@ export default function About() {
                   </p>
                   <div className="space-y-4 mb-8">
                     <div className="flex gap-4 items-start">
-                      <div className="w-8 h-8 bg-accent/15 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-accent font-bold text-sm">1</span>
+                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-primary font-bold text-sm">1</span>
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-foreground">Envío gratis</p>
@@ -155,8 +159,8 @@ export default function About() {
                       </div>
                     </div>
                     <div className="flex gap-4 items-start">
-                      <div className="w-8 h-8 bg-accent/15 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-accent font-bold text-sm">2</span>
+                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-primary font-bold text-sm">2</span>
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-foreground">30% de descuento</p>

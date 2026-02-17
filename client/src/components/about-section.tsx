@@ -19,7 +19,7 @@ export default function AboutSection() {
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 font-serif">
               Piedra de Alumbre
             </h2>
-            <h3 className="text-xl text-primary/80 mb-6 font-medium">De Origen Natural</h3>
+            <h3 className="text-xl text-primary/70 mb-6 font-medium italic font-serif">De Origen Natural</h3>
             <p className="text-muted-foreground text-base mb-8 leading-relaxed">
               La piedra de alumbre es un mineral natural que ha sido utilizado durante siglos 
               como desodorante. Su composición única permite una protección efectiva y suave, 
@@ -46,6 +46,7 @@ export default function AboutSection() {
           </div>
 
           <div className="relative">
+            <div className="absolute -inset-4 bg-primary/5 rounded-3xl -z-10"></div>
             <img 
               src="https://cdn.shopify.com/s/files/1/0622/1004/8065/files/WhatsApp_Image_2024-11-26_at_09.09.05.jpg?v=1732636829&width=1500" 
               alt="Embajadores de marca Zahal" 

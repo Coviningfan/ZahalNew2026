@@ -133,7 +133,7 @@ function FAQAccordion({ item, index }: { item: FAQItem; index: number }) {
   const [isOpen, setIsOpen] = useState(false);
   
   return (
-    <div className="border-b border-border/50 last:border-0" data-testid={`faq-item-${index}`}>
+    <div className="border-b border-border/40 last:border-0" data-testid={`faq-item-${index}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between py-5 text-left hover:text-primary transition-colors duration-200"
@@ -155,38 +155,38 @@ export default function FAQ() {
       <Navigation />
       
       <main className="pt-20">
-        <section className="relative py-20 lg:py-28 overflow-hidden">
+        <section className="relative py-16 lg:py-24 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img 
               src="https://cdn.shopify.com/s/files/1/0622/1004/8065/articles/ZAHAL_Shopify_17_0cf49831-3460-4132-9add-19bbeb41a922_1100x.jpg?v=1753817454" 
               alt="Desodorantes naturales ZAHAL" 
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/92 to-primary/75"></div>
           </div>
           <div className="container mx-auto px-4 lg:px-8 relative z-10">
             <div className="max-w-2xl">
-              <p className="text-white/70 font-semibold text-sm tracking-wider uppercase mb-4">FAQ</p>
-              <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-serif leading-tight" data-testid="text-faq-title">
+              <p className="text-white/60 font-semibold text-sm tracking-wider uppercase mb-4">Ayuda</p>
+              <h1 className="text-3xl lg:text-5xl font-bold text-white mb-5 font-serif leading-tight" data-testid="text-faq-title">
                 Preguntas Frecuentes
               </h1>
-              <p className="text-white/90 text-lg leading-relaxed">
+              <p className="text-white/80 text-base lg:text-lg leading-relaxed">
                 Todo lo que necesitas saber sobre los desodorantes naturales de piedra de alumbre ZAHAL.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="py-16 lg:py-24 bg-white">
+        <section className="py-12 lg:py-16 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="max-w-3xl mx-auto space-y-12">
+            <div className="max-w-3xl mx-auto space-y-10">
               {faqSections.map((section, sectionIndex) => (
                 <div key={sectionIndex} data-testid={`faq-section-${sectionIndex}`}>
-                  <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-3 font-serif">
-                    <span className="text-2xl">{section.icon}</span>
+                  <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-3 font-serif">
+                    <span className="text-xl">{section.icon}</span>
                     {section.title}
                   </h2>
-                  <div className="bg-card rounded-2xl border border-border/50 px-6">
+                  <div className="bg-card rounded-2xl border border-border/40 px-6">
                     {section.items.map((item, itemIndex) => (
                       <FAQAccordion key={itemIndex} item={item} index={sectionIndex * 10 + itemIndex} />
                     ))}

@@ -26,12 +26,12 @@ export default function Navigation() {
   return (
     <nav className="fixed top-0 w-full z-50 glass-card">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-18">
+        <div className="flex items-center justify-between h-16 lg:h-[72px]">
           <Link href="/" className="flex items-center" data-testid="link-home">
             <img 
               src={zahalLogo} 
               alt="Zahal Natural" 
-              className="h-9 lg:h-12 w-auto object-contain"
+              className="h-9 lg:h-11 w-auto object-contain"
             />
           </Link>
 
@@ -40,30 +40,33 @@ export default function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
+                className={`text-sm font-medium transition-colors duration-200 relative ${
                   location === item.href 
                     ? "text-primary" 
-                    : "text-foreground/70 hover:text-foreground"
+                    : "text-foreground/60 hover:text-foreground"
                 }`}
                 data-testid={`link-${item.label.toLowerCase()}`}
               >
                 {item.label}
+                {location === item.href && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+                )}
               </Link>
             ))}
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
               <SheetTrigger asChild>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="hover:bg-primary/10 relative h-9 w-9"
+                  className="hover:bg-primary/8 relative h-9 w-9"
                   data-testid="button-cart"
                 >
                   <ShoppingCart className="h-5 w-5" />
                   {totalItems > 0 && (
-                    <Badge className="absolute -top-1 -right-1 bg-accent text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center p-0">
+                    <Badge className="absolute -top-1 -right-1 bg-primary text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center p-0">
                       {totalItems}
                     </Badge>
                   )}
@@ -76,7 +79,7 @@ export default function Navigation() {
                 <div className="mt-6">
                   {cartItems.length === 0 ? (
                     <div className="text-center py-12">
-                      <ShoppingCart className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                      <ShoppingCart className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
                       <p className="text-muted-foreground text-sm">Tu carrito está vacío</p>
                     </div>
                   ) : (
@@ -142,7 +145,7 @@ export default function Navigation() {
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="lg:hidden hover:bg-primary/10 h-9 w-9"
+                  className="lg:hidden hover:bg-primary/8 h-9 w-9"
                   data-testid="button-menu"
                 >
                   <Menu className="h-5 w-5" />
@@ -160,7 +163,7 @@ export default function Navigation() {
                       className={`text-base py-3 px-3 rounded-lg transition-colors duration-200 ${
                         location === item.href 
                           ? "text-primary bg-primary/5 font-medium" 
-                          : "text-foreground/70 hover:text-foreground hover:bg-muted"
+                          : "text-foreground/60 hover:text-foreground hover:bg-muted"
                       }`}
                       onClick={() => setIsOpen(false)}
                       data-testid={`link-mobile-${item.label.toLowerCase()}`}
