@@ -63,21 +63,21 @@ export default function ProofSection() {
             </Button>
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid gap-5">
             {proofStats.map((item) => {
               const Icon = item.icon;
               return (
                 <article
                   key={item.label}
-                  className="bg-white rounded-2xl border border-primary/10 shadow-sm p-5 flex items-center gap-4 hover:shadow-md transition-shadow duration-300"
+                  className="bg-white rounded-2xl border border-primary/10 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.07)] p-6 flex items-center gap-5 hover:shadow-[0_8px_30px_-10px_rgba(0,0,0,0.12)] transition-all duration-500 group"
                   data-testid="proof-stat"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/8 flex items-center justify-center shrink-0">
-                    <Icon className="h-6 w-6 text-primary" />
+                  <div className="w-14 h-14 rounded-2xl bg-primary/[0.03] border border-primary/5 flex items-center justify-center shrink-0 group-hover:bg-primary/5 transition-colors duration-500">
+                    <Icon className="h-7 w-7 text-primary/80 group-hover:text-primary transition-colors duration-500" />
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-foreground">{item.value}</div>
-                    <p className="text-sm text-muted-foreground">{item.label}</p>
+                  <div className="flex flex-col gap-0.5">
+                    <div className="text-3xl font-bold text-foreground tracking-tight leading-none">{item.value}</div>
+                    <p className="text-[13px] font-medium text-muted-foreground/80 uppercase tracking-widest leading-tight">{item.label}</p>
                   </div>
                 </article>
               );
