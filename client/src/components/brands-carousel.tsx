@@ -13,16 +13,16 @@ import bodegaAurreraLogo from "@assets/png-transparent-logo-brand-green-bodega-a
 
 const brands = [
   { name: "Walmart", logo: walmartLogo, height: "h-8 md:h-11" },
-  { name: "Amazon", logo: amazonLogo, height: "h-6 md:h-8" },
-  { name: "Mercado Libre", logo: mercadoLibreLogo, height: "h-7 md:h-9" },
+  { name: "Amazon", logo: amazonLogo, height: "h-10 md:h-14" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, height: "h-10 md:h-14" },
   { name: "H-E-B", logo: hebLogo, height: "h-8 md:h-11" },
-  { name: "Chedraui", logo: chedrauiLogo, height: "h-7 md:h-9" },
-  { name: "Soriana", logo: sorianaLogo, height: "h-7 md:h-9" },
+  { name: "Chedraui", logo: chedrauiLogo, height: "h-10 md:h-14" },
+  { name: "Soriana", logo: sorianaLogo, height: "h-10 md:h-14" },
   { name: "Bodega Aurrera", logo: bodegaAurreraLogo, height: "h-8 md:h-11" },
   { name: "Sears", logo: searsLogo, height: "h-8 md:h-11" },
-  { name: "Sanborns", logo: sanbornsLogo, height: "h-6 md:h-8" },
-  { name: "Nutrisa", logo: nutrisaLogo, height: "h-7 md:h-9" },
-  { name: "Super Naturista", logo: superNaturistaLogo, height: "h-6 md:h-8" },
+  { name: "Sanborns", logo: sanbornsLogo, height: "h-10 md:h-14" },
+  { name: "Nutrisa", logo: nutrisaLogo, height: "h-10 md:h-14" },
+  { name: "Super Naturista", logo: superNaturistaLogo, height: "h-10 md:h-14" },
   { name: "Get Me by Ola", logo: getmeLogo, height: "h-8 md:h-11" },
 ];
 
