@@ -7,7 +7,7 @@ interface SEOProps {
   ogImage?: string;
 }
 
-const BASE_URL = "https://zahal-productos-naturales.replit.app";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://zahal-productos-naturales.replit.app";
 const DEFAULT_OG_IMAGE = `${BASE_URL}/favicon.svg`;
 
 export default function SEO({ title, description, path = "/", ogImage }: SEOProps) {

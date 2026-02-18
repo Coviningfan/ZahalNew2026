@@ -103,7 +103,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/sitemap.xml", (_req, res) => {
-    const baseUrl = "https://zahal-productos-naturales.replit.app";
+    const baseUrl = process.env.BASE_URL || `${_req.protocol}://${_req.get("host")}`;
     const pages = [
       { url: "/", priority: "1.0", changefreq: "weekly" },
       { url: "/productos", priority: "0.9", changefreq: "weekly" },
@@ -129,7 +129,7 @@ ${pages.map(p => `  <url>
   });
 
   app.get("/robots.txt", (_req, res) => {
-    const baseUrl = "https://zahal-productos-naturales.replit.app";
+    const baseUrl = process.env.BASE_URL || `${_req.protocol}://${_req.get("host")}`;
     res.set("Content-Type", "text/plain");
     res.send(`User-agent: *
 Allow: /
