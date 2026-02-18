@@ -14,10 +14,10 @@ import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d775
 
 const brands = [
   { name: "Walmart", logo: walmartLogo, style: "h-8 md:h-10" },
-  { name: "Amazon", logo: amazonLogo, style: "h-6 md:h-7" },
-  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-7 md:h-8" },
-  { name: "H-E-B", logo: hebLogo, style: "h-7 md:h-9" },
-  { name: "Chedraui", logo: chedrauiLogo, style: "h-14 md:h-16" },
+  { name: "Amazon", logo: amazonLogo, style: "h-7 md:h-8" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-8 md:h-9" },
+  { name: "H-E-B", logo: hebLogo, style: "h-8 md:h-10" },
+  { name: "Chedraui", logo: chedrauiLogo, style: "h-16 md:h-20" },
   { name: "Soriana", logo: sorianaLogo, style: "h-8 md:h-10" },
   { name: "Sears", logo: searsLogo, style: "h-6 md:h-8" },
   { name: "Sanborns", logo: sanbornsLogo, style: "h-10 md:h-12" },
@@ -37,7 +37,7 @@ function BrandItem({ brand }: { brand: typeof brands[0] }) {
       <img
         src={brand.logo}
         alt={brand.name}
-        className={`${brand.style} w-auto max-w-[120px] md:max-w-[150px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300`}
+        className={`${brand.style} w-auto max-w-[140px] md:max-w-[180px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300`}
       />
     </div>
   );
