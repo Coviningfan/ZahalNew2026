@@ -58,7 +58,7 @@ const slides = [
   },
 ];
 
-const AUTOPLAY_INTERVAL = 6000;
+const AUTOPLAY_INTERVAL = 8500;
 
 export default function HeroSection() {
   const [, setLocation] = useLocation();
