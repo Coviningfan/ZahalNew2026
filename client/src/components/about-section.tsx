@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import alumbreNatural from "@assets/image_16_1771348502523.png";
+import zahalEscudo from "@assets/zahalescudo_1771431876032.png";
 
 const benefits = [
   "Sin clorhidrato de aluminio",
@@ -53,11 +54,12 @@ export default function AboutSection() {
               alt="Piedra de Alumbre Natural Zahal" 
               className="w-full h-auto rounded-2xl shadow-lg" 
             />
-            <div className="absolute -bottom-5 -left-5 bg-primary rounded-xl p-5 shadow-xl">
-              <div className="text-center text-white">
-                <div className="text-3xl font-bold">100%</div>
-                <div className="text-sm opacity-90">Natural</div>
-              </div>
+            <div className="absolute -bottom-5 -left-5 shadow-xl">
+              <img 
+                src={zahalEscudo} 
+                alt="Libre de parabenos, clorhidrato de aluminio y alcohol" 
+                className="w-28 h-28 lg:w-32 lg:h-32 object-contain rounded-2xl"
+              />
             </div>
           </div>
         </div>
