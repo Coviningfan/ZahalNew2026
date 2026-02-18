@@ -226,7 +226,7 @@ export default function HeroSection() {
       </section>
 
       {/* ===== DESKTOP HERO (>= 640px) ===== */}
-      <section id="inicio" className="relative min-h-[75vh] lg:min-h-[80vh] hidden sm:flex items-center overflow-hidden" data-testid="hero-carousel">
+      <section id="inicio" className="relative hidden sm:flex items-center overflow-hidden" style={{ aspectRatio: "16/7" }} data-testid="hero-carousel">
         {slides.map((s, i) => (
           <div
             key={i}
