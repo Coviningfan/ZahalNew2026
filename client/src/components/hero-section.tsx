@@ -19,8 +19,16 @@ const slides = [
         tu cuerpo
       </>
     ),
+    mobileTitle: (
+      <>
+        Cuida tu piel,{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">respeta</span>{" "}
+        tu cuerpo
+      </>
+    ),
     description:
       "Desodorantes de piedra de alumbre: protección natural que dura 24 horas, sin químicos que dañen tu piel ni tu ropa.",
+    mobileDescription: "Protección natural 24h sin químicos.",
     cta: { label: "Ver Productos", href: "/productos" },
     ctaSecondary: { label: "Nuestra Historia", href: "/nosotros" },
     bgImage: banner1,
@@ -33,8 +41,15 @@ const slides = [
         <span className="italic text-[hsl(99,30%,80%)]">auténtica</span>
       </>
     ),
+    mobileTitle: (
+      <>
+        Piedra de alumbre{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">auténtica</span>
+      </>
+    ),
     description:
       "Mineral volcánico con propiedades antibacteriales. Sin parabenos, sin alcohol, sin aluminio procesado.",
+    mobileDescription: "Mineral volcánico antibacterial. Sin parabenos ni alcohol.",
     cta: { label: "Explorar Catálogo", href: "/productos" },
     ctaSecondary: { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
     bgImage: banner2,
@@ -48,7 +63,14 @@ const slides = [
         de tu rutina.
       </>
     ),
+    mobileTitle: (
+      <>
+        Bienestar en{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">cada momento</span>
+      </>
+    ),
     description: "",
+    mobileDescription: "",
     cta: { label: "Visita eNature", href: "https://enature.com.mx/" },
     ctaSecondary: null,
     bgImage: banner3,
@@ -103,154 +125,246 @@ export default function HeroSection() {
   const slide = slides[current];
 
   return (
-    <section id="inicio" className="relative lg:min-h-[80vh] flex flex-col lg:flex-row lg:items-center overflow-hidden" data-testid="hero-carousel">
-      {/* Desktop: full-cover background */}
-      {slides.map((s, i) => (
-        <div
-          key={i}
-          className="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out hidden sm:block"
-          style={{ opacity: i === current ? 1 : 0 }}
-        >
-          <img
-            src={s.bgImage}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/45"></div>
-        </div>
-      ))}
-
-      {/* Mobile: full image visible, no crop */}
-      <div className="relative w-full sm:hidden">
+    <>
+      {/* ===== MOBILE HERO (< 640px) ===== */}
+      <section className="sm:hidden relative overflow-hidden" data-testid="hero-carousel-mobile">
         {slides.map((s, i) => (
           <div
             key={i}
-            className="transition-opacity duration-700 ease-in-out"
-            style={{ opacity: i === current ? 1 : 0, position: i === 0 ? 'relative' : 'absolute', top: 0, left: 0, width: '100%' }}
+            className="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out"
+            style={{ opacity: i === current ? 1 : 0 }}
           >
             <img
               src={s.bgImage}
               alt=""
-              className="w-full h-auto"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-black/35"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
           </div>
         ))}
-      </div>
 
-      <div className="absolute inset-0 z-[1] opacity-[0.04] hidden sm:block" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }}></div>
-
-      <div className="relative sm:absolute sm:inset-0 z-10 flex items-center">
-      <div className="container mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-0">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {slide.alignRight && (
-            <div className="hidden lg:block" />
-          )}
-          <div key={current} className={`animate-carousel-fade ${slide.alignRight ? "lg:text-right lg:ml-auto" : ""}`}>
+        <div className="relative z-10 flex flex-col justify-end min-h-[75vh] px-5 pb-16 pt-24">
+          <div key={current} className="animate-carousel-fade">
             {!slide.hideBadge && (
-              <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide" data-testid="badge-natural">
-                <Leaf className="h-4 w-4 mr-2 text-[hsl(99,30%,65%)]" />
+              <div className="inline-flex items-center px-3 py-1.5 bg-white/15 backdrop-blur-md text-white/90 border border-white/20 rounded-full mb-4 text-xs font-medium tracking-wide" data-testid="badge-natural-mobile">
+                <Leaf className="h-3.5 w-3.5 mr-1.5 text-[hsl(99,30%,65%)]" />
                 {slide.badge}
               </div>
             )}
-            <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.15] mb-5 sm:mb-6 font-serif" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-              {slide.title}
+            <h1 className="text-[1.75rem] font-bold text-white leading-[1.2] mb-3 font-serif">
+              {slide.mobileTitle}
             </h1>
-            {slide.description && (
-              <p className="text-base sm:text-lg lg:text-xl text-white/85 mb-8 sm:mb-10 leading-relaxed max-w-lg">
-                {slide.description}
+            {(slide.mobileDescription) && (
+              <p className="text-sm text-white/80 mb-5 leading-relaxed max-w-[280px]">
+                {slide.mobileDescription}
               </p>
             )}
-            <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center ${slide.alignRight ? "sm:justify-end" : ""}`}>
+
+            {slide.showLogos ? (
+              <div className="flex items-center gap-3 mb-4">
+                <img src={zahalLogo} alt="Zahal" className="h-10 w-auto object-contain brightness-0 invert" />
+                <span className="text-white/70 text-lg font-bold">×</span>
+                <img src={enatureLogo} alt="eNature" className="h-10 w-auto object-contain" />
+              </div>
+            ) : null}
+
+            <div className="flex flex-col gap-2.5">
               {slide.alignRight ? (
                 <a
                   href={slide.cta.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all"
-                  data-testid="link-visita-enature"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold rounded-xl h-12 px-6 text-sm shadow-lg"
+                  data-testid="link-visita-enature-mobile"
                 >
-                  <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">{slide.cta.label}</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
+                  {slide.cta.label}
+                  <ArrowRight className="h-4 w-4" />
                 </a>
               ) : (
                 <>
                   <Button
-                    size="lg"
-                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10 gap-2 h-14 px-8 text-base"
+                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-2 h-12 px-6 text-sm rounded-xl w-full"
                     onClick={() => navigateTo(slide.cta.href)}
-                    data-testid="button-shop-now"
+                    data-testid="button-shop-now-mobile"
                   >
                     {slide.cta.label}
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                   {slide.ctaSecondary && (
                     <Button
-                      size="lg"
                       variant="outline"
-                      className="border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white hover:bg-white/15 font-semibold h-14 px-8 text-base"
+                      className="border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 font-semibold h-12 px-6 text-sm rounded-xl w-full"
                       onClick={() => slide.ctaSecondary && navigateTo(slide.ctaSecondary.href)}
-                      data-testid="button-view-catalog"
+                      data-testid="button-secondary-mobile"
                     >
                       {slide.ctaSecondary?.label}
                     </Button>
                   )}
-                  <Link href="/productos" className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all ml-0 sm:ml-2" data-testid="link-hero-catalog">
-                    <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">Elige tu favorito</span>
-                    <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
-                  </Link>
                 </>
               )}
             </div>
           </div>
-
-          {!slide.alignRight && (
-            <div className="hidden lg:block" />
-          )}
         </div>
 
-      </div>
-      </div>
+        <button
+          onClick={prev}
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white"
+          data-testid="button-carousel-prev-mobile"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        <button
+          onClick={next}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white"
+          data-testid="button-carousel-next-mobile"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
 
-      {slide.showLogos && (
-        <div className="absolute bottom-14 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
-          <img src={zahalLogo} alt="Zahal" className="h-12 md:h-16 w-auto object-contain brightness-0 invert" />
-          <span className="text-white/80 text-2xl font-bold">×</span>
-          <img src={enatureLogo} alt="eNature" className="h-12 md:h-16 w-auto object-contain" />
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className={`transition-all duration-300 rounded-full ${
+                i === current
+                  ? "w-6 h-2 bg-white"
+                  : "w-2 h-2 bg-white/40"
+              }`}
+              data-testid={`button-slide-mobile-${i}`}
+            />
+          ))}
         </div>
-      )}
+      </section>
 
-      <button
-        onClick={prev}
-        className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        data-testid="button-carousel-prev"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        data-testid="button-carousel-next"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
-
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex items-center gap-2.5">
-        {slides.map((_, i) => (
-          <button
+      {/* ===== DESKTOP HERO (>= 640px) ===== */}
+      <section id="inicio" className="relative min-h-[75vh] lg:min-h-[80vh] hidden sm:flex items-center overflow-hidden" data-testid="hero-carousel">
+        {slides.map((s, i) => (
+          <div
             key={i}
-            onClick={() => goTo(i)}
-            className={`transition-all duration-300 rounded-full ${
-              i === current
-                ? "w-8 h-2.5 bg-white"
-                : "w-2.5 h-2.5 bg-white/40 hover:bg-white/60"
-            }`}
-            data-testid={`button-slide-${i}`}
-          />
+            className="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out"
+            style={{ opacity: i === current ? 1 : 0 }}
+          >
+            <img
+              src={s.bgImage}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/45"></div>
+          </div>
         ))}
-      </div>
-    </section>
+
+        <div className="absolute inset-0 z-[1] opacity-[0.04]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {slide.alignRight && (
+              <div className="hidden lg:block" />
+            )}
+            <div key={current} className={`animate-carousel-fade ${slide.alignRight ? "lg:text-right lg:ml-auto" : ""}`}>
+              {!slide.hideBadge && (
+                <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide" data-testid="badge-natural">
+                  <Leaf className="h-4 w-4 mr-2 text-[hsl(99,30%,65%)]" />
+                  {slide.badge}
+                </div>
+              )}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6 font-serif text-balance">
+                {slide.title}
+              </h1>
+              {slide.description && (
+                <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">
+                  {slide.description}
+                </p>
+              )}
+              <div className={`flex flex-row gap-4 items-center ${slide.alignRight ? "justify-end" : ""}`}>
+                {slide.alignRight ? (
+                  <a
+                    href={slide.cta.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all"
+                    data-testid="link-visita-enature"
+                  >
+                    <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">{slide.cta.label}</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                ) : (
+                  <>
+                    <Button
+                      size="lg"
+                      className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10 gap-2 h-14 px-8 text-base"
+                      onClick={() => navigateTo(slide.cta.href)}
+                      data-testid="button-shop-now"
+                    >
+                      {slide.cta.label}
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                    {slide.ctaSecondary && (
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white hover:bg-white/15 font-semibold h-14 px-8 text-base"
+                        onClick={() => slide.ctaSecondary && navigateTo(slide.ctaSecondary.href)}
+                        data-testid="button-view-catalog"
+                      >
+                        {slide.ctaSecondary?.label}
+                      </Button>
+                    )}
+                    <Link href="/productos" className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all ml-2" data-testid="link-hero-catalog">
+                      <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">Elige tu favorito</span>
+                      <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {!slide.alignRight && (
+              <div className="hidden lg:block" />
+            )}
+          </div>
+        </div>
+
+        {slide.showLogos && (
+          <div className="absolute bottom-14 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
+            <img src={zahalLogo} alt="Zahal" className="h-12 md:h-16 w-auto object-contain brightness-0 invert" />
+            <span className="text-white/80 text-2xl font-bold">×</span>
+            <img src={enatureLogo} alt="eNature" className="h-12 md:h-16 w-auto object-contain" />
+          </div>
+        )}
+
+        <button
+          onClick={prev}
+          className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+          data-testid="button-carousel-prev"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button
+          onClick={next}
+          className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+          data-testid="button-carousel-next"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex items-center gap-2.5">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className={`transition-all duration-300 rounded-full ${
+                i === current
+                  ? "w-8 h-2.5 bg-white"
+                  : "w-2.5 h-2.5 bg-white/40 hover:bg-white/60"
+              }`}
+              data-testid={`button-slide-${i}`}
+            />
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
