@@ -213,7 +213,7 @@ export default function PrivacyPolicy() {
                     o el tratamiento de tus datos personales, puedes contactarnos a través de:
                   </p>
                   <div className="bg-white rounded-xl p-6 border border-border/40">
-                    <p className="text-foreground font-semibold mb-2">Zahal Productos Naturales</p>
+                    <p className="text-foreground font-semibold mb-2">Zahal Contacto</p>
                     <p className="text-muted-foreground text-sm mb-1">
                       Correo electrónico: <a href="mailto:contacto@zahal.com.mx" className="text-primary hover:underline" data-testid="link-privacy-email">contacto@zahal.com.mx</a>
                     </p>
