@@ -22,7 +22,7 @@ const brands = [
   { name: "Sears", logo: searsLogo, height: "h-8 md:h-10" },
   { name: "Sanborns", logo: sanbornsLogo, height: "h-16 md:h-24" },
   { name: "Nutrisa", logo: nutrisaLogo, height: "h-16 md:h-24" },
-  { name: "Super Naturista", logo: superNaturistaLogo, height: "h-16 md:h-24" },
+  { name: "Super Naturista", logo: superNaturistaLogo, height: "h-20 md:h-28" },
   { name: "Get Me by Ola", logo: getmeLogo, height: "h-16 md:h-20" },
 ];
 
