@@ -1,4 +1,4 @@
-import { Leaf, Shield, Shirt, Recycle } from "lucide-react";
+import { Leaf, Shield, Shirt, Recycle, Heart } from "lucide-react";
 
 const features = [
   {
@@ -20,6 +20,11 @@ const features = [
     icon: Recycle,
     title: "Eco-Friendly",
     description: "Empaque sostenible y biodegradable, libre de crueldad"
+  },
+  {
+    icon: Heart,
+    title: "Libre de Crueldad Animal",
+    description: "No testado en animales, comprometidos con el bienestar animal"
   }
 ];
 
@@ -27,7 +32,7 @@ export default function FeaturesSection() {
   return (
     <section className="py-14 lg:py-16 bg-white border-b border-border/30">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
