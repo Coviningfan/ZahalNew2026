@@ -54,6 +54,7 @@ const slides = [
     bgImage: banner3,
     alignRight: true,
     showLogos: true,
+    hideBadge: true,
   },
 ];
 
@@ -128,10 +129,12 @@ export default function HeroSection() {
             <div className="hidden lg:block" />
           )}
           <div key={current} className={`animate-carousel-fade ${slide.alignRight ? "lg:text-right lg:ml-auto" : ""}`}>
-            <div className={`inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide`} data-testid="badge-natural">
-              <Leaf className="h-4 w-4 mr-2 text-[hsl(99,30%,65%)]" />
-              {slide.badge}
-            </div>
+            {!slide.hideBadge && (
+              <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide" data-testid="badge-natural">
+                <Leaf className="h-4 w-4 mr-2 text-[hsl(99,30%,65%)]" />
+                {slide.badge}
+              </div>
+            )}
             <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6 font-serif text-balance">
               {slide.title}
             </h1>
@@ -189,10 +192,10 @@ export default function HeroSection() {
         </div>
 
         {slide.showLogos && (
-          <div className="absolute bottom-16 left-4 lg:left-8 z-10 flex items-center gap-3">
-            <img src={zahalLogo} alt="Zahal" className="h-8 md:h-10 w-auto object-contain" />
-            <span className="text-white/70 text-lg font-bold">×</span>
-            <img src={enatureLogo} alt="eNature" className="h-8 md:h-10 w-auto object-contain" />
+          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
+            <img src={zahalLogo} alt="Zahal" className="h-12 md:h-16 w-auto object-contain brightness-0 invert" />
+            <span className="text-white/80 text-2xl font-bold">×</span>
+            <img src={enatureLogo} alt="eNature" className="h-12 md:h-16 w-auto object-contain" />
           </div>
         )}
       </div>
