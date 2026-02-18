@@ -16,15 +16,21 @@ import amazonLogo from "@assets/AMAZON_180x_1771434503364.avif";
 import mercadoLibreLogo from "@assets/MERCADO_LIBRE_180x_1771434503366.avif";
 import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 import getmeLogo from "@assets/logo_getmepng_1771435262525.png";
+import daxLogo from "@assets/DaxLogo_1771437463517.png";
+import tiendaUnamLogo from "@assets/tienda_unam_1771437690744.jpg";
+import laComerLogo from "@assets/la-comer-logo-png_seeklogo-299203-fotor-bg-remover-20260218102_1771437783061.png";
+import caalfrabetLogo from "@assets/Logo_CAALFRA_Oficial_1771437792297.avif";
+import sheinLogo from "@assets/shein-seeklogo_1771437844496.png";
+import ultrasoyaLogo from "@assets/logo-ultrasoya_1771437873164.png";
 
 const autoservicio = [
   { name: "Walmart", logo: walmartLogo },
   { name: "Chedraui", logo: chedrauiLogo },
-  { name: "La Comer", logo: null },
+  { name: "La Comer", logo: laComerLogo },
   { name: "HEB", logo: hebLogo },
   { name: "Soriana", logo: sorianaLogo },
-  { name: "Dax", logo: null },
-  { name: "Tienda UNAM", logo: null },
+  { name: "Dax", logo: daxLogo },
+  { name: "Tienda UNAM", logo: tiendaUnamLogo },
 ];
 
 const departamentales = [
@@ -33,8 +39,8 @@ const departamentales = [
   { name: "Súper Naturista", logo: superNaturistaLogo },
   { name: "Pronasoya", logo: pronasoyaLogo },
   { name: "Super Soya", logo: superSoyaLogo },
-  { name: "Caalfrabet", logo: null },
-  { name: "Ultrasoya", logo: null },
+  { name: "Caalfrabet", logo: caalfrabetLogo },
+  { name: "Ultrasoya", logo: ultrasoyaLogo },
   { name: "Nutrisa", logo: nutrisaLogo },
 ];
 
@@ -42,7 +48,7 @@ const ecommerce = [
   { name: "Amazon", logo: amazonLogo },
   { name: "Mercado Libre", logo: mercadoLibreLogo },
   { name: "Get Me by Ola", logo: getmeLogo },
-  { name: "SheIn", logo: null },
+  { name: "SheIn", logo: sheinLogo },
 ];
 
 function StoreItem({ store }: { store: { name: string; logo: string | null } }) {
