@@ -13,25 +13,25 @@ import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
 import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 
 const brands = [
-  { name: "Walmart", logo: walmartLogo, style: "h-7 md:h-9" },
-  { name: "Amazon", logo: amazonLogo, style: "h-6 md:h-7" },
-  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-7 md:h-8" },
-  { name: "H-E-B", logo: hebLogo, style: "h-7 md:h-9" },
-  { name: "Chedraui", logo: chedrauiLogo, style: "h-11 md:h-14" },
-  { name: "Soriana", logo: sorianaLogo, style: "h-7 md:h-9" },
-  { name: "Sears", logo: searsLogo, style: "h-5 md:h-7" },
-  { name: "Sanborns", logo: sanbornsLogo, style: "h-8 md:h-10" },
-  { name: "Nutrisa", logo: nutrisaLogo, style: "h-6 md:h-7" },
-  { name: "Super Naturista", logo: superNaturistaLogo, style: "h-8 md:h-10" },
-  { name: "Pronasoya", logo: pronasoyaLogo, style: "h-8 md:h-10" },
-  { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10" },
-  { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-7" },
+  { name: "Walmart", logo: walmartLogo, style: "h-7 md:h-9", width: "w-[130px] md:w-[160px]" },
+  { name: "Amazon", logo: amazonLogo, style: "h-6 md:h-7", width: "w-[120px] md:w-[150px]" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-7 md:h-8", width: "w-[130px] md:w-[155px]" },
+  { name: "H-E-B", logo: hebLogo, style: "h-7 md:h-9", width: "w-[120px] md:w-[150px]" },
+  { name: "Chedraui", logo: chedrauiLogo, style: "h-11 md:h-14", width: "w-[100px] md:w-[120px]" },
+  { name: "Soriana", logo: sorianaLogo, style: "h-7 md:h-9", width: "w-[130px] md:w-[160px]" },
+  { name: "Sears", logo: searsLogo, style: "h-5 md:h-7", width: "w-[100px] md:w-[120px]" },
+  { name: "Sanborns", logo: sanbornsLogo, style: "h-8 md:h-10", width: "w-[120px] md:w-[145px]" },
+  { name: "Nutrisa", logo: nutrisaLogo, style: "h-6 md:h-7", width: "w-[110px] md:w-[130px]" },
+  { name: "Super Naturista", logo: superNaturistaLogo, style: "h-8 md:h-10", width: "w-[100px] md:w-[120px]" },
+  { name: "Pronasoya", logo: pronasoyaLogo, style: "h-8 md:h-10", width: "w-[90px] md:w-[110px]" },
+  { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10", width: "w-[100px] md:w-[120px]" },
+  { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-7", width: "w-[110px] md:w-[130px]" },
 ];
 
 function BrandItem({ brand }: { brand: typeof brands[0] }) {
   return (
     <div
-      className="flex-shrink-0 w-[110px] md:w-[140px] h-14 md:h-18 flex items-center justify-center px-2"
+      className={`flex-shrink-0 ${brand.width} h-14 md:h-18 flex items-center justify-center px-2`}
       data-testid={`brand-logo-${brand.name.toLowerCase().replace(/ /g, "-")}`}
     >
       <img
