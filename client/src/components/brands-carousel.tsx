@@ -1,11 +1,11 @@
 import nutrisaLogo from "@assets/Nutrisa+logotipo+_1_-removebg-preview_1771434664253.png";
-import chedrauiLogo from "@assets/chedraui-logo-png_seeklogo-29285_1771350421227.png";
+import chedrauiLogo from "@assets/Chedraui-removebg-preview_1771435050194.png";
 import hebLogo from "@assets/HEB_180x_1771434503355.avif";
 import searsLogo from "@assets/Sears_Mexico_Logo.svg_1771350421240.png";
-import sanbornsLogo from "@assets/sanborns-logo-png__1771350421241.png";
+import sanbornsLogo from "@assets/Sanbornspng_1771434929637.png";
 import walmartLogo from "@assets/WALMART_e7e3f2bf-c140-4087-9005-94a3fb231765_180x_1771434503363.avif";
 import superNaturistaLogo from "@assets/SUPER_NATURISTA_180x_1771434503354.webp";
-import getmeLogo from "@assets/getme_by_ola_logo_1771350421244.webp";
+import getmeLogo from "@assets/logo_getmepng_1771435262525.png";
 import amazonLogo from "@assets/AMAZON_180x_1771434503364.avif";
 import mercadoLibreLogo from "@assets/MERCADO_LIBRE_180x_1771434503366.avif";
 import sorianaLogo from "@assets/soriana-logo-png_seeklogo-284960_1771350650256.png";
@@ -20,12 +20,12 @@ const brands = [
   { name: "Chedraui", logo: chedrauiLogo, style: "h-7 md:h-9" },
   { name: "Soriana", logo: sorianaLogo, style: "h-8 md:h-10" },
   { name: "Sears", logo: searsLogo, style: "h-6 md:h-8" },
-  { name: "Sanborns", logo: sanbornsLogo, style: "h-8 md:h-10" },
+  { name: "Sanborns", logo: sanbornsLogo, style: "h-10 md:h-12" },
   { name: "Nutrisa", logo: nutrisaLogo, style: "h-6 md:h-7" },
   { name: "Super Naturista", logo: superNaturistaLogo, style: "h-7 md:h-9" },
   { name: "Pronasoya", logo: pronasoyaLogo, style: "h-10 md:h-12" },
   { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10" },
-  { name: "Get Me by Ola", logo: getmeLogo, style: "h-9 md:h-11" },
+  { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-8" },
 ];
 
 function BrandItem({ brand }: { brand: typeof brands[0] }) {
