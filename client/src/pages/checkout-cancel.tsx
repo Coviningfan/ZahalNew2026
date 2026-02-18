@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { XCircle, ArrowLeft, ShoppingCart } from "lucide-react";
+import { XCircle, ArrowLeft } from "lucide-react";
 import SEO from "@/components/seo";
 
 export default function CheckoutCancel() {
@@ -12,6 +12,7 @@ export default function CheckoutCancel() {
         title="Pago Cancelado"
         description="Tu proceso de pago fue cancelado. Puedes intentar de nuevo."
         path="/checkout/cancelado"
+        noindex
       />
       <Navigation />
       <main id="main-content" className="pt-20">
@@ -26,7 +27,6 @@ export default function CheckoutCancel() {
             <p className="text-muted-foreground mb-8 leading-relaxed">
               Tu pago no fue procesado. Los productos siguen en tu carrito — puedes intentarlo de nuevo cuando estés listo.
             </p>
-
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/productos">
                 <Button className="gap-2 bg-primary hover:bg-primary/90" data-testid="button-back-to-shop">

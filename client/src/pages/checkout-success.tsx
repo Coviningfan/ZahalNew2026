@@ -26,6 +26,7 @@ export default function CheckoutSuccess() {
           title="Pedido"
           description="Página de confirmación de pedido."
           path="/checkout/exito"
+          noindex
         />
         <Navigation />
         <main id="main-content" className="pt-20">
@@ -60,6 +61,7 @@ export default function CheckoutSuccess() {
         title="Pedido Confirmado"
         description="Tu pedido ha sido procesado exitosamente."
         path="/checkout/exito"
+        noindex
       />
       <Navigation />
       <main id="main-content" className="pt-20">
