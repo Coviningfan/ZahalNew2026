@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, createContext, useContext } from "react";
 import type { Product, CartItem } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 
 interface CartContextType {
   cartItems: (CartItem & { product: Product })[];
@@ -33,15 +34,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [rawItems, setRawItems] = useState<CartItem[]>(loadCart);
   const [productCache, setProductCache] = useState<Map<string, Product>>(new Map());
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     saveCart(rawItems);
   }, [rawItems]);
 
   useEffect(() => {
-    const productIds = rawItems.map(i => i.productId).filter(id => !productCache.has(id));
+    const missingIds = rawItems.map(i => i.productId).filter(id => !productCache.has(id));
+    if (missingIds.length === 0 && productCache.size > 0) return;
     
-    // Always refresh product data to ensure price IDs are up to date
     fetch("/api/products")
       .then(r => r.json())
       .then((products: Product[]) => {
@@ -51,7 +53,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           return next;
         });
         
-        // Sync rawItems with fresh price IDs if they differ
         setRawItems(prev => prev.map(item => {
           const p = products.find(prod => prod.id === item.productId);
           if (p && p.stripePriceId !== item.stripePriceId) {
@@ -82,7 +83,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const existing = prev.find(i => i.productId === product.id);
       if (existing) {
         return prev.map(i =>
-          i.productId === product.id ? { ...i, quantity: i.quantity + quantity } : i
+          i.productId === product.id ? { ...i, quantity: Math.min(i.quantity + quantity, 10) } : i
         );
       }
       return [...prev, { productId: product.id, quantity, stripePriceId: product.stripePriceId }];
@@ -94,7 +95,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setRawItems(prev => prev.filter(i => i.productId !== productId));
     } else {
       setRawItems(prev => prev.map(i =>
-        i.productId === productId ? { ...i, quantity } : i
+        i.productId === productId ? { ...i, quantity: Math.min(quantity, 10) } : i
       ));
     }
   }, []);
@@ -133,6 +134,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Checkout error:", error);
+      toast({
+        title: "Error al procesar el pago",
+        description: "Hubo un problema al iniciar el pago. Intenta de nuevo.",
+        variant: "destructive",
+      });
     } finally {
       setIsCheckingOut(false);
     }
@@ -155,6 +161,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Buy now error:", error);
+      toast({
+        title: "Error al procesar el pago",
+        description: "Hubo un problema al iniciar el pago. Intenta de nuevo.",
+        variant: "destructive",
+      });
     } finally {
       setIsCheckingOut(false);
     }

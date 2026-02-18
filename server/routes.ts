@@ -4,8 +4,27 @@ import { storage } from "./storage";
 import { checkoutSchema } from "@shared/schema";
 import { getStripeClient, getStripePublishableKey } from "./stripeClient";
 import { z } from "zod";
+import rateLimit from "express-rate-limit";
+
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many requests, please try again later." },
+});
+
+const checkoutLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many checkout attempts, please try again later." },
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.use("/api", apiLimiter);
+
   app.get("/api/products", async (req, res) => {
     try {
       const { category, featured } = req.query;
@@ -49,7 +68,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/checkout", async (req, res) => {
+  app.post("/api/checkout", checkoutLimiter, async (req, res) => {
     try {
       const { items } = checkoutSchema.parse(req.body);
       const stripe = getStripeClient();
@@ -92,6 +111,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       { url: "/contacto", priority: "0.7", changefreq: "monthly" },
       { url: "/preguntas-frecuentes", priority: "0.6", changefreq: "monthly" },
       { url: "/privacidad", priority: "0.3", changefreq: "yearly" },
+      { url: "/donde-encontrarnos", priority: "0.5", changefreq: "monthly" },
+      { url: "/terminos", priority: "0.3", changefreq: "yearly" },
     ];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
