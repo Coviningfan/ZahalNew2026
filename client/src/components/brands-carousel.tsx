@@ -14,10 +14,10 @@ import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d775
 
 const brands = [
   { name: "Walmart", logo: walmartLogo, style: "h-8 md:h-10" },
-  { name: "Amazon", logo: amazonLogo, style: "h-7 md:h-9" },
-  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-8 md:h-10" },
-  { name: "H-E-B", logo: hebLogo, style: "h-9 md:h-11" },
-  { name: "Chedraui", logo: chedrauiLogo, style: "h-7 md:h-9" },
+  { name: "Amazon", logo: amazonLogo, style: "h-5 md:h-6" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-6 md:h-7" },
+  { name: "H-E-B", logo: hebLogo, style: "h-6 md:h-8" },
+  { name: "Chedraui", logo: chedrauiLogo, style: "h-10 md:h-12" },
   { name: "Soriana", logo: sorianaLogo, style: "h-8 md:h-10" },
   { name: "Sears", logo: searsLogo, style: "h-6 md:h-8" },
   { name: "Sanborns", logo: sanbornsLogo, style: "h-10 md:h-12" },
