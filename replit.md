@@ -4,7 +4,17 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 
 # Recent Changes (February 18, 2026)
 
-## Website Audit & SEO Fixes
+## External Audit Fixes
+- **Server hardening**: Error handler no longer throws after response (was causing unhandled rejections), added request body size limits (1MB), rate limiting on /api/* (100 req/min) and /api/checkout (5 req/min) via express-rate-limit
+- **Query client fix**: staleTime changed from Infinity to 5 minutes so product data refreshes; retry set to 1 so failed fetches aren't permanent
+- **Dead code removal**: Deleted unused duplicate `client/src/lib/api.ts`
+- **Cart fetch optimization**: Product cache only re-fetches from API when new (uncached) product IDs are in cart
+- **Checkout UX**: Toast notifications on checkout failure (was silently swallowing errors); quantity cap of 10 per product; checkout success page verifies session_id from URL (prevents false confirmations)
+- **SEO improvements**: og:image and twitter:image meta tags now rendered in SEO component with default fallback; Nunito ghost font removed from index.html (was loaded but never used); /donde-encontrarnos and /terminos added to sitemap.xml
+- **Storage optimization**: Stripe price fetching parallelized with Promise.all (was sequential loop, N+1 API calls)
+- **Legal pages**: Added Términos y Condiciones page at /terminos with full content; footer "Términos" link now functional
+
+## Previous Website Audit & SEO Fixes
 - Per-page SEO meta tags via react-helmet-async (unique title, description, canonical, OG tags per page)
 - Fallback meta tags in index.html for crawlers that don't execute JavaScript
 - Viewport meta fixed: removed maximum-scale=1 to allow user zooming (accessibility + mobile)
@@ -85,7 +95,7 @@ Mexican market UX: WhatsApp integration, trust signals, Spanish-first copy.
 
 ## Frontend Architecture
 - **React SPA**: Single-page application built with React 18 and TypeScript
-- **Routing**: Wouter — routes: /, /productos, /productos/:id, /nosotros, /preguntas-frecuentes, /contacto, /checkout/exito, /checkout/cancelado
+- **Routing**: Wouter — routes: /, /productos, /productos/:id, /nosotros, /preguntas-frecuentes, /contacto, /privacidad, /terminos, /donde-encontrarnos, /checkout/exito, /checkout/cancelado
 - **State Management**: TanStack Query v5 (product data) + React Context (cart)
 - **Cart**: Client-side localStorage-based cart via CartProvider
 - **UI Framework**: Shadcn/ui + Radix UI + Tailwind CSS
