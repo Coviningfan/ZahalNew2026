@@ -3,7 +3,7 @@ import { Leaf, Shield, Shirt, Recycle } from "lucide-react";
 const features = [
   {
     icon: Leaf,
-    title: "100% Natural",
+    title: "Natural",
     description: "Piedra de alumbre pura, sin químicos agresivos ni parabenos"
   },
   {
