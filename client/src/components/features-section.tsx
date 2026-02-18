@@ -24,7 +24,7 @@ const features = [
   {
     icon: Heart,
     title: "Libre de Crueldad Animal",
-    description: "No testado en animales, comprometidos con el bienestar animal"
+    description: "Sin pruebas en animales, comprometidos con el bienestar animal"
   }
 ];
 
