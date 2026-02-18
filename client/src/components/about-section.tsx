@@ -12,7 +12,7 @@ const benefits = [
 
 export default function AboutSection() {
   return (
-    <section id="sobre-nosotros" className="py-16 lg:py-24 bg-white">
+    <section id="sobre-nosotros" className="py-10 lg:py-14 bg-white">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
