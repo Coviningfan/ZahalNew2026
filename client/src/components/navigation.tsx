@@ -18,7 +18,7 @@ export default function Navigation() {
     { href: "/", label: "Inicio" },
     { href: "/productos", label: "Productos" },
     { href: "/nosotros", label: "Nosotros" },
-    { href: "/preguntas-frecuentes", label: "FAQ" },
+    { href: "/preguntas-frecuentes", label: "Preguntas Frecuentes" },
     { href: "/contacto", label: "Contacto" },
   ];
 
