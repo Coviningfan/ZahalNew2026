@@ -22,8 +22,9 @@ export default function PrivacyPolicy() {
                 Política de Privacidad
               </h1>
               <p className="text-muted-foreground text-lg leading-relaxed mb-4">
-                Zahal®, es una marca licenciada a Markvel S.A de C.V, respetamos y protegemos la privacidad de nuestros usuarios. 
-                Esta política describe cómo recopilamos, usamos y protegemos tu información personal.
+                Zahal®, es una marca licenciada a Markvel S.A de C.V.
+                <br /><br />
+                Respetamos y protegemos la privacidad de nuestros usuarios. Esta política describe cómo recopilamos, usamos y protegemos tu información personal.
               </p>
               <p className="text-muted-foreground text-sm">
                 Última actualización: Febrero 2026
