@@ -19,6 +19,8 @@ const categories = [
   { value: "sport", label: "Sport" },
   { value: "teens", label: "Teens" },
   { value: "travel", label: "Travel" },
+  { value: "cuidado", label: "Cuidado Personal" },
+  { value: "manos", label: "Limpieza de Manos" },
 ];
 
 export default function Products() {

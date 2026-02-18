@@ -40,7 +40,7 @@ const categories = [
       id: "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
       name: "Kit Eco Viajero",
       description: "Todo lo que necesitas en tu maleta. Incluye mini desodorantes, jabón y limpiador. Cumple con normativas de aeropuerto y es 100% biodegradable.",
-      price: "$150",
+      price: "$207",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_momento_2.jpg?v=1753740213"
     }
   },
