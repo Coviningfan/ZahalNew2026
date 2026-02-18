@@ -6,7 +6,7 @@ import alumbreNatural from "@assets/image_16_1771348502523.png";
 const benefits = [
   "Sin clorhidrato de aluminio",
   "Sin parabenos ni alcohol", 
-  "pH neutro y vegano",
+  "Vegano",
   "No mancha la ropa ni la piel"
 ];
 
