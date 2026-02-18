@@ -6,6 +6,7 @@ export interface Product {
   description: string;
   price: string;
   category: string;
+  additionalCategories: string[];
   weight: string | null;
   images: string[];
   features: string[];

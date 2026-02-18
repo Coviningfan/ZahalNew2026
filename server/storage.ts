@@ -13,12 +13,18 @@ function mapStripeProductToProduct(product: any, price: any): Product {
   const unitAmount = price?.unit_amount || 0;
   const priceStr = (unitAmount / 100).toFixed(2);
 
+  let additionalCategories: string[] = [];
+  if (metadata.additionalCategories) {
+    additionalCategories = metadata.additionalCategories.split(',').map((c: string) => c.trim()).filter(Boolean);
+  }
+
   return {
     id: metadata.slug || product.id,
     name: product.name || '',
     description: product.description || '',
     price: priceStr,
     category: metadata.category || 'unisex',
+    additionalCategories,
     weight: metadata.weight || null,
     images,
     features,
@@ -87,7 +93,7 @@ class StripeApiStorage implements IStorage {
 
   async getProductsByCategory(category: string): Promise<Product[]> {
     const products = await this.fetchAllProducts();
-    return products.filter(p => p.category === category);
+    return products.filter(p => p.category === category || p.additionalCategories.includes(category));
   }
 
   async getFeaturedProducts(): Promise<Product[]> {
