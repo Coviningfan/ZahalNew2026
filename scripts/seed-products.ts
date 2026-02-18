@@ -17,7 +17,7 @@ const products = [
       features: JSON.stringify(["Sin clorhidrato de aluminio", "Sin parabenos", "Sin alcohol", "Sin aroma", "Vegano", "Orgánico", "No mancha", "pH neutro", "Protección 24hrs"]),
       inStock: "true",
       isFeatured: "true",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -36,7 +36,7 @@ const products = [
       features: JSON.stringify(["Sales minerales", "Sin alcohol", "Sin aroma", "Tamaño viaje", "No se enjuaga", "Eco-friendly"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -74,7 +74,7 @@ const products = [
       features: JSON.stringify(["Con aroma fresco", "Para niños y adolescentes", "Con aloe vera", "Sin clorhidrato de aluminio", "Sin alcohol", "Sin parabenos", "Vegano", "Orgánico", "Piel sensible"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -93,7 +93,7 @@ const products = [
       features: JSON.stringify(["Aceite de árbol de té", "Antibacterial natural", "Auxiliar anti-acné", "Post-tatuaje", "Sin químicos", "100% biodegradable"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -111,7 +111,7 @@ const products = [
       features: JSON.stringify(["Piedra de alumbre", "Sin alcohol", "Sin aroma", "Tamaño familiar", "No se enjuaga", "Eco-friendly"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -129,7 +129,7 @@ const products = [
       features: JSON.stringify(["Para hombre", "Con aloe vera", "Sin clorhidrato de aluminio", "Sin alcohol", "Sin fragancia", "Sin parabenos", "Vegano", "Orgánico", "No tóxico"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -147,7 +147,7 @@ const products = [
       features: JSON.stringify(["Para niños y adolescentes", "Con aloe vera", "Carbón activado", "Sin clorhidrato de aluminio", "Sin alcohol", "Sin parabenos", "Vegano", "Orgánico", "Piel sensible"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -165,7 +165,7 @@ const products = [
       features: JSON.stringify(["Carbón activado", "Ideal para deportistas", "Con aloe vera", "Sin clorhidrato de aluminio", "Sin alcohol", "Sin parabenos", "Vegano", "Orgánico", "No tóxico"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -201,7 +201,7 @@ const products = [
       features: JSON.stringify(["Para pies y calzado", "Piedra de alumbre", "24h protección", "Sin alcohol", "Sin aroma", "pH neutro", "Vegano"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -255,7 +255,7 @@ const products = [
       features: JSON.stringify(["Recargable 3 veces", "Piedra de alumbre", "Eco-friendly", "Sin parabenos", "Sin alcohol", "Piel sensible"]),
       inStock: "true",
       isFeatured: "false",
-      isNew: "true",
+      isNew: "false",
     }
   },
   {
@@ -291,7 +291,7 @@ const products = [
       features: JSON.stringify(["Gran tamaño 120g", "Piedra de alumbre pura", "Sin clorhidrato de aluminio", "Sin parabenos", "Sin alcohol", "Sin aroma", "Vegano", "Orgánico", "Duración 4 años"]),
       inStock: "true",
       isFeatured: "true",
-      isNew: "true",
+      isNew: "false",
     }
   },
 ];
