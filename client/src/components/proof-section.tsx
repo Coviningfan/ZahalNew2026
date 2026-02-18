@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
 const highlights = [
-  "Sin aluminio clorohidratado, alcohol ni fragancias sintéticas agresivas",
+  "Sin Clorhidrato de aluminio, alcohol ni fragancias sintéticas agresivas",
   "Apto para piel sensible y para uso diario después del afeitado",
   "No deja residuos blancos ni manchas amarillas en la ropa",
 ];
