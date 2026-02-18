@@ -1,0 +1,187 @@
+Project Overview
+This is a full-stack e-commerce platform for Zahal, a natural skincare brand specializing in alum stone deodorants. The application features a custom React frontend with direct Stripe payment processing, recently migrated from Shopify.
+
+Technical Stack Analysis
+Frontend Architecture
+Framework: React 18 with TypeScript and Vite build tool
+
+Routing: Wouter for client-side routing
+
+State Management: TanStack Query v5 for server state, React Context for cart management
+
+UI Components: Comprehensive Shadcn/ui + Radix UI component library implementation
+
+Styling: Tailwind CSS v3 with custom design tokens
+
+Backend Architecture
+Server: Express.js with TypeScript
+
+Database: Neon PostgreSQL with Drizzle ORM
+
+Payment Processing: Stripe Checkout integration
+
+Data Layer: Products sourced directly from Stripe API with 60-second caching
+
+Security Audit
+Strengths
+Comprehensive security headers implemented in server/index.ts:
+
+X-Frame-Options: SAMEORIGIN
+
+X-Content-Type-Options: nosniff
+
+Strict-Transport-Security
+
+Content-Security-Policy (properly configured for Stripe)
+
+Referrer-Policy
+
+Permissions-Policy
+
+Input validation: Zod schemas for API request validation
+
+HTTPS enforcement: CSP and HSTS headers configured
+
+Compression middleware: Enabled for performance
+
+Areas for Improvement
+No environment variable validation - Missing checks for critical variables like STRIPE_SECRET_KEY
+
+Error handling exposes stack traces - Server throws errors in error handler instead of logging safely
+
+No rate limiting - Checkout endpoint vulnerable to abuse
+
+Missing CSRF protection - No session-based CSRF tokens
+
+No request body size limits - Could be vulnerable to DoS attacks
+
+Code Quality Issues
+Critical Issues
+Large image files committed (4.5MB total):
+
+home_page_after_return.png (1.6MB)
+
+original_brought_front.png (1.7MB)
+
+These should be in .gitignore or optimized
+
+Cache invalidation logic may have race conditions in storage.ts:
+
+Manual cache updates inside loops could lead to stale data
+
+Hardcoded base URL in sitemap: "https://zahal-productos-naturales.replit.app"
+
+Configuration Issues
+Weak .gitignore - Missing common patterns:
+
+No .env or environment files
+
+No IDE-specific files
+
+No OS-specific files (only .DS_Store)
+
+Package.json naming mismatch: Project named "rest-express" but repository is "ZahalNew2026"
+
+API Design Assessment
+Endpoint Structure
+GET /api/products - Good: supports filtering by category and featured
+
+GET /api/products/:id - Standard implementation
+
+POST /api/checkout - Properly validated with Zod schema
+
+GET /api/stripe/publishable-key - Good practice for separating keys
+
+Issues
+No pagination on products endpoint - will scale poorly beyond 100 products
+
+No error standardization - Different error response formats
+
+Missing API versioning - Future changes will break clients
+
+No request logging middleware for non-API routes
+
+Performance Concerns
+Stripe API calls on every product fetch - Despite caching, initial load fetches all products + individual price lookups
+
+Sequential price fetching - Could be parallelized with Promise.all()
+
+Large dependency bundle (295KB package-lock.json) - Consider code splitting
+
+No CDN configuration for static assets
+
+SEO & Accessibility
+Strengths (Recent Improvements)
+React Helmet Async for per-page meta tags
+
+Sitemap.xml and robots.txt implementation
+
+Skip-to-content link for accessibility
+
+Semantic HTML with main landmarks
+
+Fixed viewport meta tag for mobile accessibility
+
+Missing
+No structured data (JSON-LD for products)
+
+No image alt text validation
+
+No prerender/SSR - SPA may hurt SEO despite meta tags
+
+Database & Data Layer
+Concerns
+No database schema files found - Drizzle config exists but no schema definitions visible
+
+Stripe as source of truth - Risky if Stripe has downtime
+
+No data validation on Stripe metadata parsing
+
+Try-catch silently fails on features JSON parsing
+
+Recommendations (Priority Order)
+Critical
+Add .env to .gitignore and implement environment variable validation
+
+Remove large PNG files from repository; use Git LFS or external storage
+
+Add rate limiting middleware (express-rate-limit)
+
+Fix error handling to prevent stack trace exposure
+
+Implement request body size limits
+
+High Priority
+Add API versioning (/api/v1/...)
+
+Implement product pagination
+
+Add structured data for SEO
+
+Parallelize Stripe price fetching
+
+Add CSRF protection for state-changing operations
+
+Medium Priority
+Standardize API error responses
+
+Add request logging for all routes
+
+Implement automated testing (no tests found)
+
+Add monitoring/observability (no error tracking)
+
+Create proper database schema migrations with Drizzle
+
+Low Priority
+Rename package.json project name
+
+Make base URL configurable via environment
+
+Add pre-commit hooks for code quality
+
+Implement code splitting for better performance
+
+Consider SSR/SSG for better SEO
+
+The application demonstrates solid recent development with good security headers and a clean architecture, but lacks production-ready error handling, testing, and operational concerns like monitoring and rate limiting.

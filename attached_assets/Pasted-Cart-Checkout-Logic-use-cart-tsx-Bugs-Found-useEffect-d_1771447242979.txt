@@ -1,0 +1,37 @@
+Cart & Checkout Logic (use-cart.tsx)
+Bugs Found
+useEffect dependency bug — The product refresh fires whenever rawItems.length changes, but it's conditioned on productIds with an !productCache.has(id) filter that's computed inside the effect and then ignored. The comment even says "Always refresh product data" — meaning every time you add/remove an item, it re-fetches all products from the API. This causes unnecessary network traffic.
+
+Silent checkout failure — In both checkout() and buyNow(), if the fetch fails, it just console.errors and swallows the error with no user-facing feedback. The user sees nothing when checkout fails.
+
+isCheckingOut never resets on navigation — buyNow() sets isCheckingOut = true and redirects via window.location.href, but if the redirect fails or is blocked, the button stays disabled indefinitely.
+
+No quantity cap — addToCart increments infinitely with no max quantity guard. A user could theoretically add 9999 of an item.
+
+Forms: Newsletter & Contact
+Critical: Both Forms Are Fake
+Newsletter: handleSubmit never calls any API — it just shows a success toast and clears the field. No emails are actually being collected.
+
+Contact form: handleSubmit uses setTimeout(..., 1000) to fake a loading state and shows a success message — no message is ever sent anywhere. The form is entirely cosmetic.
+
+These are the two highest-priority functional gaps in the entire app — users believe they're subscribing or contacting support, but nothing happens.
+
+Checkout Success Page
+No session verification — /checkout/exito simply clears the cart and shows a success message. It does not verify the Stripe session_id query parameter against the API. Anyone can navigate directly to /checkout/exito without paying and see the "Pedido Confirmado" screen. This is a trust/integrity issue (though Stripe handles actual payment fulfillment server-side, it could confuse internal order tracking).
+
+Stripe Client
+The apiVersion uses a non-standard string cast ('2025-11-17.clover' as any). The as any means TypeScript can't catch version incompatibilities — if Stripe deprecates endpoints in that version, you'll get runtime errors with no compile-time warning.
+
+Routing (App.tsx)
+/donde-encontrarnos is not in the sitemap — The route exists in the router but is absent from the sitemap in routes.ts. Search engines won't index it.
+
+/privacidad is in the sitemap but the route is /privacidad in App.tsx — these match, but the priority is only 0.3, which may be fine.
+
+No 301 redirects — If users hit old Shopify URLs from bookmarks/links, they'll get a 404 with no redirect.
+
+Schema (shared/schema.ts)
+price is typed as string instead of number — every consumer calls parseFloat(product.price) manually throughout the codebase. This is error-prone; a malformed Stripe price would silently produce NaN totals.
+
+No maxQuantity field in CartItem — there's no way to enforce stock limits per product.
+
+checkoutSchema doesn't validate stripePriceId format — any string passes, so a malformed or stale price ID will only fail at Stripe's API level, not before.
