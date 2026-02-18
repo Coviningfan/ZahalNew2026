@@ -11,6 +11,12 @@ import mercadoLibreLogo from "@assets/MERCADO_LIBRE_180x_1771434503366.avif";
 import sorianaLogo from "@assets/soriana-logopng_1771435365592.png";
 import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
 import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
+import daxLogo from "@assets/DaxLogo_1771437463517.png";
+import laComerLogo from "@assets/la-comer-logo-png_seeklogo-299203-fotor-bg-remover-20260218102_1771437783061.png";
+import tiendaUnamLogo from "@assets/tienda_unam_1771437690744.jpg";
+import caalfrabetLogo from "@assets/Logo_CAALFRA_Oficial_1771437792297.avif";
+import sheinLogo from "@assets/shein-seeklogo_1771437844496.png";
+import ultrasoyaLogo from "@assets/logo-ultrasoya_1771437873164.png";
 
 const brands = [
   { name: "Walmart", logo: walmartLogo, style: "h-7 md:h-9", width: "w-[130px] md:w-[160px]" },
@@ -26,6 +32,12 @@ const brands = [
   { name: "Pronasoya", logo: pronasoyaLogo, style: "h-8 md:h-10", width: "w-[90px] md:w-[110px]" },
   { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10", width: "w-[100px] md:w-[120px]" },
   { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-7", width: "w-[110px] md:w-[130px]" },
+  { name: "La Comer", logo: laComerLogo, style: "h-7 md:h-9", width: "w-[130px] md:w-[155px]" },
+  { name: "Dax", logo: daxLogo, style: "h-5 md:h-6", width: "w-[90px] md:w-[110px]" },
+  { name: "Tienda UNAM", logo: tiendaUnamLogo, style: "h-8 md:h-10", width: "w-[90px] md:w-[110px]" },
+  { name: "Caalfrabet", logo: caalfrabetLogo, style: "h-8 md:h-10", width: "w-[100px] md:w-[120px]" },
+  { name: "SheIn", logo: sheinLogo, style: "h-4 md:h-5", width: "w-[100px] md:w-[120px]" },
+  { name: "Ultrasoya", logo: ultrasoyaLogo, style: "h-6 md:h-8", width: "w-[110px] md:w-[130px]" },
 ];
 
 function BrandItem({ brand }: { brand: typeof brands[0] }) {
@@ -45,7 +57,7 @@ function BrandItem({ brand }: { brand: typeof brands[0] }) {
 
 export default function BrandsCarousel() {
   return (
-    <section className="py-12 lg:py-16 bg-background overflow-hidden" data-testid="brands-carousel">
+    <section className="py-12 lg:py-16 bg-primary/[0.04] overflow-hidden" data-testid="brands-carousel">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-8">
           <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-2">Nos encuentras en</p>
@@ -56,8 +68,8 @@ export default function BrandsCarousel() {
       </div>
 
       <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-primary/[0.04] to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-primary/[0.04] to-transparent z-10" />
 
         <div className="flex animate-scroll-brands items-center" style={{ width: "fit-content" }}>
           {[...brands, ...brands, ...brands].map((brand, i) => (
