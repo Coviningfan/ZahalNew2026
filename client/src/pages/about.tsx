@@ -25,7 +25,7 @@ export default function About() {
                 </h1>
                 <p className="text-muted-foreground text-lg leading-relaxed mb-6">
                   En Zahal creemos que el cuidado personal puede ser natural, consciente y poderoso. 
-                  Somos una marca mexicana comprometida con la salud, el bienestar y el medio ambiente.
+                  Somos una marca comprometida con la salud, el bienestar y el medio ambiente.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   Cada producto que desarrollamos tiene una razón: ayudarte a sentirte bien en tu piel todos los días, 
