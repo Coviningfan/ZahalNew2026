@@ -1,15 +1,16 @@
 import nutrisaLogo from "@assets/Nutrisa_logo_1771350421137.jpg";
 import chedrauiLogo from "@assets/chedraui-logo-png_seeklogo-29285_1771350421227.png";
-import hebLogo from "@assets/H-E-B_logo_1771350421239.webp";
+import hebLogo from "@assets/HEB_180x_1771434503355.avif";
 import searsLogo from "@assets/Sears_Mexico_Logo.svg_1771350421240.png";
 import sanbornsLogo from "@assets/sanborns-logo-png__1771350421241.png";
-import walmartLogo from "@assets/Walmart-Logo_1771350421242.jpg";
-import superNaturistaLogo from "@assets/logo_super_naturista_1771351958008.webp";
+import walmartLogo from "@assets/WALMART_e7e3f2bf-c140-4087-9005-94a3fb231765_180x_1771434503363.avif";
+import superNaturistaLogo from "@assets/SUPER_NATURISTA_180x_1771434503354.webp";
 import getmeLogo from "@assets/getme_by_ola_logo_1771350421244.webp";
-import amazonLogo from "@assets/[CITYPNG.COM]Black_Official_Amazon_Logo_-_3000x3000_1771351946073.png";
-import mercadoLibreLogo from "@assets/mercado-libre-logo-png_seeklogo-472565_1771351576967.png";
+import amazonLogo from "@assets/AMAZON_180x_1771434503364.avif";
+import mercadoLibreLogo from "@assets/MERCADO_LIBRE_180x_1771434503366.avif";
 import sorianaLogo from "@assets/soriana-logo-png_seeklogo-284960_1771350650256.png";
-import bodegaAurreraLogo from "@assets/png-transparent-logo-brand-green-bodega-aurrera-product-line-t_1771350657131.png";
+import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
+import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 
 const brands = [
   { name: "Walmart", logo: walmartLogo, height: "h-16 md:h-20" },
@@ -18,11 +19,12 @@ const brands = [
   { name: "H-E-B", logo: hebLogo, height: "h-16 md:h-20" },
   { name: "Chedraui", logo: chedrauiLogo, height: "h-16 md:h-24" },
   { name: "Soriana", logo: sorianaLogo, height: "h-16 md:h-24" },
-  { name: "Bodega Aurrera", logo: bodegaAurreraLogo, height: "h-16 md:h-20" },
   { name: "Sears", logo: searsLogo, height: "h-8 md:h-10" },
   { name: "Sanborns", logo: sanbornsLogo, height: "h-16 md:h-24" },
   { name: "Nutrisa", logo: nutrisaLogo, height: "h-16 md:h-24" },
   { name: "Super Naturista", logo: superNaturistaLogo, height: "h-20 md:h-28" },
+  { name: "Pronasoya", logo: pronasoyaLogo, height: "h-16 md:h-20" },
+  { name: "Super Soya", logo: superSoyaLogo, height: "h-16 md:h-20" },
   { name: "Get Me by Ola", logo: getmeLogo, height: "h-16 md:h-20" },
 ];
 
