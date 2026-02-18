@@ -32,7 +32,7 @@ const brands = [
   { name: "Pronasoya", logo: pronasoyaLogo, style: "h-9 md:h-11", width: "min-w-[85px] md:min-w-[100px]" },
   { name: "Super Soya", logo: superSoyaLogo, style: "h-9 md:h-11", width: "min-w-[90px] md:min-w-[105px]" },
   { name: "Get Me by Ola", logo: getmeLogo, style: "h-7 md:h-8", width: "min-w-[115px] md:min-w-[135px]" },
-  { name: "La Comer", logo: laComerLogo, style: "h-10 md:h-14", width: "min-w-[135px] md:min-w-[170px]" },
+  { name: "La Comer", logo: laComerLogo, style: "h-14 md:h-[72px]", width: "min-w-[120px] md:min-w-[150px]" },
   { name: "Dax", logo: daxLogo, style: "h-6 md:h-7", width: "min-w-[90px] md:min-w-[105px]", invert: true },
   { name: "Tienda UNAM", logo: tiendaUnamLogo, style: "h-8 md:h-10", width: "min-w-[80px] md:min-w-[95px]" },
   { name: "Caalfrabet", logo: caalfrabetLogo, style: "h-9 md:h-11", width: "min-w-[90px] md:min-w-[105px]" },
