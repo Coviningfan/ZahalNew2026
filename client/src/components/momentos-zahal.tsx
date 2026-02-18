@@ -309,7 +309,7 @@ export default function MomentosZahal() {
       <div className="container mx-auto px-4 lg:px-8">
           <div className="flex flex-col items-center justify-center gap-4 mb-4">
             <p className="text-primary font-semibold text-sm tracking-wider uppercase">
-              Elige tu momento
+              Elige tu Zahal Ideal
             </p>
             <div className="flex items-center gap-3">
               <span className="text-3xl lg:text-4xl font-bold text-foreground font-serif">Momentos</span>
