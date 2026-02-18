@@ -33,10 +33,10 @@ const brands = [
   { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10", width: "w-[100px] md:w-[120px]" },
   { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-7", width: "w-[110px] md:w-[130px]" },
   { name: "La Comer", logo: laComerLogo, style: "h-7 md:h-9", width: "w-[130px] md:w-[155px]" },
-  { name: "Dax", logo: daxLogo, style: "h-5 md:h-6", width: "w-[90px] md:w-[110px]" },
-  { name: "Tienda UNAM", logo: tiendaUnamLogo, style: "h-8 md:h-10", width: "w-[90px] md:w-[110px]" },
+  { name: "Dax", logo: daxLogo, style: "h-5 md:h-6", width: "w-[90px] md:w-[110px]", invert: true },
+  { name: "Tienda UNAM", logo: tiendaUnamLogo, style: "h-7 md:h-8", width: "w-[80px] md:w-[100px]" },
   { name: "Caalfrabet", logo: caalfrabetLogo, style: "h-8 md:h-10", width: "w-[100px] md:w-[120px]" },
-  { name: "SheIn", logo: sheinLogo, style: "h-4 md:h-5", width: "w-[100px] md:w-[120px]" },
+  { name: "SheIn", logo: sheinLogo, style: "h-5 md:h-6", width: "w-[110px] md:w-[130px]" },
   { name: "Ultrasoya", logo: ultrasoyaLogo, style: "h-6 md:h-8", width: "w-[110px] md:w-[130px]" },
 ];
 
@@ -49,7 +49,7 @@ function BrandItem({ brand }: { brand: typeof brands[0] }) {
       <img
         src={brand.logo}
         alt={brand.name}
-        className={`${brand.style} w-auto max-w-[100px] md:max-w-[130px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300`}
+        className={`${brand.style} w-auto max-w-[100px] md:max-w-[130px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 ${brand.invert ? "invert" : ""}`}
       />
     </div>
   );
