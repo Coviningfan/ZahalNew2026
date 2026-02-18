@@ -12,7 +12,7 @@ const proofStats = [
   {
     icon: ShieldCheck,
     value: "24h",
-    label: "protección antibacteriana natural",
+    label: "protección duradera natural",
   },
   {
     icon: Droplets,
