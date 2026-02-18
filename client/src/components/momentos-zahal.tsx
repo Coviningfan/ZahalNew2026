@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
 import { Star, ChevronLeft, ChevronRight, Quote, ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 const categories = [
   {
@@ -306,13 +307,15 @@ export default function MomentosZahal() {
   return (
     <section className="py-16 lg:py-24 bg-card linen-texture overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">
-            Elige tu momento
-          </p>
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 font-serif">
-            Momentos ZAHAL
-          </h2>
+          <div className="flex flex-col items-center justify-center gap-4 mb-4">
+            <p className="text-primary font-semibold text-sm tracking-wider uppercase">
+              Elige tu momento
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl lg:text-4xl font-bold text-foreground font-serif">Momentos</span>
+              <img src={zahalLogo} alt="Zahal" className="h-10 lg:h-12 w-auto object-contain" />
+            </div>
+          </div>
           <p className="text-muted-foreground text-base max-w-xl mx-auto">
             Una opción natural que se adapta a tu estilo de vida
           </p>
