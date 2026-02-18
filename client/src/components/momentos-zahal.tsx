@@ -367,7 +367,7 @@ export default function MomentosZahal() {
                       />
                       <div className="min-w-0 flex-1">
                         <p className="text-primary font-bold text-[11px] uppercase tracking-widest mb-1">
-                          Momento {category.title}
+                          {category.title}
                         </p>
                         <h3 className="text-lg font-bold text-foreground font-serif leading-tight mb-1">
                           {category.featuredProduct.name}
@@ -383,13 +383,22 @@ export default function MomentosZahal() {
                     <p className="text-muted-foreground text-sm leading-relaxed mt-3 mb-4">
                       {category.featuredProduct.description}
                     </p>
-                    <Button
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold h-11 gap-2"
-                      onClick={() => navigateTo(`/productos/${category.featuredProduct.id}`)}
-                    >
-                      Ver Detalles
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
+                    <div className="flex gap-3">
+                      <Button
+                        className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold h-11 gap-2"
+                        onClick={() => navigateTo(`/productos/${category.featuredProduct.id}`)}
+                      >
+                        Ver Detalles
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="flex-1 border-primary/20 hover:bg-primary/5 text-primary font-semibold h-11 gap-2"
+                        onClick={() => navigateTo(`/productos?categoria=${category.id}`)}
+                      >
+                        Productos similares
+                      </Button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -454,7 +463,7 @@ export default function MomentosZahal() {
 
                     <div className="order-1 lg:order-2">
                       <p className="text-primary font-bold text-sm uppercase tracking-widest mb-4">
-                        Recomendado para momento {selectedCategory.title}
+                        Recomendado para {selectedCategory.title}
                       </p>
                       <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 font-serif">
                         {selectedCategory.featuredProduct.name}
@@ -482,10 +491,11 @@ export default function MomentosZahal() {
                         <Button
                           size="lg"
                           variant="outline"
-                          className="border-primary/20 hover:bg-primary/5 text-primary font-semibold h-14 px-8"
-                          onClick={() => setSelectedCategory(null)}
+                          className="border-primary/20 hover:bg-primary/5 text-primary font-semibold h-14 px-8 gap-2"
+                          onClick={() => navigateTo(`/productos?categoria=${selectedCategory.id}`)}
                         >
-                          Cerrar
+                          Productos similares
+                          <ArrowRight className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
