@@ -329,7 +329,7 @@ export default function MomentosZahal() {
                     selectedCategory && selectedCategory.id !== category.id ? "opacity-40 grayscale" : ""
                   }`}
                 >
-                  <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 aspect-[16/9]">
+                  <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 aspect-[16/9]">
                     <img
                       src={category.image}
                       alt={`${category.title} lifestyle`}
@@ -405,7 +405,7 @@ export default function MomentosZahal() {
                     selectedCategory && selectedCategory.id !== category.id ? "opacity-40 grayscale" : ""
                   }`}
                 >
-                  <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1 aspect-[3/4]">
+                  <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 transform hover:-translate-y-1 aspect-[3/4]">
                     <img
                       src={category.image}
                       alt={`${category.title} lifestyle`}
@@ -471,7 +471,7 @@ export default function MomentosZahal() {
                       <div className="flex gap-4">
                         <Button
                           size="lg"
-                          className="bg-primary hover:bg-primary/90 text-white font-semibold h-13 px-8 gap-2"
+                          className="bg-primary hover:bg-primary/90 text-white font-semibold h-14 px-8 gap-2"
                           onClick={() => navigateTo(`/productos/${selectedCategory.featuredProduct.id}`)}
                         >
                           Ver Detalles
@@ -480,7 +480,7 @@ export default function MomentosZahal() {
                         <Button
                           size="lg"
                           variant="outline"
-                          className="border-primary/20 hover:bg-primary/5 text-primary font-semibold h-13 px-8"
+                          className="border-primary/20 hover:bg-primary/5 text-primary font-semibold h-14 px-8"
                           onClick={() => setSelectedCategory(null)}
                         >
                           Cerrar

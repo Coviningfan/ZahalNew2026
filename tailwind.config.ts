@@ -47,6 +47,7 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
+        serif: ["var(--font-serif)"],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out',

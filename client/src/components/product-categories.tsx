@@ -47,11 +47,11 @@ export default function ProductCategories() {
           {categories.map((category) => (
             <button 
               key={category.id} 
-              onClick={() => setLocation("/productos")}
+              onClick={() => setLocation(`/productos?categoria=${category.id}`)}
               className="group cursor-pointer text-left"
               data-testid={`link-category-${category.id}`}
             >
-              <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1">
+              <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 transform hover:-translate-y-1">
                 <img 
                   src={category.image}
                   alt={`${category.title} lifestyle`}

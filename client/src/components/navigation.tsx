@@ -92,7 +92,7 @@ export default function Navigation() {
                         {cartItems.map((item) => (
                           <div key={item.productId} className="flex items-start gap-3 p-3 bg-card rounded-xl border border-border/50" data-testid={`cart-item-${item.productId}`}>
                             <img 
-                              src={item.product.images[0]} 
+                              src={item.product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"} 
                               alt={item.product.name}
                               className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                             />
