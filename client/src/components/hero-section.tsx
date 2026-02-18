@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { Leaf, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import heroImage from "@assets/ZAHAL_PROD_012_dfa9fd33-8688-41b6-ac9b-c6ca187d00fa_1759341695530.jpg";
+
 
 const slides = [
   {
@@ -154,20 +154,11 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="relative animate-scale-in hidden lg:flex justify-center" data-testid="hero-product-square">
-            <div className="relative">
-              <div className="absolute -inset-6 bg-white/5 rounded-3xl blur-xl"></div>
-              <img
-                src={heroImage}
-                alt="Zahal desodorante natural de piedra de alumbre"
-                className="relative w-full max-w-md h-auto rounded-2xl shadow-2xl shadow-black/20"
-              />
-              <Link href="/productos" className="absolute -bottom-4 -right-4 bg-white/15 backdrop-blur-xl border border-white/20 rounded-xl p-4 shadow-xl animate-float cursor-pointer hover:bg-white/25 transition-colors" data-testid="link-hero-catalog">
-                <div className="text-center">
-                  <div className="text-sm font-semibold text-white leading-tight">Elige tu<br/>favorito</div>
-                </div>
-              </Link>
-            </div>
+          <div className="hidden lg:flex justify-center items-center">
+            <Link href="/productos" className="group inline-flex items-center gap-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full py-3 px-6 shadow-xl hover:bg-white/20 transition-all" data-testid="link-hero-catalog">
+              <span className="text-sm font-semibold text-white tracking-wide">Elige tu favorito</span>
+              <ArrowRight className="h-4 w-4 text-white group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
       </div>
