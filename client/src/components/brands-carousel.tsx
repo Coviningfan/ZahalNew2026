@@ -63,6 +63,10 @@ export default function BrandsCarousel() {
           ))}
         </div>
       </div>
+
+      <p className="text-muted-foreground/40 text-[10px] text-center mt-6 px-4">
+        Las marcas mostradas se usan solo para identificar puntos de venta y pertenecen a sus respectivos propietarios.
+      </p>
     </section>
   );
 }
