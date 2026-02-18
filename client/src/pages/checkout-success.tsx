@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { CheckCircle, ArrowRight, ShoppingBag } from "lucide-react";
+import SEO from "@/components/seo";
 
 export default function CheckoutSuccess() {
   const { clearCart } = useCart();
@@ -15,8 +16,13 @@ export default function CheckoutSuccess() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Pedido Confirmado"
+        description="Tu pedido ha sido procesado exitosamente."
+        path="/checkout/exito"
+      />
       <Navigation />
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <div className="container mx-auto px-4 lg:px-8 py-16">
           <div className="max-w-lg mx-auto text-center">
             <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">

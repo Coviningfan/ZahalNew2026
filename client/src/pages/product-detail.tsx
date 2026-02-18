@@ -11,6 +11,7 @@ import { Shield, Leaf, Award, ArrowLeft, Check, Truck, ShieldCheck, ShoppingCart
 import { SiWhatsapp } from "react-icons/si";
 import { Link } from "wouter";
 import type { Product } from "@shared/schema";
+import SEO from "@/components/seo";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -34,7 +35,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
-        <main className="pt-20">
+        <main id="main-content" className="pt-20">
           <div className="container mx-auto px-4 lg:px-8 py-16">
             <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
               <Skeleton className="w-full aspect-square rounded-2xl" />
@@ -57,7 +58,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
-        <main className="pt-20">
+        <main id="main-content" className="pt-20">
           <div className="container mx-auto px-4 lg:px-8 py-16 text-center">
             <h1 className="text-2xl font-bold text-destructive mb-4">Producto no encontrado</h1>
             <p className="text-muted-foreground mb-8">El producto que buscas no existe o ha sido eliminado.</p>
@@ -85,9 +86,14 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={product.name}
+        description={product.description?.slice(0, 155)}
+        path={`/productos/${product.id}`}
+      />
       <Navigation />
       
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <div className="container mx-auto px-4 lg:px-8 py-8">
           <Link href="/productos" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 gap-1.5" data-testid="link-back">
             <ArrowLeft className="h-4 w-4" />

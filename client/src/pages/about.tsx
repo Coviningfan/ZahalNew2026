@@ -1,14 +1,20 @@
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
+import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Heart, Leaf, Users, Sparkles, CheckCircle, Mail } from "lucide-react";
 
 export default function About() {
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Nuestra Historia"
+        description="Conoce la historia de Zahal, marca mexicana de desodorantes naturales de piedra de alumbre."
+        path="/nosotros"
+      />
       <Navigation />
       
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <section className="py-16 lg:py-24 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-6xl mx-auto">

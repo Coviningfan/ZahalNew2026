@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
+import SEO from "@/components/seo";
 import { ChevronDown } from "lucide-react";
 
 interface FAQItem {
@@ -152,9 +153,14 @@ function FAQAccordion({ item, index }: { item: FAQItem; index: number }) {
 export default function FAQ() {
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Preguntas Frecuentes"
+        description="Resuelve tus dudas sobre desodorantes naturales de piedra de alumbre Zahal."
+        path="/preguntas-frecuentes"
+      />
       <Navigation />
       
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <section className="relative py-16 lg:py-24 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img 

@@ -3,12 +3,18 @@ import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { XCircle, ArrowLeft, ShoppingCart } from "lucide-react";
+import SEO from "@/components/seo";
 
 export default function CheckoutCancel() {
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Pago Cancelado"
+        description="Tu proceso de pago fue cancelado. Puedes intentar de nuevo."
+        path="/checkout/cancelado"
+      />
       <Navigation />
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <div className="container mx-auto px-4 lg:px-8 py-16">
           <div className="max-w-lg mx-auto text-center">
             <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">

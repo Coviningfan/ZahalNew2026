@@ -1,13 +1,19 @@
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
+import SEO from "@/components/seo";
 import { Shield, Database, Cookie, CreditCard, UserCheck, Mail } from "lucide-react";
 
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-background" data-testid="page-privacy-policy">
+      <SEO
+        title="Política de Privacidad"
+        description="Conoce cómo protegemos tus datos personales en Zahal."
+        path="/privacidad"
+      />
       <Navigation />
 
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <section className="py-16 lg:py-24 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-4xl mx-auto">

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, SlidersHorizontal } from "lucide-react";
 import type { Product } from "@shared/schema";
+import SEO from "@/components/seo";
 
 const categories = [
   { value: "all", label: "Todas las categorías" },
@@ -47,9 +48,14 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Tienda de Productos Naturales"
+        description="Explora nuestra línea completa de desodorantes naturales: sprays, roll-ons, sticks y kits de viaje."
+        path="/productos"
+      />
       <Navigation />
       
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="text-center mb-10">

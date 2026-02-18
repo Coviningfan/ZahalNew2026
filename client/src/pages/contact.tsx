@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin, Send, Facebook, Instagram, MessageCircle } from "lucide-react";
 import { SiTiktok, SiWhatsapp } from "react-icons/si";
+import SEO from "@/components/seo";
 
 export default function Contact() {
   const { toast } = useToast();
@@ -36,9 +37,14 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Contacto"
+        description="Contáctanos por WhatsApp o formulario. Estamos aquí para ayudarte con tu pedido."
+        path="/contacto"
+      />
       <Navigation />
       
-      <main className="pt-20">
+      <main id="main-content" className="pt-20">
         <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-2xl mx-auto text-center">
