@@ -10,7 +10,6 @@ import amazonLogo from "@assets/AMAZON_180x_1771434503364.avif";
 import mercadoLibreLogo from "@assets/MERCADO_LIBRE_180x_1771434503366.avif";
 import sorianaLogo from "@assets/soriana-logopng_1771435365592.png";
 import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
-import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 import daxLogo from "@assets/DaxLogo_1771437463517.png";
 import laComerLogo from "@assets/la-comer-logo-png_seeklogo-299203-fotor-bg-remover-20260218102_1771437783061.png";
 import tiendaUnamLogo from "@assets/tienda_unam_1771437690744.jpg";
@@ -30,7 +29,6 @@ const brands = [
   { name: "Nutrisa", logo: nutrisaLogo, style: "h-7 md:h-8", width: "min-w-[115px] md:min-w-[135px]" },
   { name: "Super Naturista", logo: superNaturistaLogo, style: "h-9 md:h-11", width: "min-w-[95px] md:min-w-[110px]" },
   { name: "Pronasoya", logo: pronasoyaLogo, style: "h-9 md:h-11", width: "min-w-[85px] md:min-w-[100px]" },
-  { name: "Super Soya", logo: superSoyaLogo, style: "h-9 md:h-11", width: "min-w-[90px] md:min-w-[105px]" },
   { name: "Get Me by Ola", logo: getmeLogo, style: "h-7 md:h-8", width: "min-w-[115px] md:min-w-[135px]" },
   { name: "La Comer", logo: laComerLogo, style: "h-20 md:h-[120px]", width: "min-w-[120px] md:min-w-[150px]" },
   { name: "Dax", logo: daxLogo, style: "h-6 md:h-7", width: "min-w-[90px] md:min-w-[105px]", invert: true },

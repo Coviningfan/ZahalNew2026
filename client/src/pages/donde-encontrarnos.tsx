@@ -14,7 +14,6 @@ import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
 import nutrisaLogo from "@assets/Nutrisa+logotipo+_1_-removebg-preview_1771434664253.png";
 import amazonLogo from "@assets/AMAZON_180x_1771434503364.avif";
 import mercadoLibreLogo from "@assets/MERCADO_LIBRE_180x_1771434503366.avif";
-import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 import getmeLogo from "@assets/logo_getmepng_1771435262525.png";
 import daxLogo from "@assets/DaxLogo_1771437463517.png";
 import tiendaUnamLogo from "@assets/tienda_unam_1771437690744.jpg";
@@ -38,7 +37,6 @@ const departamentales = [
   { name: "Sears", logo: searsLogo },
   { name: "Súper Naturista", logo: superNaturistaLogo },
   { name: "Pronasoya", logo: pronasoyaLogo },
-  { name: "Super Soya", logo: superSoyaLogo },
   { name: "Caalfrabet", logo: caalfrabetLogo },
   { name: "Ultrasoya", logo: ultrasoyaLogo },
   { name: "Nutrisa", logo: nutrisaLogo },
