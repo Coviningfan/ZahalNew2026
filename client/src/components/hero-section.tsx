@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { Leaf, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import banner1 from "@assets/BANNER_Febrero_2_1771433657500.png";
+import banner2 from "@assets/BANNER_Febrero_1771433657501.png";
 
 
 const slides = [
@@ -18,8 +20,7 @@ const slides = [
       "Desodorantes de piedra de alumbre: protección natural que dura 24 horas, sin químicos que dañen tu piel ni tu ropa.",
     cta: { label: "Ver Productos", href: "/productos" },
     ctaSecondary: { label: "Nuestra Historia", href: "/nosotros" },
-    bgImage:
-      "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080",
+    bgImage: banner1,
   },
   {
     badge: "100% Natural",
@@ -33,8 +34,7 @@ const slides = [
       "Mineral volcánico con propiedades antibacteriales. Sin parabenos, sin alcohol, sin aluminio procesado.",
     cta: { label: "Explorar Catálogo", href: "/productos" },
     ctaSecondary: { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
-    bgImage:
-      "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    bgImage: banner2,
   },
   {
     badge: "Hecho en México",
