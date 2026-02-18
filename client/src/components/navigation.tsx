@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
-import { Menu, ShoppingCart, X, Plus, Minus, ArrowRight, Loader2 } from "lucide-react";
+import { Menu, ShoppingCart, X, Plus, Minus, ArrowRight, Loader2, Facebook, Instagram } from "lucide-react";
+import { SiTiktok, SiWhatsapp } from "react-icons/si";
 import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 export default function Navigation() {
@@ -54,6 +55,20 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center space-x-2">
+            <div className="hidden md:flex items-center space-x-1 mr-2">
+              <a href="https://wa.me/5215545327249" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/50 hover:text-primary hover:bg-primary/8 transition-colors" data-testid="nav-link-whatsapp">
+                <SiWhatsapp className="h-4 w-4" />
+              </a>
+              <a href="https://www.facebook.com/CristalZahal" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/50 hover:text-primary hover:bg-primary/8 transition-colors" data-testid="nav-link-facebook">
+                <Facebook className="h-4 w-4" />
+              </a>
+              <a href="https://www.instagram.com/zahal_mexico/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/50 hover:text-primary hover:bg-primary/8 transition-colors" data-testid="nav-link-instagram">
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a href="https://www.tiktok.com/@zahaloficial?_t=ZM-8xt99kGDh7F&_r=1" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/50 hover:text-primary hover:bg-primary/8 transition-colors" data-testid="nav-link-tiktok">
+                <SiTiktok className="h-3.5 w-3.5" />
+              </a>
+            </div>
             <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
               <SheetTrigger asChild>
                 <Button
