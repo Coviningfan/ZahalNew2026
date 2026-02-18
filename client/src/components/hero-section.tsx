@@ -4,6 +4,9 @@ import { Link, useLocation } from "wouter";
 import { Leaf, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import banner1 from "@assets/BANNER_Febrero_2_1771433657500.png";
 import banner2 from "@assets/BANNER_Febrero_1771433657501.png";
+import banner3 from "@assets/Banners_enature_1771436433184.png";
+import enatureLogo from "@assets/LOGO-ENATURE_340x_1771436603136.avif";
+import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
 
 const slides = [
@@ -37,20 +40,20 @@ const slides = [
     bgImage: banner2,
   },
   {
-    badge: "Hecho en México",
+    badge: "Zahal x eNature",
     title: (
       <>
-        Protección que{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">dura</span>{" "}
-        todo el día
+        Bienestar que acompaña{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">cada momento</span>{" "}
+        de tu rutina.
       </>
     ),
-    description:
-      "Hasta 24 horas de frescura sin irritar tu piel. Ideal para pieles sensibles y para toda la familia.",
-    cta: { label: "Comprar Ahora", href: "/productos" },
-    ctaSecondary: { label: "Contáctanos", href: "/contacto" },
-    bgImage:
-      "https://images.unsplash.com/photo-1599305090598-fe179d501227?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    description: "",
+    cta: { label: "Visita eNature", href: "https://enature.com.mx/" },
+    ctaSecondary: null,
+    bgImage: banner3,
+    alignRight: true,
+    showLogos: true,
   },
 ];
 
@@ -121,47 +124,77 @@ export default function HeroSection() {
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div key={current} className="animate-carousel-fade">
-            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide" data-testid="badge-natural">
+          {slide.alignRight && (
+            <div className="hidden lg:block" />
+          )}
+          <div key={current} className={`animate-carousel-fade ${slide.alignRight ? "lg:text-right lg:ml-auto" : ""}`}>
+            <div className={`inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide`} data-testid="badge-natural">
               <Leaf className="h-4 w-4 mr-2 text-[hsl(99,30%,65%)]" />
               {slide.badge}
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6 font-serif text-balance">
               {slide.title}
             </h1>
-            <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">
-              {slide.description}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <Button
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10 gap-2 h-14 px-8 text-base"
-                onClick={() => navigateTo(slide.cta.href)}
-                data-testid="button-shop-now"
-              >
-                {slide.cta.label}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white hover:bg-white/15 font-semibold h-14 px-8 text-base"
-                onClick={() => navigateTo(slide.ctaSecondary.href)}
-                data-testid="button-view-catalog"
-              >
-                {slide.ctaSecondary.label}
-              </Button>
-              <Link href="/productos" className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all ml-0 sm:ml-2" data-testid="link-hero-catalog">
-                <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">Elige tu favorito</span>
-                <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
-              </Link>
+            {slide.description && (
+              <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">
+                {slide.description}
+              </p>
+            )}
+            <div className={`flex flex-col sm:flex-row gap-4 items-center ${slide.alignRight ? "sm:justify-end" : ""}`}>
+              {slide.alignRight ? (
+                <a
+                  href={slide.cta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all"
+                  data-testid="link-visita-enature"
+                >
+                  <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">{slide.cta.label}</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
+                </a>
+              ) : (
+                <>
+                  <Button
+                    size="lg"
+                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10 gap-2 h-14 px-8 text-base"
+                    onClick={() => navigateTo(slide.cta.href)}
+                    data-testid="button-shop-now"
+                  >
+                    {slide.cta.label}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                  {slide.ctaSecondary && (
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white hover:bg-white/15 font-semibold h-14 px-8 text-base"
+                      onClick={() => slide.ctaSecondary && navigateTo(slide.ctaSecondary.href)}
+                      data-testid="button-view-catalog"
+                    >
+                      {slide.ctaSecondary?.label}
+                    </Button>
+                  )}
+                  <Link href="/productos" className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all ml-0 sm:ml-2" data-testid="link-hero-catalog">
+                    <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">Elige tu favorito</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
-          <div className="hidden lg:block">
-            {/* Espacio reservado para balance visual */}
-          </div>
+          {!slide.alignRight && (
+            <div className="hidden lg:block" />
+          )}
         </div>
+
+        {slide.showLogos && (
+          <div className="absolute bottom-16 left-4 lg:left-8 z-10 flex items-center gap-3">
+            <img src={zahalLogo} alt="Zahal" className="h-8 md:h-10 w-auto object-contain" />
+            <span className="text-white/70 text-lg font-bold">×</span>
+            <img src={enatureLogo} alt="eNature" className="h-8 md:h-10 w-auto object-contain" />
+          </div>
+        )}
       </div>
 
       <button
