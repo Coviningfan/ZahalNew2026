@@ -13,6 +13,7 @@ import FAQ from "@/pages/faq";
 import Contact from "@/pages/contact";
 import CheckoutSuccess from "@/pages/checkout-success";
 import CheckoutCancel from "@/pages/checkout-cancel";
+import PrivacyPolicy from "@/pages/privacy-policy";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -36,6 +37,7 @@ function Router() {
         <Route path="/contacto" component={Contact} />
         <Route path="/checkout/exito" component={CheckoutSuccess} />
         <Route path="/checkout/cancelado" component={CheckoutCancel} />
+        <Route path="/privacidad" component={PrivacyPolicy} />
         <Route component={NotFound} />
       </Switch>
     </>

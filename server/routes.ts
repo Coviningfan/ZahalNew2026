@@ -83,6 +83,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/sitemap.xml", (req, res) => {
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const pages = [
+      { url: '/', priority: '1.0', changefreq: 'weekly' },
+      { url: '/productos', priority: '0.9', changefreq: 'weekly' },
+      { url: '/nosotros', priority: '0.7', changefreq: 'monthly' },
+      { url: '/contacto', priority: '0.7', changefreq: 'monthly' },
+      { url: '/preguntas-frecuentes', priority: '0.6', changefreq: 'monthly' },
+      { url: '/privacidad', priority: '0.3', changefreq: 'yearly' },
+    ];
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${pages.map(p => `  <url>
+    <loc>${baseUrl}${p.url}</loc>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+    res.set('Content-Type', 'application/xml');
+    res.send(sitemap);
+  });
+
+  app.get("/robots.txt", (req, res) => {
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const robotsTxt = `User-agent: *
+Allow: /
+Disallow: /checkout/
+Disallow: /api/
+
+Sitemap: ${baseUrl}/sitemap.xml`;
+
+    res.set('Content-Type', 'text/plain');
+    res.send(robotsTxt);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

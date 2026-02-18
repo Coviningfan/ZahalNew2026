@@ -15,6 +15,7 @@ const infoLinks = [
   { href: "/nosotros", label: "Sobre Nosotros" },
   { href: "/contacto", label: "Contacto" },
   { href: "/preguntas-frecuentes", label: "Preguntas Frecuentes" },
+  { href: "/privacidad", label: "Política de Privacidad" },
 ];
 
 export default function Footer() {
@@ -151,7 +152,7 @@ export default function Footer() {
             &copy; 2026 Zahal Productos Naturales. Todos los derechos reservados.
           </p>
           <div className="flex gap-6 text-white/40 text-xs mt-2">
-            <span className="hover:text-white/70 transition-colors cursor-pointer">Privacidad</span>
+            <Link href="/privacidad" className="hover:text-white/70 transition-colors cursor-pointer">Privacidad</Link>
             <span className="hover:text-white/70 transition-colors cursor-pointer">Términos</span>
           </div>
         </div>
