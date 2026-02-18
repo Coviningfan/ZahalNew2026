@@ -46,3 +46,4 @@ waitForPort = 5000
 [userenv.shared]
 BASE_URL = "https://zahal-productos-naturales.replit.app"
 VITE_BASE_URL = "https://zahal-productos-naturales.replit.app"
+VITE_GA4_ID = "G-NNR6S8V151"
