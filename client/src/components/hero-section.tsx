@@ -191,14 +191,15 @@ export default function HeroSection() {
           )}
         </div>
 
-        {slide.showLogos && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
-            <img src={zahalLogo} alt="Zahal" className="h-12 md:h-16 w-auto object-contain brightness-0 invert" />
-            <span className="text-white/80 text-2xl font-bold">×</span>
-            <img src={enatureLogo} alt="eNature" className="h-12 md:h-16 w-auto object-contain" />
-          </div>
-        )}
       </div>
+
+      {slide.showLogos && (
+        <div className="absolute bottom-14 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
+          <img src={zahalLogo} alt="Zahal" className="h-12 md:h-16 w-auto object-contain brightness-0 invert" />
+          <span className="text-white/80 text-2xl font-bold">×</span>
+          <img src={enatureLogo} alt="eNature" className="h-12 md:h-16 w-auto object-contain" />
+        </div>
+      )}
 
       <button
         onClick={prev}
