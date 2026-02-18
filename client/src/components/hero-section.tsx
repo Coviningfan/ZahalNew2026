@@ -93,11 +93,12 @@ export default function HeroSection() {
     document.body.appendChild(overlay);
     requestAnimationFrame(() => { overlay.style.opacity = "1"; });
     setTimeout(() => {
-      window.scrollTo(0, 0);
       setLocation(path);
       setTimeout(() => {
         overlay.style.opacity = "0";
-        overlay.addEventListener("transitionend", () => overlay.remove());
+        const cleanup = () => overlay.remove();
+        overlay.addEventListener("transitionend", cleanup);
+        setTimeout(cleanup, 300);
       }, 50);
     }, 150);
   };

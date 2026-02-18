@@ -34,6 +34,8 @@ export default function Products() {
   useEffect(() => {
     if (categoriaParam && categories.some(c => c.value === categoriaParam)) {
       setSelectedCategory(categoriaParam);
+    } else if (!categoriaParam) {
+      setSelectedCategory("all");
     }
   }, [categoriaParam]);
 

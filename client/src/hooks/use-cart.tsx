@@ -142,7 +142,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsCheckingOut(false);
     }
-  }, [rawItems]);
+  }, [rawItems, toast]);
 
   const buyNow = useCallback(async (product: Product) => {
     setIsCheckingOut(true);
@@ -169,7 +169,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsCheckingOut(false);
     }
-  }, []);
+  }, [toast]);
 
   return (
     <CartContext.Provider value={{
