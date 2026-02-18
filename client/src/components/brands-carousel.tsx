@@ -13,25 +13,25 @@ import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
 import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 
 const brands = [
-  { name: "Walmart", logo: walmartLogo, style: "h-8 md:h-10" },
-  { name: "Amazon", logo: amazonLogo, style: "h-7 md:h-8" },
-  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-8 md:h-9" },
-  { name: "H-E-B", logo: hebLogo, style: "h-8 md:h-10" },
-  { name: "Chedraui", logo: chedrauiLogo, style: "h-12 md:h-14" },
-  { name: "Soriana", logo: sorianaLogo, style: "h-8 md:h-10" },
-  { name: "Sears", logo: searsLogo, style: "h-6 md:h-8" },
-  { name: "Sanborns", logo: sanbornsLogo, style: "h-10 md:h-12" },
+  { name: "Walmart", logo: walmartLogo, style: "h-7 md:h-9" },
+  { name: "Amazon", logo: amazonLogo, style: "h-6 md:h-7" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-7 md:h-8" },
+  { name: "H-E-B", logo: hebLogo, style: "h-7 md:h-9" },
+  { name: "Chedraui", logo: chedrauiLogo, style: "h-11 md:h-14" },
+  { name: "Soriana", logo: sorianaLogo, style: "h-7 md:h-9" },
+  { name: "Sears", logo: searsLogo, style: "h-5 md:h-7" },
+  { name: "Sanborns", logo: sanbornsLogo, style: "h-8 md:h-10" },
   { name: "Nutrisa", logo: nutrisaLogo, style: "h-6 md:h-7" },
-  { name: "Super Naturista", logo: superNaturistaLogo, style: "h-7 md:h-9" },
-  { name: "Pronasoya", logo: pronasoyaLogo, style: "h-10 md:h-12" },
+  { name: "Super Naturista", logo: superNaturistaLogo, style: "h-8 md:h-10" },
+  { name: "Pronasoya", logo: pronasoyaLogo, style: "h-8 md:h-10" },
   { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10" },
-  { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-8" },
+  { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-7" },
 ];
 
 function BrandItem({ brand }: { brand: typeof brands[0] }) {
   return (
     <div
-      className="flex-shrink-0 w-[160px] md:w-[200px] h-16 md:h-20 flex items-center justify-center px-5"
+      className="flex-shrink-0 w-[130px] md:w-[170px] h-16 md:h-20 flex items-center justify-center px-3"
       data-testid={`brand-logo-${brand.name.toLowerCase().replace(/ /g, "-")}`}
     >
       <img
