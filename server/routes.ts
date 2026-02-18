@@ -150,26 +150,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ─── SEO: Sitemap & Robots ─────────────────────────────────────────────────
 
-  app.get("/sitemap.xml", (_req, res) => {
+  app.get("/sitemap.xml", async (_req, res) => {
     const baseUrl = process.env.BASE_URL || `${_req.protocol}://${_req.get("host")}`;
-    const pages = [
-      { url: "/", priority: "1.0", changefreq: "weekly" },
-      { url: "/productos", priority: "0.9", changefreq: "weekly" },
-      { url: "/nosotros", priority: "0.7", changefreq: "monthly" },
-      { url: "/contacto", priority: "0.7", changefreq: "monthly" },
+
+    const staticPages = [
+      { url: "/",                     priority: "1.0", changefreq: "weekly"  },
+      { url: "/productos",            priority: "0.9", changefreq: "weekly"  },
+      { url: "/nosotros",             priority: "0.7", changefreq: "monthly" },
+      { url: "/contacto",             priority: "0.7", changefreq: "monthly" },
       { url: "/preguntas-frecuentes", priority: "0.6", changefreq: "monthly" },
-      { url: "/privacidad", priority: "0.3", changefreq: "yearly" },
-      { url: "/donde-encontrarnos", priority: "0.5", changefreq: "monthly" },
-      { url: "/terminos", priority: "0.3", changefreq: "yearly" },
+      { url: "/donde-encontrarnos",   priority: "0.5", changefreq: "monthly" },
+      { url: "/privacidad",           priority: "0.3", changefreq: "yearly"  },
+      { url: "/terminos",             priority: "0.3", changefreq: "yearly"  },
     ];
+
+    // Fetch all products and add their pages dynamically
+    let productPages: { url: string; priority: string; changefreq: string }[] = [];
+    try {
+      const products = await storage.getProducts();
+      productPages = products.map(p => ({
+        url: `/productos/${p.id}`,
+        priority: "0.8",
+        changefreq: "weekly",
+      }));
+    } catch (err) {
+      console.error("Sitemap: failed to fetch products", err);
+    }
+
+    const allPages = [...staticPages, ...productPages];
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.map(p => `  <url>
+${allPages.map(p => `  <url>
     <loc>${baseUrl}${p.url}</loc>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority}</priority>
   </url>`).join("\n")}
 </urlset>`;
+
     res.set("Content-Type", "application/xml");
     res.send(xml);
   });
