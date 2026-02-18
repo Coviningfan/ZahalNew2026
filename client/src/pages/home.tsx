@@ -9,6 +9,29 @@ import AboutSection from "@/components/about-section";
 import Newsletter from "@/components/newsletter";
 import Footer from "@/components/footer";
 import SEO from "@/components/seo";
+import { BASE_URL } from "@/lib/config";
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Zahal Productos Naturales",
+  url: BASE_URL,
+  logo: {
+    "@type": "ImageObject",
+    url: `${BASE_URL}/favicon.svg`,
+  },
+  description:
+    "Desodorantes naturales de piedra de alumbre. Sin aluminio, sin químicos. Protección 24h. Envío a todo México.",
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "MX",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    availableLanguage: "Spanish",
+  },
+};
 
 export default function Home() {
   return (
@@ -17,6 +40,7 @@ export default function Home() {
         title="Zahal - Desodorantes Naturales de Alumbre"
         description="Desodorantes naturales de piedra de alumbre. Sin aluminio, sin químicos. Protección 24h. Envío a todo México."
         path="/"
+        jsonLd={organizationJsonLd}
       />
       <Navigation />
       <main id="main-content">
