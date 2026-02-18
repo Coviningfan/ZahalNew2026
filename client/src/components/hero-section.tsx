@@ -103,11 +103,12 @@ export default function HeroSection() {
   const slide = slides[current];
 
   return (
-    <section id="inicio" className="relative min-h-[85vh] sm:min-h-[75vh] lg:min-h-[80vh] flex items-center overflow-hidden" data-testid="hero-carousel">
+    <section id="inicio" className="relative lg:min-h-[80vh] flex flex-col lg:flex-row lg:items-center overflow-hidden" data-testid="hero-carousel">
+      {/* Desktop: full-cover background */}
       {slides.map((s, i) => (
         <div
           key={i}
-          className="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out"
+          className="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out hidden sm:block"
           style={{ opacity: i === current ? 1 : 0 }}
         >
           <img
@@ -119,11 +120,30 @@ export default function HeroSection() {
         </div>
       ))}
 
-      <div className="absolute inset-0 z-[1] opacity-[0.04]" style={{
+      {/* Mobile: full image visible, no crop */}
+      <div className="relative w-full sm:hidden">
+        {slides.map((s, i) => (
+          <div
+            key={i}
+            className="transition-opacity duration-700 ease-in-out"
+            style={{ opacity: i === current ? 1 : 0, position: i === 0 ? 'relative' : 'absolute', top: 0, left: 0, width: '100%' }}
+          >
+            <img
+              src={s.bgImage}
+              alt=""
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 bg-black/35"></div>
+          </div>
+        ))}
+      </div>
+
+      <div className="absolute inset-0 z-[1] opacity-[0.04] hidden sm:block" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
       }}></div>
 
-      <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+      <div className="relative sm:absolute sm:inset-0 z-10 flex items-center">
+      <div className="container mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-0">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {slide.alignRight && (
             <div className="hidden lg:block" />
@@ -191,6 +211,7 @@ export default function HeroSection() {
           )}
         </div>
 
+      </div>
       </div>
 
       {slide.showLogos && (
