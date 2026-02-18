@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Facebook, Instagram, Mail, Phone, MapPin, MessageCircle, Store, ShoppingBag, Globe } from "lucide-react";
+import { Facebook, Instagram, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import { SiTiktok, SiWhatsapp } from "react-icons/si";
 import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 
@@ -15,6 +15,7 @@ const infoLinks = [
   { href: "/nosotros", label: "Sobre Nosotros" },
   { href: "/contacto", label: "Contacto" },
   { href: "/preguntas-frecuentes", label: "Preguntas Frecuentes" },
+  { href: "/donde-encontrarnos", label: "¿Dónde encontrarnos?" },
   { href: "/privacidad", label: "Política de Privacidad" },
 ];
 
@@ -142,55 +143,6 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-        </div>
-
-        <div className="border-t border-white/8 py-10">
-          <h3 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-6 text-center">¿Dónde encontrarnos?</h3>
-          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Store className="h-4 w-4 text-primary/70" />
-                <span className="text-white/70 text-xs font-semibold uppercase tracking-wider">Autoservicio</span>
-              </div>
-              <ul className="space-y-1.5 text-white/50 text-sm">
-                <li>Walmart</li>
-                <li>Chedraui</li>
-                <li>La Comer</li>
-                <li>HEB</li>
-                <li>Dax</li>
-                <li>Tienda UNAM</li>
-              </ul>
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <ShoppingBag className="h-4 w-4 text-primary/70" />
-                <span className="text-white/70 text-xs font-semibold uppercase tracking-wider">Departamentales y Especializadas</span>
-              </div>
-              <ul className="space-y-1.5 text-white/50 text-sm">
-                <li>Sanborns</li>
-                <li>Sears</li>
-                <li>Súper Naturista</li>
-                <li>Pronasoya</li>
-                <li>Caalfrabet</li>
-                <li>Ultrasoya</li>
-                <li>Nutrisa</li>
-              </ul>
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Globe className="h-4 w-4 text-primary/70" />
-                <span className="text-white/70 text-xs font-semibold uppercase tracking-wider">E-commerce</span>
-              </div>
-              <ul className="space-y-1.5 text-white/50 text-sm">
-                <li>Amazon</li>
-                <li>Mercado Libre</li>
-                <li>SheIn</li>
-              </ul>
-            </div>
-          </div>
-          <p className="text-white/30 text-[10px] text-center mt-6">
-            Las marcas mostradas se usan solo para identificar puntos de venta y pertenecen a sus respectivos propietarios.
-          </p>
         </div>
 
         <div className="border-t border-white/8 py-6 flex flex-col items-center gap-2">
