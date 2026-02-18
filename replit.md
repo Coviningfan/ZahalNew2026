@@ -2,7 +2,27 @@
 
 This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application uses a custom React frontend with direct Stripe payment processing — no Shopify dependency.
 
-# Recent Changes (February 17, 2026)
+# Recent Changes (February 18, 2026)
+
+## Website Audit & SEO Fixes
+- Per-page SEO meta tags via react-helmet-async (unique title, description, canonical, OG tags per page)
+- Fallback meta tags in index.html for crawlers that don't execute JavaScript
+- Viewport meta fixed: removed maximum-scale=1 to allow user zooming (accessibility + mobile)
+- Google Fonts trimmed from 20+ families to only Playfair Display + Inter (performance)
+- Favicon added (SVG with green "Z" logo at /favicon.svg)
+- Skip-to-content accessibility link (sr-only, visible on keyboard focus)
+- All pages wrapped in `<main id="main-content">` landmarks
+- Gzip compression middleware added to Express server
+- sitemap.xml route with all public pages + proper XML format
+- robots.txt route with crawl directives and sitemap reference
+- SEO component: `client/src/components/seo.tsx` — reusable Helmet wrapper
+- Invalid Tailwind classes fixed: h-13→h-14, duration-400→duration-500
+- font-serif registered in Tailwind config
+- 404 page translated to Spanish
+- Cart sidebar image fallback for products without images
+- Product category navigation fixed to pass ?categoria= query parameter
+
+# Previous Changes (February 17, 2026)
 
 ## Stripe Integration (Replacing Shopify)
 - Complete migration from Shopify checkout to native Stripe Checkout
