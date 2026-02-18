@@ -127,113 +127,56 @@ export default function HeroSection() {
   return (
     <>
       {/* ===== MOBILE HERO (< 640px) ===== */}
-      <section className="sm:hidden relative overflow-hidden" data-testid="hero-carousel-mobile">
-        {slides.map((s, i) => (
-          <div
-            key={i}
-            className="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out"
-            style={{ opacity: i === current ? 1 : 0 }}
-          >
-            <img
-              src={s.bgImage}
-              alt=""
-              className="w-full h-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
-          </div>
-        ))}
-
-        <div className="relative z-10 flex flex-col justify-end min-h-[75vh] px-5 pb-16 pt-24">
-          <div key={current} className="animate-carousel-fade">
-            {!slide.hideBadge && (
-              <div className="inline-flex items-center px-3 py-1.5 bg-white/15 backdrop-blur-md text-white/90 border border-white/20 rounded-full mb-4 text-xs font-medium tracking-wide" data-testid="badge-natural-mobile">
-                <Leaf className="h-3.5 w-3.5 mr-1.5 text-[hsl(99,30%,65%)]" />
-                {slide.badge}
-              </div>
-            )}
-            <h1 className="text-[1.75rem] font-bold text-white leading-[1.2] mb-3 font-serif">
-              {slide.mobileTitle}
-            </h1>
-            {(slide.mobileDescription) && (
-              <p className="text-sm text-white/80 mb-5 leading-relaxed max-w-[280px]">
-                {slide.mobileDescription}
-              </p>
-            )}
-
-            {slide.showLogos ? (
-              <div className="flex items-center gap-3 mb-4">
-                <img src={zahalLogo} alt="Zahal" className="h-10 w-auto object-contain brightness-0 invert" />
-                <span className="text-white/70 text-lg font-bold">×</span>
-                <img src={enatureLogo} alt="eNature" className="h-10 w-auto object-contain" />
-              </div>
-            ) : null}
-
-            <div className="flex flex-col gap-2.5">
-              {slide.alignRight ? (
-                <a
-                  href={slide.cta.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold rounded-xl h-12 px-6 text-sm shadow-lg"
-                  data-testid="link-visita-enature-mobile"
-                >
-                  {slide.cta.label}
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              ) : (
-                <>
-                  <Button
-                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-2 h-12 px-6 text-sm rounded-xl w-full"
-                    onClick={() => navigateTo(slide.cta.href)}
-                    data-testid="button-shop-now-mobile"
-                  >
-                    {slide.cta.label}
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  {slide.ctaSecondary && (
-                    <Button
-                      variant="outline"
-                      className="border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 font-semibold h-12 px-6 text-sm rounded-xl w-full"
-                      onClick={() => slide.ctaSecondary && navigateTo(slide.ctaSecondary.href)}
-                      data-testid="button-secondary-mobile"
-                    >
-                      {slide.ctaSecondary?.label}
-                    </Button>
-                  )}
-                </>
-              )}
+      <section className="sm:hidden bg-background" data-testid="hero-carousel-mobile">
+        <div className="relative w-full overflow-hidden">
+          {slides.map((s, i) => (
+            <div
+              key={i}
+              className="transition-opacity duration-700 ease-in-out"
+              style={{
+                opacity: i === current ? 1 : 0,
+                position: i === 0 ? "relative" : "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+              }}
+            >
+              <img
+                src={s.bgImage}
+                alt=""
+                className="w-full h-auto block"
+              />
             </div>
-          </div>
+          ))}
         </div>
 
-        <button
-          onClick={prev}
-          className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white"
-          data-testid="button-carousel-prev-mobile"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <button
-          onClick={next}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white"
-          data-testid="button-carousel-next-mobile"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+        <div className="flex items-center justify-center gap-4 py-4 bg-background">
+          <button
+            onClick={prev}
+            className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+            data-testid="button-carousel-prev-mobile"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
               className={`transition-all duration-300 rounded-full ${
                 i === current
-                  ? "w-6 h-2 bg-white"
-                  : "w-2 h-2 bg-white/40"
+                  ? "w-3 h-3 bg-primary"
+                  : "w-3 h-3 bg-border hover:bg-muted-foreground"
               }`}
               data-testid={`button-slide-mobile-${i}`}
             />
           ))}
+          <button
+            onClick={next}
+            className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+            data-testid="button-carousel-next-mobile"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
       </section>
 
