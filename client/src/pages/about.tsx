@@ -3,6 +3,7 @@ import Footer from "@/components/footer";
 import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Heart, Leaf, Users, Sparkles, CheckCircle, Mail } from "lucide-react";
+import zahalEscudo from "@assets/zahalescudo_1771431876032.png";
 
 export default function About() {
   return (
@@ -39,9 +40,12 @@ export default function About() {
                   alt="Filosofía Zahal" 
                   className="w-full h-[400px] lg:h-[500px] object-cover rounded-2xl"
                 />
-                <div className="absolute -bottom-6 -left-6 bg-primary text-white rounded-2xl p-6 shadow-xl hidden md:block">
-                  <div className="text-3xl font-bold font-serif">100%</div>
-                  <div className="text-sm text-white/80">Natural y Orgánico</div>
+                <div className="absolute -bottom-6 -left-6 shadow-xl hidden md:block">
+                  <img 
+                    src={zahalEscudo} 
+                    alt="Libre de parabenos, clorhidrato de aluminio y alcohol" 
+                    className="w-28 h-28 lg:w-32 lg:h-32 object-contain rounded-2xl"
+                  />
                 </div>
               </div>
             </div>
