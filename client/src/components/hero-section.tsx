@@ -6,7 +6,7 @@ import banner1 from "@assets/BANNER_Febrero_2_1771433657500.png";
 import banner2 from "@assets/BANNER_Febrero_1771433657501.png";
 import banner3 from "@assets/Banners_enature_1771436433184.png";
 import enatureLogo from "@assets/LOGO-ENATURE_340x_1771436603136.avif";
-import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
+import zahalLogo from "@assets/Zahal_Verde_-_No_fondo_1771455710794.webp";
 
 
 const slides = [

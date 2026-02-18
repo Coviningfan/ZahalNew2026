@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
 import { Menu, ShoppingCart, X, Plus, Minus, ArrowRight, Loader2, Facebook, Instagram } from "lucide-react";
 import { SiTiktok, SiWhatsapp } from "react-icons/si";
-import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
+import zahalLogo from "@assets/Zahal_Verde_-_No_fondo_1771455710794.webp";
 
 export default function Navigation() {
   const [location] = useLocation();

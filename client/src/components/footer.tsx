@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Facebook, Instagram, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import { SiTiktok, SiWhatsapp } from "react-icons/si";
-import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
+import zahalLogo from "@assets/Zahal_Verde_-_No_fondo_1771455710794.webp";
 
 const productLinks = [
   { href: "/productos", label: "Todos los productos" },

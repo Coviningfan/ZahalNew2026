@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
 import { Star, ChevronLeft, ChevronRight, Quote, ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
+import zahalLogo from "@assets/Zahal_Verde_-_No_fondo_1771455710794.webp";
 
 const categories = [
   {
