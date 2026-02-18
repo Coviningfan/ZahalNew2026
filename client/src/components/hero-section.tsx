@@ -22,7 +22,7 @@ const slides = [
       "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080",
   },
   {
-    badge: "100% Natural",
+    badge: "Natural",
     title: (
       <>
         Piedra de alumbre{" "}
