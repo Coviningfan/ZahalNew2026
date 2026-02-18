@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Leaf, ArrowRight } from "lucide-react";
 import heroImage from "@assets/ZAHAL_PROD_012_dfa9fd33-8688-41b6-ac9b-c6ca187d00fa_1759341695530.jpg";
 
@@ -82,13 +82,11 @@ export default function HeroSection() {
                 alt="Zahal desodorante natural de piedra de alumbre"
                 className="relative w-full max-w-md h-auto rounded-2xl shadow-2xl shadow-black/20"
               />
-              <div className="absolute -bottom-4 -right-4 bg-white/15 backdrop-blur-xl border border-white/20 rounded-xl p-4 shadow-xl animate-float">
+              <Link href="/productos" className="absolute -bottom-4 -right-4 bg-white/15 backdrop-blur-xl border border-white/20 rounded-xl p-4 shadow-xl animate-float cursor-pointer hover:bg-white/25 transition-colors" data-testid="link-hero-catalog">
                 <div className="text-center">
-                  <div className="text-xs font-medium text-white/60 uppercase tracking-wider">Desde</div>
-                  <div className="text-2xl font-bold text-white">$45</div>
-                  <div className="text-xs text-white/60">MXN</div>
+                  <div className="text-sm font-semibold text-white leading-tight">Elige tu<br/>favorito</div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
