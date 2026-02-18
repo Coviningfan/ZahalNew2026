@@ -39,7 +39,7 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
           <img 
             src={product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400"}
             alt={product.name}
-            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+            className="w-full aspect-[4/5] object-contain group-hover:scale-105 transition-transform duration-700 ease-out p-4" 
             data-testid={`img-product-${product.id}`}
           />
           <div className="absolute top-3 right-3 flex gap-2">
