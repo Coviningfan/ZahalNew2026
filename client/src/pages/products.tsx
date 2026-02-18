@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSearch } from "wouter";
+import { useSearch, useLocation } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
@@ -35,12 +35,15 @@ const breadcrumbJsonLd = {
 
 export default function Products() {
   const searchString = useSearch();
+  const [, navigate] = useLocation();
   const urlParams = new URLSearchParams(searchString);
   const categoriaParam = urlParams.get("categoria");
+  const buscarParam = urlParams.get("buscar");
 
   const [selectedCategory, setSelectedCategory] = useState(categoriaParam || "all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(buscarParam || "");
 
+  // Sync category state from URL (handles navigation from other pages + back/forward)
   useEffect(() => {
     if (categoriaParam && categories.some(c => c.value === categoriaParam)) {
       setSelectedCategory(categoriaParam);
@@ -49,14 +52,49 @@ export default function Products() {
     }
   }, [categoriaParam]);
 
+  // Sync search state from URL (handles browser back/forward)
+  useEffect(() => {
+    const val = buscarParam || "";
+    setSearchQuery(prev => (prev !== val ? val : prev));
+  }, [buscarParam]);
+
+  const updateUrl = (newCategory: string, newSearch: string) => {
+    const params = new URLSearchParams();
+    if (newCategory && newCategory !== "all") params.set("categoria", newCategory);
+    if (newSearch) params.set("buscar", newSearch);
+    const qs = params.toString();
+    navigate(qs ? `/productos?${qs}` : "/productos", { replace: true });
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+    updateUrl(value, searchQuery);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    updateUrl(selectedCategory, value);
+  };
+
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+    navigate("/productos", { replace: true });
+  };
+
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
 
   const filteredProducts = products?.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory || (product.additionalCategories && product.additionalCategories.includes(selectedCategory));
+    const matchesCategory =
+      selectedCategory === "all" ||
+      product.category === selectedCategory ||
+      (product.additionalCategories && product.additionalCategories.includes(selectedCategory));
     return matchesSearch && matchesCategory;
   }) || [];
 
@@ -69,7 +107,7 @@ export default function Products() {
         jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
-      
+
       <main id="main-content" className="pt-20">
         <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
@@ -89,12 +127,12 @@ export default function Products() {
                 <Input
                   placeholder="Buscar productos..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleSearchChange}
                   className="pl-10 bg-white h-11"
                   data-testid="input-search"
                 />
               </div>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <Select value={selectedCategory} onValueChange={handleCategoryChange}>
                 <SelectTrigger className="w-full md:w-[220px] bg-white h-11" data-testid="select-category">
                   <SlidersHorizontal className="h-4 w-4 mr-2 text-muted-foreground" />
                   <SelectValue placeholder="Filtrar por categor\u00eda" />
@@ -132,8 +170,8 @@ export default function Products() {
             ) : error ? (
               <div className="text-center py-16">
                 <p className="text-destructive text-lg">Error al cargar los productos</p>
-                <Button 
-                  onClick={() => window.location.reload()} 
+                <Button
+                  onClick={() => window.location.reload()}
                   className="mt-4"
                   data-testid="button-reload"
                 >
@@ -145,10 +183,7 @@ export default function Products() {
                 <p className="text-muted-foreground text-lg">No se encontraron productos</p>
                 {(searchQuery || selectedCategory !== "all") && (
                   <Button
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory("all");
-                    }}
+                    onClick={handleClearFilters}
                     variant="outline"
                     className="mt-4"
                     data-testid="button-clear-filters"

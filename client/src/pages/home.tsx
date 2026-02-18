@@ -39,6 +39,14 @@ const homeJsonLd = [
     description:
       "Tienda en l\u00ednea de desodorantes naturales de piedra de alumbre para toda la familia.",
     inLanguage: "es-MX",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${BASE_URL}/productos?buscar={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
   },
 ];
 
