@@ -129,6 +129,7 @@ export default function HeroSection() {
       {/* ===== MOBILE HERO (< 640px) ===== */}
       <section className="sm:hidden bg-background" data-testid="hero-carousel-mobile">
         <div className="relative w-full overflow-hidden">
+          {/* Full image — preserves aspect ratio, no crop */}
           {slides.map((s, i) => (
             <div
               key={i}
@@ -146,17 +147,69 @@ export default function HeroSection() {
                 alt=""
                 className="w-full h-auto block"
               />
+              <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/25 to-transparent"></div>
             </div>
           ))}
+
+          {/* Text overlay positioned on the image */}
+          <div className="absolute inset-0 z-10 flex items-center">
+            <div className="w-full px-4" key={current}>
+              <div className={`animate-carousel-fade ${slide.alignRight ? "ml-auto text-right max-w-[65%]" : "ml-auto max-w-[60%] text-right"}`}>
+                {!slide.hideBadge && (
+                  <div className="inline-flex items-center px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white border border-white/25 rounded-full mb-2 text-[10px] font-semibold tracking-wider uppercase" data-testid="badge-natural-mobile">
+                    <Leaf className="h-3 w-3 mr-1 text-[hsl(99,30%,70%)]" />
+                    {slide.badge}
+                  </div>
+                )}
+                <h2 className="text-lg font-bold text-white leading-tight mb-1.5 font-serif drop-shadow-lg">
+                  {slide.mobileTitle}
+                </h2>
+                {slide.mobileDescription && (
+                  <p className="text-[11px] text-white/90 leading-snug mb-2.5 drop-shadow-md">
+                    {slide.mobileDescription}
+                  </p>
+                )}
+                {slide.showLogos && (
+                  <div className="flex items-center gap-2 justify-end mb-2">
+                    <img src={zahalLogo} alt="Zahal" className="h-7 w-auto object-contain brightness-0 invert drop-shadow-lg" />
+                    <span className="text-white/80 text-sm font-bold">×</span>
+                    <img src={enatureLogo} alt="eNature" className="h-7 w-auto object-contain drop-shadow-lg" />
+                  </div>
+                )}
+                {slide.alignRight ? (
+                  <a
+                    href={slide.cta.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 bg-white text-primary font-semibold rounded-lg h-8 px-4 text-xs shadow-lg"
+                    data-testid="link-visita-enature-mobile"
+                  >
+                    {slide.cta.label}
+                    <ArrowRight className="h-3 w-3" />
+                  </a>
+                ) : (
+                  <Button
+                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-1.5 h-8 px-4 text-xs rounded-lg"
+                    onClick={() => navigateTo(slide.cta.href)}
+                    data-testid="button-shop-now-mobile"
+                  >
+                    {slide.cta.label}
+                    <ArrowRight className="h-3 w-3" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center justify-center gap-4 py-4 bg-background">
+        {/* Carousel controls below image */}
+        <div className="flex items-center justify-center gap-4 py-3 bg-background">
           <button
             onClick={prev}
-            className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+            className="w-7 h-7 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
             data-testid="button-carousel-prev-mobile"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-3.5 w-3.5" />
           </button>
           {slides.map((_, i) => (
             <button
@@ -164,18 +217,18 @@ export default function HeroSection() {
               onClick={() => goTo(i)}
               className={`transition-all duration-300 rounded-full ${
                 i === current
-                  ? "w-3 h-3 bg-primary"
-                  : "w-3 h-3 bg-border hover:bg-muted-foreground"
+                  ? "w-2.5 h-2.5 bg-primary"
+                  : "w-2.5 h-2.5 bg-border"
               }`}
               data-testid={`button-slide-mobile-${i}`}
             />
           ))}
           <button
             onClick={next}
-            className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+            className="w-7 h-7 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
             data-testid="button-carousel-next-mobile"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
       </section>
