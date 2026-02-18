@@ -8,7 +8,7 @@ import superNaturistaLogo from "@assets/SUPER_NATURISTA_180x_1771434503354.webp"
 import getmeLogo from "@assets/logo_getmepng_1771435262525.png";
 import amazonLogo from "@assets/AMAZON_180x_1771434503364.avif";
 import mercadoLibreLogo from "@assets/MERCADO_LIBRE_180x_1771434503366.avif";
-import sorianaLogo from "@assets/soriana-logo-png_seeklogo-284960_1771350650256.png";
+import sorianaLogo from "@assets/soriana-logopng_1771435365592.png";
 import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
 import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 
