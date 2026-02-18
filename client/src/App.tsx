@@ -16,6 +16,7 @@ import CheckoutSuccess from "@/pages/checkout-success";
 import CheckoutCancel from "@/pages/checkout-cancel";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import DondeEncontrarnos from "@/pages/donde-encontrarnos";
+import Terms from "@/pages/terms";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -41,6 +42,7 @@ function Router() {
         <Route path="/checkout/cancelado" component={CheckoutCancel} />
         <Route path="/privacidad" component={PrivacyPolicy} />
         <Route path="/donde-encontrarnos" component={DondeEncontrarnos} />
+        <Route path="/terminos" component={Terms} />
         <Route component={NotFound} />
       </Switch>
     </>
