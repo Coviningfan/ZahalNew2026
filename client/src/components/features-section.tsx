@@ -1,4 +1,5 @@
-import { Leaf, Shield, Shirt, Recycle, Heart } from "lucide-react";
+import { Leaf, Shield, Shirt, Recycle } from "lucide-react";
+import { PiRabbitFill } from "react-icons/pi";
 
 const features = [
   {
@@ -22,7 +23,7 @@ const features = [
     description: "Empaque sostenible y biodegradable, libre de crueldad"
   },
   {
-    icon: Heart,
+    icon: PiRabbitFill,
     title: "Libre de Crueldad Animal",
     description: "Sin pruebas en animales, comprometidos con el bienestar animal"
   }
