@@ -7,7 +7,7 @@ import zahalLogo from "@assets/Zahal Verde - No fondo_1759182945567.png";
 const categories = [
   {
     id: "unisex",
-    title: "Unisex",
+    title: "Vida Cotidiana",
     description: "Para toda la familia",
     image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_12_d3f065e2-e2ed-47ce-b2d5-3e90a108f64a.jpg?v=1729194975&width=800",
     featuredProduct: {
@@ -20,7 +20,7 @@ const categories = [
   },
   {
     id: "sport",
-    title: "Sport",
+    title: "Deportistas",
     description: "Protección intensa",
     image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_15_39055246-6ec5-49ef-87a0-7e1de3b85b9a.jpg?v=1730323398&width=800",
     featuredProduct: {
@@ -33,7 +33,7 @@ const categories = [
   },
   {
     id: "travel",
-    title: "Travel",
+    title: "Viajeros",
     description: "Tamaño perfecto",
     image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_13_959e9a9d-14fb-4d0b-bf05-9df00ec8fe20.jpg?v=1729194974&width=800",
     featuredProduct: {
