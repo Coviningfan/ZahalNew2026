@@ -13,31 +13,31 @@ import pronasoyaLogo from "@assets/PRONASOYA_180x_1771434503308.webp";
 import superSoyaLogo from "@assets/SUPER_SOYA_e83b6911-92aa-4a85-814b-b15f65d7750d_180x_1771434503346.png";
 
 const brands = [
-  { name: "Walmart", logo: walmartLogo },
-  { name: "Amazon", logo: amazonLogo },
-  { name: "Mercado Libre", logo: mercadoLibreLogo },
-  { name: "H-E-B", logo: hebLogo },
-  { name: "Chedraui", logo: chedrauiLogo },
-  { name: "Soriana", logo: sorianaLogo },
-  { name: "Sears", logo: searsLogo },
-  { name: "Sanborns", logo: sanbornsLogo },
-  { name: "Nutrisa", logo: nutrisaLogo },
-  { name: "Super Naturista", logo: superNaturistaLogo },
-  { name: "Pronasoya", logo: pronasoyaLogo },
-  { name: "Super Soya", logo: superSoyaLogo },
-  { name: "Get Me by Ola", logo: getmeLogo },
+  { name: "Walmart", logo: walmartLogo, style: "h-8 md:h-10" },
+  { name: "Amazon", logo: amazonLogo, style: "h-7 md:h-9" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-8 md:h-10" },
+  { name: "H-E-B", logo: hebLogo, style: "h-9 md:h-11" },
+  { name: "Chedraui", logo: chedrauiLogo, style: "h-7 md:h-9" },
+  { name: "Soriana", logo: sorianaLogo, style: "h-8 md:h-10" },
+  { name: "Sears", logo: searsLogo, style: "h-6 md:h-8" },
+  { name: "Sanborns", logo: sanbornsLogo, style: "h-8 md:h-10" },
+  { name: "Nutrisa", logo: nutrisaLogo, style: "h-6 md:h-7" },
+  { name: "Super Naturista", logo: superNaturistaLogo, style: "h-7 md:h-9" },
+  { name: "Pronasoya", logo: pronasoyaLogo, style: "h-10 md:h-12" },
+  { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10" },
+  { name: "Get Me by Ola", logo: getmeLogo, style: "h-9 md:h-11" },
 ];
 
-function BrandItem({ brand, index }: { brand: typeof brands[0]; index: number }) {
+function BrandItem({ brand }: { brand: typeof brands[0] }) {
   return (
     <div
-      className="flex-shrink-0 w-[160px] md:w-[200px] h-16 md:h-20 flex items-center justify-center px-4"
+      className="flex-shrink-0 w-[160px] md:w-[200px] h-16 md:h-20 flex items-center justify-center px-5"
       data-testid={`brand-logo-${brand.name.toLowerCase().replace(/ /g, "-")}`}
     >
       <img
         src={brand.logo}
         alt={brand.name}
-        className="h-10 md:h-12 w-auto max-w-[140px] md:max-w-[160px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+        className={`${brand.style} w-auto max-w-[120px] md:max-w-[150px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300`}
       />
     </div>
   );
@@ -61,7 +61,7 @@ export default function BrandsCarousel() {
 
         <div className="flex animate-scroll-brands items-center" style={{ width: "fit-content" }}>
           {[...brands, ...brands, ...brands].map((brand, i) => (
-            <BrandItem key={`brand-${i}`} brand={brand} index={i} />
+            <BrandItem key={`brand-${i}`} brand={brand} />
           ))}
         </div>
       </div>
