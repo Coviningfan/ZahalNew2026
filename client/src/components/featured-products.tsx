@@ -12,7 +12,14 @@ export default function FeaturedProducts() {
     queryKey: ["/api/products"],
   });
 
-  const featuredProducts = products?.slice(0, 3);
+  const featuredSlugs = [
+    "zahal-limpiador-de-manos-natural-30-ml",
+    "desodorante-natural-de-piedra-de-alumbre-roll-on-unisex-90-ml",
+    "zahal-desodorante-natural-stik-120-g",
+  ];
+  const featuredProducts = featuredSlugs
+    .map(slug => products?.find(p => p.id === slug))
+    .filter(Boolean) as Product[];
 
   const handleNavigate = () => {
     const overlay = document.createElement("div");
