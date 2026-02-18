@@ -39,7 +39,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
-              Marca mexicana comprometida con tu bienestar y el medio ambiente. Cuidado natural con la pureza de la piedra de alumbre.
+              Marca comprometida con tu bienestar y el medio ambiente. Cuidado natural con la pureza de la piedra de alumbre.
             </p>
             <div className="flex space-x-2.5">
               <a 
