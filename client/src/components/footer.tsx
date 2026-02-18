@@ -17,6 +17,7 @@ const infoLinks = [
   { href: "/preguntas-frecuentes", label: "Preguntas Frecuentes" },
   { href: "/donde-encontrarnos", label: "¿Dónde encontrarnos?" },
   { href: "/privacidad", label: "Política de Privacidad" },
+  { href: "/terminos", label: "Términos y Condiciones" },
 ];
 
 export default function Footer() {

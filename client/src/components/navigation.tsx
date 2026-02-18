@@ -18,7 +18,8 @@ export default function Navigation() {
     { href: "/", label: "Inicio" },
     { href: "/productos", label: "Productos" },
     { href: "/nosotros", label: "Nosotros" },
-    { href: "/preguntas-frecuentes", label: "Preguntas Frecuentes" },
+    { href: "/preguntas-frecuentes", label: "Preguntas" },
+    { href: "/donde-encontrarnos", label: "¿Dónde encontrarnos?" },
     { href: "/contacto", label: "Contacto" },
   ];
 
@@ -34,12 +35,12 @@ export default function Navigation() {
             />
           </Link>
 
-          <div className="hidden lg:flex items-center space-x-7">
+          <div className="hidden lg:flex items-center space-x-6">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-[13px] font-medium tracking-wide uppercase transition-colors duration-200 relative py-1 ${
+                className={`text-[12px] font-medium tracking-wide uppercase transition-colors duration-200 relative py-1 ${
                   location === item.href 
                     ? "text-primary" 
                     : "text-foreground/55 hover:text-foreground"
