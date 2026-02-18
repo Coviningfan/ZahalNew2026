@@ -132,7 +132,7 @@ export default function HeroSection() {
             <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">
               {slide.description}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
               <Button
                 size="lg"
                 className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10 gap-2 h-14 px-8 text-base"
@@ -151,14 +151,15 @@ export default function HeroSection() {
               >
                 {slide.ctaSecondary.label}
               </Button>
+              <Link href="/productos" className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all ml-0 sm:ml-2" data-testid="link-hero-catalog">
+                <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">Elige tu favorito</span>
+                <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </div>
 
-          <div className="hidden lg:flex justify-center items-center">
-            <Link href="/productos" className="group inline-flex items-center gap-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full py-3 px-6 shadow-xl hover:bg-white/20 transition-all" data-testid="link-hero-catalog">
-              <span className="text-sm font-semibold text-white tracking-wide">Elige tu favorito</span>
-              <ArrowRight className="h-4 w-4 text-white group-hover:translate-x-1 transition-transform" />
-            </Link>
+          <div className="hidden lg:block">
+            {/* Espacio reservado para balance visual */}
           </div>
         </div>
       </div>
