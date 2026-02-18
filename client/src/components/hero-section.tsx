@@ -111,7 +111,7 @@ export default function HeroSection() {
             alt=""
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 hero-gradient"></div>
+          <div className="absolute inset-0 bg-black/45"></div>
         </div>
       ))}
 
