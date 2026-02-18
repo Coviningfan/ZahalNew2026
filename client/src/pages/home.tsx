@@ -11,36 +11,45 @@ import Footer from "@/components/footer";
 import SEO from "@/components/seo";
 import { BASE_URL } from "@/lib/config";
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Zahal Productos Naturales",
-  url: BASE_URL,
-  logo: {
-    "@type": "ImageObject",
-    url: `${BASE_URL}/favicon.svg`,
+const homeJsonLd = [
+  {
+    "@type": "Organization",
+    name: "Zahal Productos Naturales",
+    url: BASE_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${BASE_URL}/favicon.svg`,
+    },
+    description:
+      "Desodorantes naturales de piedra de alumbre. Sin aluminio, sin qu\u00edmicos. Protecci\u00f3n 24h. Env\u00edo a todo M\u00e9xico.",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "MX",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      availableLanguage: "Spanish",
+    },
   },
-  description:
-    "Desodorantes naturales de piedra de alumbre. Sin aluminio, sin químicos. Protección 24h. Envío a todo México.",
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "MX",
+  {
+    "@type": "WebSite",
+    name: "Zahal Productos Naturales",
+    url: BASE_URL,
+    description:
+      "Tienda en l\u00ednea de desodorantes naturales de piedra de alumbre para toda la familia.",
+    inLanguage: "es-MX",
   },
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer service",
-    availableLanguage: "Spanish",
-  },
-};
+];
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
         title="Zahal - Desodorantes Naturales de Alumbre"
-        description="Desodorantes naturales de piedra de alumbre. Sin aluminio, sin químicos. Protección 24h. Envío a todo México."
+        description="Desodorantes naturales de piedra de alumbre. Sin aluminio, sin qu\u00edmicos. Protecci\u00f3n 24h. Env\u00edo a todo M\u00e9xico."
         path="/"
-        jsonLd={organizationJsonLd}
+        jsonLd={homeJsonLd}
       />
       <Navigation />
       <main id="main-content">

@@ -11,9 +11,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Search, SlidersHorizontal } from "lucide-react";
 import type { Product } from "@shared/schema";
 import SEO from "@/components/seo";
+import { BASE_URL } from "@/lib/config";
 
 const categories = [
-  { value: "all", label: "Todas las categorías" },
+  { value: "all", label: "Todas las categor\u00edas" },
   { value: "unisex", label: "Unisex" },
   { value: "hombre", label: "Hombre" },
   { value: "sport", label: "Sport" },
@@ -22,6 +23,15 @@ const categories = [
   { value: "cuidado", label: "Cuidado Personal" },
   { value: "manos", label: "Limpieza de Manos" },
 ];
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: BASE_URL },
+    { "@type": "ListItem", position: 2, name: "Productos", item: `${BASE_URL}/productos` },
+  ],
+};
 
 export default function Products() {
   const searchString = useSearch();
@@ -54,8 +64,9 @@ export default function Products() {
     <div className="min-h-screen bg-background">
       <SEO
         title="Tienda de Productos Naturales"
-        description="Explora nuestra línea completa de desodorantes naturales: sprays, roll-ons, sticks y kits de viaje."
+        description="Cat\u00e1logo completo de desodorantes naturales de piedra de alumbre Zahal: sprays, roll-ons, sticks y kits de viaje. Env\u00edo a todo M\u00e9xico."
         path="/productos"
+        jsonLd={breadcrumbJsonLd}
       />
       <Navigation />
       
@@ -63,12 +74,12 @@ export default function Products() {
         <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="text-center mb-10">
-              <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Catálogo</p>
+              <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Cat\u00e1logo</p>
               <h1 className="text-3xl lg:text-5xl font-bold text-foreground mb-4 font-serif">
                 Nuestros Productos
               </h1>
               <p className="text-muted-foreground text-base lg:text-lg max-w-2xl mx-auto">
-                Descubre nuestra línea completa de cuidado natural con piedra de alumbre
+                Descubre nuestra l\u00ednea completa de cuidado natural con piedra de alumbre
               </p>
             </div>
 
@@ -86,7 +97,7 @@ export default function Products() {
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-full md:w-[220px] bg-white h-11" data-testid="select-category">
                   <SlidersHorizontal className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <SelectValue placeholder="Filtrar por categoría" />
+                  <SelectValue placeholder="Filtrar por categor\u00eda" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (

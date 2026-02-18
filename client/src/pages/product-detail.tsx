@@ -12,6 +12,7 @@ import { SiWhatsapp } from "react-icons/si";
 import { Link } from "wouter";
 import type { Product } from "@shared/schema";
 import SEO from "@/components/seo";
+import { BASE_URL } from "@/lib/config";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -81,8 +82,43 @@ export default function ProductDetail() {
     sport: "Sport",
     travel: "Travel",
     teens: "Teens",
-    soap: "Jabón",
+    soap: "Jab\u00f3n",
   };
+
+  const productJsonLd = [
+    {
+      "@type": "Product",
+      name: product.name,
+      description: product.description,
+      image: product.images,
+      sku: String(product.id),
+      brand: {
+        "@type": "Brand",
+        name: "Zahal",
+      },
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "MXN",
+        price: String(product.price),
+        availability: product.inStock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        url: `${BASE_URL}/productos/${product.id}`,
+        seller: {
+          "@type": "Organization",
+          name: "Zahal Productos Naturales",
+        },
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: BASE_URL },
+        { "@type": "ListItem", position: 2, name: "Productos", item: `${BASE_URL}/productos` },
+        { "@type": "ListItem", position: 3, name: product.name, item: `${BASE_URL}/productos/${product.id}` },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -90,6 +126,9 @@ export default function ProductDetail() {
         title={product.name}
         description={product.description?.slice(0, 155)}
         path={`/productos/${product.id}`}
+        ogImage={product.images[0]}
+        ogType="product"
+        jsonLd={productJsonLd}
       />
       <Navigation />
       
@@ -162,7 +201,7 @@ export default function ProductDetail() {
                 <div className="bg-card rounded-xl p-5 border border-border/40">
                   <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
                     <Shield className="h-4 w-4 text-primary" />
-                    Características
+                    Caracter\u00edsticas
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
                     {product.features.map((feature, index) => (
@@ -218,7 +257,7 @@ export default function ProductDetail() {
               <div className="grid grid-cols-3 gap-3 pt-2">
                 <div className="text-center p-3 bg-card rounded-xl border border-border/30">
                   <Truck className="h-4 w-4 text-primary mx-auto mb-1" />
-                  <p className="text-xs text-muted-foreground">Envío a todo México</p>
+                  <p className="text-xs text-muted-foreground">Env\u00edo a todo M\u00e9xico</p>
                 </div>
                 <div className="text-center p-3 bg-card rounded-xl border border-border/30">
                   <ShieldCheck className="h-4 w-4 text-primary mx-auto mb-1" />
@@ -232,7 +271,7 @@ export default function ProductDetail() {
 
               {!product.inStock && (
                 <p className="text-destructive text-sm">
-                  Este producto no está disponible actualmente
+                  Este producto no est\u00e1 disponible actualmente
                 </p>
               )}
             </div>
