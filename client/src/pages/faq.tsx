@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 
 interface FAQItem {
   question: string;
-  answer: string;
+  answer: string | React.ReactNode;
 }
 
 interface FAQSection {
@@ -16,6 +16,16 @@ interface FAQSection {
 }
 
 const faqSections: FAQSection[] = [
+  {
+    title: "Compra y disponibilidad",
+    icon: "🛒",
+    items: [
+      {
+        question: "¿Dónde puedo comprar productos ZAHAL?",
+        answer: <span>Consulta todos nuestros puntos de venta en la página <a href="/donde-encontrarnos" className="text-primary font-semibold underline underline-offset-2 hover:text-primary/80 transition-colors">Dónde Encontrarnos</a>.</span>
+      }
+    ]
+  },
   {
     title: "Sobre los productos ZAHAL",
     icon: "🌿",
@@ -144,7 +154,7 @@ function FAQAccordion({ item, index }: { item: FAQItem; index: number }) {
         <ChevronDown className={`h-5 w-5 text-muted-foreground flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-5' : 'max-h-0'}`}>
-        <p className="text-muted-foreground text-sm leading-relaxed">{item.answer}</p>
+        <div className="text-muted-foreground text-sm leading-relaxed">{item.answer}</div>
       </div>
     </div>
   );
