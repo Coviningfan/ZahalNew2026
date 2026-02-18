@@ -182,7 +182,7 @@ export default function HeroSection() {
                   </a>
                 ) : (
                   <Button
-                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-2 h-10 px-5 text-sm rounded-xl"
+                    className="bg-primary text-white hover:bg-primary/90 font-semibold shadow-lg shadow-black/20 gap-2 h-10 px-5 text-sm rounded-xl"
                     onClick={() => navigateTo(slide.cta.href)}
                     data-testid="button-shop-now-mobile"
                   >
@@ -282,7 +282,7 @@ export default function HeroSection() {
                   <>
                     <Button
                       size="lg"
-                      className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10 gap-2 h-14 px-8 text-base"
+                      className="bg-primary text-white hover:bg-primary/90 font-semibold shadow-lg shadow-black/20 gap-2 h-14 px-8 text-base"
                       onClick={() => navigateTo(slide.cta.href)}
                       data-testid="button-shop-now"
                     >
@@ -293,7 +293,7 @@ export default function HeroSection() {
                       <Button
                         size="lg"
                         variant="outline"
-                        className="border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white hover:bg-white/15 font-semibold h-14 px-8 text-base"
+                        className="border-2 border-white/40 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 font-semibold h-14 px-8 text-base"
                         onClick={() => slide.ctaSecondary && navigateTo(slide.ctaSecondary.href)}
                         data-testid="button-view-catalog"
                       >
