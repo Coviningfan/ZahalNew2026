@@ -128,52 +128,44 @@ export default function HeroSection() {
     <>
       {/* ===== MOBILE HERO (< 640px) ===== */}
       <section className="sm:hidden bg-background" data-testid="hero-carousel-mobile">
-        <div className="relative w-full overflow-hidden">
-          {/* Full image — preserves aspect ratio, no crop */}
+        <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/2.5" }}>
           {slides.map((s, i) => (
             <div
               key={i}
-              className="transition-opacity duration-700 ease-in-out"
-              style={{
-                opacity: i === current ? 1 : 0,
-                position: i === 0 ? "relative" : "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-              }}
+              className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+              style={{ opacity: i === current ? 1 : 0 }}
             >
               <img
                 src={s.bgImage}
                 alt=""
-                className="w-full h-auto block"
+                className="w-full h-full object-cover object-center"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/25 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-l from-black/55 via-black/20 to-transparent"></div>
             </div>
           ))}
 
-          {/* Text overlay positioned on the image */}
           <div className="absolute inset-0 z-10 flex items-center">
-            <div className="w-full px-4" key={current}>
+            <div className="w-full px-5" key={current}>
               <div className={`animate-carousel-fade ${slide.alignRight ? "ml-auto text-right max-w-[65%]" : "ml-auto max-w-[60%] text-right"}`}>
                 {!slide.hideBadge && (
-                  <div className="inline-flex items-center px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white border border-white/25 rounded-full mb-2 text-[10px] font-semibold tracking-wider uppercase" data-testid="badge-natural-mobile">
-                    <Leaf className="h-3 w-3 mr-1 text-[hsl(99,30%,70%)]" />
+                  <div className="inline-flex items-center px-3 py-1.5 bg-white/20 backdrop-blur-sm text-white border border-white/25 rounded-full mb-3 text-[11px] font-semibold tracking-wider uppercase" data-testid="badge-natural-mobile">
+                    <Leaf className="h-3.5 w-3.5 mr-1.5 text-[hsl(99,30%,70%)]" />
                     {slide.badge}
                   </div>
                 )}
-                <h2 className="text-lg font-bold text-white leading-tight mb-1.5 font-serif drop-shadow-lg">
+                <h2 className="text-2xl font-bold text-white leading-tight mb-2 font-serif drop-shadow-lg">
                   {slide.mobileTitle}
                 </h2>
                 {slide.mobileDescription && (
-                  <p className="text-[11px] text-white/90 leading-snug mb-2.5 drop-shadow-md">
+                  <p className="text-sm text-white/90 leading-snug mb-4 drop-shadow-md">
                     {slide.mobileDescription}
                   </p>
                 )}
                 {slide.showLogos && (
-                  <div className="flex items-center gap-2 justify-end mb-2">
-                    <img src={zahalLogo} alt="Zahal" className="h-7 w-auto object-contain brightness-0 invert drop-shadow-lg" />
-                    <span className="text-white/80 text-sm font-bold">×</span>
-                    <img src={enatureLogo} alt="eNature" className="h-7 w-auto object-contain drop-shadow-lg" />
+                  <div className="flex items-center gap-3 justify-end mb-3">
+                    <img src={zahalLogo} alt="Zahal" className="h-10 w-auto object-contain brightness-0 invert drop-shadow-lg" />
+                    <span className="text-white/80 text-lg font-bold">×</span>
+                    <img src={enatureLogo} alt="eNature" className="h-10 w-auto object-contain drop-shadow-lg" />
                   </div>
                 )}
                 {slide.alignRight ? (
@@ -181,20 +173,20 @@ export default function HeroSection() {
                     href={slide.cta.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 bg-white text-primary font-semibold rounded-lg h-8 px-4 text-xs shadow-lg"
+                    className="inline-flex items-center gap-2 bg-white text-primary font-semibold rounded-xl h-10 px-5 text-sm shadow-lg"
                     data-testid="link-visita-enature-mobile"
                   >
                     {slide.cta.label}
-                    <ArrowRight className="h-3 w-3" />
+                    <ArrowRight className="h-4 w-4" />
                   </a>
                 ) : (
                   <Button
-                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-1.5 h-8 px-4 text-xs rounded-lg"
+                    className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg gap-2 h-10 px-5 text-sm rounded-xl"
                     onClick={() => navigateTo(slide.cta.href)}
                     data-testid="button-shop-now-mobile"
                   >
                     {slide.cta.label}
-                    <ArrowRight className="h-3 w-3" />
+                    <ArrowRight className="h-4 w-4" />
                   </Button>
                 )}
               </div>
@@ -202,7 +194,6 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Carousel controls below image */}
         <div className="flex items-center justify-center gap-4 py-3 bg-background">
           <button
             onClick={prev}
