@@ -55,25 +55,23 @@ class StripeApiStorage implements IStorage {
     }
 
     const stripe = getStripeClient();
-    const products: Product[] = [];
-
     const stripeProducts = await stripe.products.list({ active: true, limit: 100 });
 
-    for (const product of stripeProducts.data) {
-      const prices = await stripe.prices.list({ product: product.id, active: true, limit: 1 });
-      const price = prices.data[0];
-      if (price) {
-        const p = mapStripeProductToProduct(product, price);
-        products.push(p);
-        // Ensure the cache is updated with the correct price ID
-        if (cachedProducts) {
-          const index = cachedProducts.findIndex(cp => cp.id === p.id);
-          if (index !== -1) {
-            cachedProducts[index] = p;
-          }
+    const productPricePromises = stripeProducts.data.map(async (product) => {
+      try {
+        const prices = await stripe.prices.list({ product: product.id, active: true, limit: 1 });
+        const price = prices.data[0];
+        if (price) {
+          return mapStripeProductToProduct(product, price);
         }
+        return null;
+      } catch {
+        return null;
       }
-    }
+    });
+
+    const results = await Promise.all(productPricePromises);
+    const products = results.filter((p): p is Product => p !== null);
 
     products.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
 
