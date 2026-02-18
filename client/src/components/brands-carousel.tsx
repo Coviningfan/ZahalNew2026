@@ -1,5 +1,5 @@
 import nutrisaLogo from "@assets/Nutrisa+logotipo+_1_-removebg-preview_1771434664253.png";
-import chedrauiLogo from "@assets/Chedraui-removebg-preview_1771435050194.png";
+import chedrauiLogo from "@assets/chedraui-seeklogobueno-fotor-bg-remover-2026021893334_1771436026327.png";
 import hebLogo from "@assets/HEB_180x_1771434503355.avif";
 import searsLogo from "@assets/Sears_Mexico_Logo.svg_1771350421240.png";
 import sanbornsLogo from "@assets/Sanbornspng_1771434929637.png";
@@ -17,7 +17,7 @@ const brands = [
   { name: "Amazon", logo: amazonLogo, style: "h-7 md:h-8" },
   { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-8 md:h-9" },
   { name: "H-E-B", logo: hebLogo, style: "h-8 md:h-10" },
-  { name: "Chedraui", logo: chedrauiLogo, style: "h-16 md:h-20" },
+  { name: "Chedraui", logo: chedrauiLogo, style: "h-12 md:h-14" },
   { name: "Soriana", logo: sorianaLogo, style: "h-8 md:h-10" },
   { name: "Sears", logo: searsLogo, style: "h-6 md:h-8" },
   { name: "Sanborns", logo: sanbornsLogo, style: "h-10 md:h-12" },
