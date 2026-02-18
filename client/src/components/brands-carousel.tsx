@@ -19,37 +19,37 @@ import sheinLogo from "@assets/shein-seeklogo_1771437844496.png";
 import ultrasoyaLogo from "@assets/logo-ultrasoya_1771437873164.png";
 
 const brands = [
-  { name: "Walmart", logo: walmartLogo, style: "h-7 md:h-9", width: "w-[145px] md:w-[175px]" },
-  { name: "Amazon", logo: amazonLogo, style: "h-6 md:h-7", width: "w-[130px] md:w-[155px]" },
-  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-7 md:h-8", width: "w-[145px] md:w-[170px]" },
-  { name: "H-E-B", logo: hebLogo, style: "h-7 md:h-9", width: "w-[120px] md:w-[145px]" },
-  { name: "Chedraui", logo: chedrauiLogo, style: "h-11 md:h-14", width: "w-[105px] md:w-[125px]" },
-  { name: "Soriana", logo: sorianaLogo, style: "h-7 md:h-9", width: "w-[145px] md:w-[175px]" },
-  { name: "Sears", logo: searsLogo, style: "h-5 md:h-7", width: "w-[110px] md:w-[130px]" },
-  { name: "Sanborns", logo: sanbornsLogo, style: "h-8 md:h-10", width: "w-[130px] md:w-[155px]" },
-  { name: "Nutrisa", logo: nutrisaLogo, style: "h-6 md:h-7", width: "w-[115px] md:w-[135px]" },
-  { name: "Super Naturista", logo: superNaturistaLogo, style: "h-8 md:h-10", width: "w-[105px] md:w-[125px]" },
-  { name: "Pronasoya", logo: pronasoyaLogo, style: "h-8 md:h-10", width: "w-[100px] md:w-[115px]" },
-  { name: "Super Soya", logo: superSoyaLogo, style: "h-8 md:h-10", width: "w-[105px] md:w-[125px]" },
-  { name: "Get Me by Ola", logo: getmeLogo, style: "h-6 md:h-7", width: "w-[120px] md:w-[140px]" },
-  { name: "La Comer", logo: laComerLogo, style: "h-9 md:h-11", width: "w-[150px] md:w-[180px]" },
-  { name: "Dax", logo: daxLogo, style: "h-5 md:h-6", width: "w-[100px] md:w-[115px]", invert: true },
-  { name: "Tienda UNAM", logo: tiendaUnamLogo, style: "h-7 md:h-8", width: "w-[90px] md:w-[105px]" },
-  { name: "Caalfrabet", logo: caalfrabetLogo, style: "h-8 md:h-10", width: "w-[105px] md:w-[125px]" },
-  { name: "SheIn", logo: sheinLogo, style: "h-5 md:h-6", width: "w-[125px] md:w-[145px]" },
-  { name: "Ultrasoya", logo: ultrasoyaLogo, style: "h-6 md:h-8", width: "w-[130px] md:w-[150px]" },
+  { name: "Walmart", logo: walmartLogo, style: "h-8 md:h-10", width: "w-[160px] md:w-[200px]" },
+  { name: "Amazon", logo: amazonLogo, style: "h-7 md:h-8", width: "w-[150px] md:w-[180px]" },
+  { name: "Mercado Libre", logo: mercadoLibreLogo, style: "h-8 md:h-9", width: "w-[160px] md:w-[195px]" },
+  { name: "H-E-B", logo: hebLogo, style: "h-8 md:h-10", width: "w-[140px] md:w-[170px]" },
+  { name: "Chedraui", logo: chedrauiLogo, style: "h-12 md:h-14", width: "w-[120px] md:w-[140px]" },
+  { name: "Soriana", logo: sorianaLogo, style: "h-8 md:h-10", width: "w-[160px] md:w-[200px]" },
+  { name: "Sears", logo: searsLogo, style: "h-6 md:h-8", width: "w-[130px] md:w-[155px]" },
+  { name: "Sanborns", logo: sanbornsLogo, style: "h-9 md:h-11", width: "w-[145px] md:w-[175px]" },
+  { name: "Nutrisa", logo: nutrisaLogo, style: "h-7 md:h-8", width: "w-[135px] md:w-[160px]" },
+  { name: "Super Naturista", logo: superNaturistaLogo, style: "h-9 md:h-11", width: "w-[120px] md:w-[140px]" },
+  { name: "Pronasoya", logo: pronasoyaLogo, style: "h-9 md:h-11", width: "w-[115px] md:w-[135px]" },
+  { name: "Super Soya", logo: superSoyaLogo, style: "h-9 md:h-11", width: "w-[120px] md:w-[140px]" },
+  { name: "Get Me by Ola", logo: getmeLogo, style: "h-7 md:h-8", width: "w-[140px] md:w-[165px]" },
+  { name: "La Comer", logo: laComerLogo, style: "h-12 md:h-16", width: "w-[180px] md:w-[220px]" },
+  { name: "Dax", logo: daxLogo, style: "h-6 md:h-7", width: "w-[115px] md:w-[135px]", invert: true },
+  { name: "Tienda UNAM", logo: tiendaUnamLogo, style: "h-8 md:h-10", width: "w-[110px] md:w-[130px]" },
+  { name: "Caalfrabet", logo: caalfrabetLogo, style: "h-9 md:h-11", width: "w-[120px] md:w-[140px]" },
+  { name: "SheIn", logo: sheinLogo, style: "h-5 md:h-7", width: "w-[140px] md:w-[165px]" },
+  { name: "Ultrasoya", logo: ultrasoyaLogo, style: "h-7 md:h-9", width: "w-[150px] md:w-[175px]" },
 ];
 
 function BrandItem({ brand }: { brand: typeof brands[0] }) {
   return (
     <div
-      className={`flex-shrink-0 ${brand.width} h-14 md:h-18 flex items-center justify-center px-2`}
+      className={`flex-shrink-0 ${brand.width} h-16 md:h-20 flex items-center justify-center px-3`}
       data-testid={`brand-logo-${brand.name.toLowerCase().replace(/ /g, "-")}`}
     >
       <img
         src={brand.logo}
         alt={brand.name}
-        className={`${brand.style} w-auto max-w-[120px] md:max-w-[155px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 ${brand.invert ? "invert" : ""}`}
+        className={`${brand.style} w-auto max-w-[150px] md:max-w-[190px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 ${brand.invert ? "invert" : ""}`}
       />
     </div>
   );
