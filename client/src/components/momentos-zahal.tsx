@@ -307,6 +307,7 @@ export default function MomentosZahal() {
   return (
     <section className="py-16 lg:py-24 bg-card linen-texture overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
+        <div className="text-center mb-12">
           <div className="flex flex-col items-center justify-center gap-4 mb-4">
             <p className="text-primary font-semibold text-sm tracking-wider uppercase">
               Elige tu Zahal Ideal
