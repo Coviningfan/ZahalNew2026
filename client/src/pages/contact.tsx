@@ -66,17 +66,17 @@ export default function Contact() {
                 href="https://wa.me/5215545327249?text=Hola, tengo una pregunta sobre los productos Zahal"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-5 bg-emerald-50 border border-emerald-200/60 rounded-2xl hover:bg-emerald-100/70 transition-colors group"
+                className="flex items-center gap-4 p-5 bg-[hsl(99,32%,96%)] border border-[hsl(99,25%,80%)]/60 rounded-2xl hover:bg-[hsl(99,32%,90%)]/70 transition-colors group"
                 data-testid="link-whatsapp-contact"
               >
-                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-[hsl(99,32%,38%)] rounded-xl flex items-center justify-center flex-shrink-0">
                   <SiWhatsapp className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-foreground">Escríbenos por WhatsApp</p>
                   <p className="text-sm text-muted-foreground">Respuesta rápida de lunes a viernes — 55 4532 7249</p>
                 </div>
-                <span className="text-emerald-600 font-medium text-sm hidden sm:block group-hover:underline">Abrir chat →</span>
+                <span className="text-[hsl(99,32%,38%)] font-medium text-sm hidden sm:block group-hover:underline">Abrir chat →</span>
               </a>
             </div>
 

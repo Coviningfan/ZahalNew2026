@@ -112,7 +112,7 @@ export default function ProductDetail() {
               </div>
               <div className="absolute top-4 right-4 flex gap-2">
                 {product.isNew && (
-                  <Badge className="bg-emerald-600/90 backdrop-blur-sm text-white px-3 py-1">Nuevo</Badge>
+                  <Badge className="bg-[hsl(99,32%,38%)]/90 backdrop-blur-sm text-white px-3 py-1">Nuevo</Badge>
                 )}
                 {product.isFeatured && (
                   <Badge className="bg-primary/90 backdrop-blur-sm text-white px-3 py-1">Popular</Badge>
@@ -206,7 +206,7 @@ export default function ProductDetail() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full h-12 gap-2 border-emerald-600/30 text-emerald-700 hover:bg-emerald-50"
+                    className="w-full h-12 gap-2 border-[hsl(99,32%,38%)]/30 text-[hsl(99,32%,30%)] hover:bg-[hsl(99,32%,96%)]"
                     data-testid="button-whatsapp"
                   >
                     <SiWhatsapp className="h-4 w-4" />

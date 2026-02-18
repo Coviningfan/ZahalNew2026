@@ -46,7 +46,7 @@ export default function Footer() {
                 href="https://wa.me/5215545327249"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 bg-white/8 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors duration-200"
+                className="w-9 h-9 bg-white/8 rounded-lg flex items-center justify-center hover:bg-[hsl(99,32%,38%)] transition-colors duration-200"
                 data-testid="link-whatsapp"
               >
                 <SiWhatsapp className="h-4 w-4" />
@@ -124,7 +124,7 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60 text-sm">
               <li>
                 <a href="https://wa.me/5215545327249" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-white transition-colors">
-                  <MessageCircle className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+                  <MessageCircle className="h-4 w-4 text-[hsl(99,30%,55%)] flex-shrink-0" />
                   <span>WhatsApp: 55 4532 7249</span>
                 </a>
               </li>

@@ -4,50 +4,50 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(80 20% 98%);
-  --foreground: hsl(150 10% 12%);
-  --card: hsl(90 15% 96%);
-  --card-foreground: hsl(150 10% 12%);
-  --popover: hsl(80 20% 98%);
-  --popover-foreground: hsl(150 10% 12%);
-  --primary: hsl(152 45% 28%);
+  --background: hsl(99 20% 98%);
+  --foreground: hsl(99 10% 12%);
+  --card: hsl(99 15% 96%);
+  --card-foreground: hsl(99 10% 12%);
+  --popover: hsl(99 20% 98%);
+  --popover-foreground: hsl(99 10% 12%);
+  --primary: hsl(99 32% 35%);
   --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(140 18% 92%);
-  --secondary-foreground: hsl(152 45% 22%);
-  --muted: hsl(90 10% 93%);
-  --muted-foreground: hsl(150 5% 42%);
-  --accent: hsl(152 35% 38%);
+  --secondary: hsl(99 18% 92%);
+  --secondary-foreground: hsl(99 32% 25%);
+  --muted: hsl(99 10% 93%);
+  --muted-foreground: hsl(99 5% 42%);
+  --accent: hsl(99 30% 42%);
   --accent-foreground: hsl(0 0% 100%);
   --destructive: hsl(0 70% 50%);
   --destructive-foreground: hsl(0 0% 100%);
-  --border: hsl(140 12% 88%);
-  --input: hsl(140 12% 88%);
-  --ring: hsl(152 45% 28%);
+  --border: hsl(99 12% 88%);
+  --input: hsl(99 12% 88%);
+  --ring: hsl(99 32% 35%);
   --radius: 12px;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
 }
 
 .dark {
-  --background: hsl(150 10% 10%);
-  --foreground: hsl(140 10% 95%);
-  --card: hsl(150 10% 14%);
-  --card-foreground: hsl(140 10% 95%);
-  --popover: hsl(150 10% 14%);
-  --popover-foreground: hsl(140 10% 95%);
-  --primary: hsl(152 40% 40%);
+  --background: hsl(99 10% 10%);
+  --foreground: hsl(99 10% 95%);
+  --card: hsl(99 10% 14%);
+  --card-foreground: hsl(99 10% 95%);
+  --popover: hsl(99 10% 14%);
+  --popover-foreground: hsl(99 10% 95%);
+  --primary: hsl(99 32% 45%);
   --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(152 15% 25%);
-  --secondary-foreground: hsl(140 10% 90%);
-  --muted: hsl(150 10% 18%);
-  --muted-foreground: hsl(140 8% 60%);
-  --accent: hsl(152 35% 45%);
+  --secondary: hsl(99 15% 25%);
+  --secondary-foreground: hsl(99 10% 90%);
+  --muted: hsl(99 10% 18%);
+  --muted-foreground: hsl(99 8% 60%);
+  --accent: hsl(99 30% 48%);
   --accent-foreground: hsl(0 0% 100%);
   --destructive: hsl(0 50% 50%);
   --destructive-foreground: hsl(0 0% 100%);
-  --border: hsl(150 10% 20%);
-  --input: hsl(150 10% 20%);
-  --ring: hsl(152 40% 40%);
+  --border: hsl(99 10% 20%);
+  --input: hsl(99 10% 20%);
+  --ring: hsl(99 32% 45%);
 }
 
 @keyframes fadeIn {
@@ -86,14 +86,14 @@
 }
 
 .hero-gradient {
-  background: linear-gradient(135deg, hsl(152 45% 18% / 0.92) 0%, hsl(152 35% 30% / 0.85) 50%, hsl(140 30% 25% / 0.88) 100%);
+  background: linear-gradient(135deg, hsl(99 32% 18% / 0.92) 0%, hsl(99 30% 30% / 0.85) 50%, hsl(99 28% 25% / 0.88) 100%);
 }
 
 .glass-card {
   backdrop-filter: blur(20px) saturate(180%);
-  background: hsl(80 20% 98% / 0.92);
-  border-bottom: 1px solid hsl(140 15% 85% / 0.6);
-  box-shadow: 0 1px 3px hsl(150 10% 20% / 0.04);
+  background: hsl(99 20% 98% / 0.92);
+  border-bottom: 1px solid hsl(99 15% 85% / 0.6);
+  box-shadow: 0 1px 3px hsl(99 10% 20% / 0.04);
 }
 
 .linen-texture {
@@ -101,7 +101,7 @@
 }
 
 .organic-border {
-  border: 1px solid hsl(140 20% 85%);
+  border: 1px solid hsl(99 20% 85%);
 }
 
 @layer base {

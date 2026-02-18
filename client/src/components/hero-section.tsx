@@ -40,12 +40,12 @@ export default function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in">
             <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide" data-testid="badge-natural">
-              <Leaf className="h-4 w-4 mr-2 text-emerald-300" />
+              <Leaf className="h-4 w-4 mr-2 text-[hsl(99,30%,65%)]" />
               Hecho en México — 100% Natural
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6 font-serif text-balance">
               Cuida tu piel,{" "}
-              <span className="italic text-emerald-200">respeta</span>{" "}
+              <span className="italic text-[hsl(99,30%,80%)]">respeta</span>{" "}
               tu cuerpo
             </h1>
             <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">

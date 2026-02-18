@@ -49,7 +49,7 @@ export default function ProductCard({ product, showBadge = false }: ProductCardP
               </Badge>
             )}
             {product.isNew && (
-              <Badge className="bg-emerald-600/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1">
+              <Badge className="bg-[hsl(99,32%,38%)]/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1">
                 Nuevo
               </Badge>
             )}
