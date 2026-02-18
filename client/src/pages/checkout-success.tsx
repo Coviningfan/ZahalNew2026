@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useSearch } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
-import { CheckCircle, ArrowRight, ShoppingBag, AlertTriangle } from "lucide-react";
+import { CheckCircle, ArrowRight, ShoppingBag, AlertTriangle, Loader2 } from "lucide-react";
 import SEO from "@/components/seo";
 
 export default function CheckoutSuccess() {
@@ -13,13 +13,55 @@ export default function CheckoutSuccess() {
   const params = new URLSearchParams(searchString);
   const sessionId = params.get("session_id");
 
+  const [isVerifying, setIsVerifying] = useState(true);
+  const [isValid, setIsValid] = useState(false);
+
   useEffect(() => {
-    if (sessionId) {
-      clearCart();
+    if (!sessionId) {
+      setIsVerifying(false);
+      return;
     }
+
+    fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
+      .then(r => r.json())
+      .then(data => {
+        setIsValid(data.valid === true);
+        if (data.valid === true) {
+          clearCart();
+        }
+      })
+      .catch(() => {
+        setIsValid(false);
+      })
+      .finally(() => {
+        setIsVerifying(false);
+      });
   }, [sessionId]);
 
-  if (!sessionId) {
+  if (isVerifying) {
+    return (
+      <div className="min-h-screen bg-background">
+        <SEO
+          title="Verificando pedido"
+          description="Verificando tu pedido."
+          path="/checkout/exito"
+          noindex
+        />
+        <Navigation />
+        <main id="main-content" className="pt-20">
+          <div className="container mx-auto px-4 lg:px-8 py-16">
+            <div className="max-w-lg mx-auto text-center">
+              <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-6" />
+              <p className="text-muted-foreground" data-testid="text-verifying">Verificando tu pedido...</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!isValid) {
     return (
       <div className="min-h-screen bg-background">
         <SEO

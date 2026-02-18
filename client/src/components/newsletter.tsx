@@ -6,16 +6,33 @@ import { Mail } from "lucide-react";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email) return;
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error("Failed");
       toast({
         title: "¡Suscripción exitosa!",
         description: "Te has suscrito al newsletter de Zahal",
       });
       setEmail("");
+    } catch {
+      toast({
+        title: "Error al suscribir",
+        description: "No pudimos registrar tu correo. Intenta de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -46,9 +63,10 @@ export default function Newsletter() {
               type="submit"
               size="lg"
               className="bg-white text-primary hover:bg-white/90 font-semibold h-12"
+              disabled={isSubmitting}
               data-testid="button-subscribe"
             >
-              Suscribirme
+              {isSubmitting ? "Suscribiendo..." : "Suscribirme"}
             </Button>
           </form>
           <p className="text-white/35 text-xs mt-4">Sin spam. Solo tips y ofertas. Cancela cuando quieras.</p>

@@ -126,7 +126,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ items }),
       });
 
-      if (!res.ok) throw new Error("Checkout failed");
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.message || "Checkout failed");
+      }
 
       const { url } = await res.json();
       if (url) {
@@ -136,7 +139,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       console.error("Checkout error:", error);
       toast({
         title: "Error al procesar el pago",
-        description: "Hubo un problema al iniciar el pago. Intenta de nuevo.",
+        description: error instanceof Error && error.message !== "Checkout failed"
+          ? error.message
+          : "Hubo un problema al iniciar el pago. Intenta de nuevo.",
         variant: "destructive",
       });
     } finally {
@@ -153,7 +158,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ items: [{ stripePriceId: product.stripePriceId, quantity: 1 }] }),
       });
 
-      if (!res.ok) throw new Error("Checkout failed");
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.message || "Checkout failed");
+      }
 
       const { url } = await res.json();
       if (url) {
@@ -163,7 +171,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       console.error("Buy now error:", error);
       toast({
         title: "Error al procesar el pago",
-        description: "Hubo un problema al iniciar el pago. Intenta de nuevo.",
+        description: error instanceof Error && error.message !== "Checkout failed"
+          ? error.message
+          : "Hubo un problema al iniciar el pago. Intenta de nuevo.",
         variant: "destructive",
       });
     } finally {

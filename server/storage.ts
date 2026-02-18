@@ -1,4 +1,4 @@
-import { type Product } from "@shared/schema";
+import { type Product, type ContactMessage, type NewsletterSubscriber } from "@shared/schema";
 import { getStripeClient } from "./stripeClient";
 
 function mapStripeProductToProduct(product: any, price: any): Product {
@@ -40,11 +40,19 @@ let cachedProducts: Product[] | null = null;
 let cacheTimestamp = 0;
 const CACHE_TTL = 60000;
 
+const contactMessages: ContactMessage[] = [];
+let contactMessageNextId = 1;
+
+const newsletterSubscribers: NewsletterSubscriber[] = [];
+let newsletterNextId = 1;
+
 export interface IStorage {
   getProducts(): Promise<Product[]>;
   getProductById(id: string): Promise<Product | undefined>;
   getProductsByCategory(category: string): Promise<Product[]>;
   getFeaturedProducts(): Promise<Product[]>;
+  addContactMessage(msg: { name: string; email: string; phone: string; message: string }): Promise<{ id: number }>;
+  addNewsletterSubscriber(email: string): Promise<{ id: number }>;
 }
 
 class StripeApiStorage implements IStorage {
@@ -97,6 +105,18 @@ class StripeApiStorage implements IStorage {
   async getFeaturedProducts(): Promise<Product[]> {
     const products = await this.fetchAllProducts();
     return products.filter(p => p.isFeatured);
+  }
+
+  async addContactMessage(msg: { name: string; email: string; phone: string; message: string }): Promise<{ id: number }> {
+    const id = contactMessageNextId++;
+    contactMessages.push({ ...msg, id, createdAt: new Date().toISOString() });
+    return { id };
+  }
+
+  async addNewsletterSubscriber(email: string): Promise<{ id: number }> {
+    const id = newsletterNextId++;
+    newsletterSubscribers.push({ email, id, createdAt: new Date().toISOString() });
+    return { id };
   }
 }
 

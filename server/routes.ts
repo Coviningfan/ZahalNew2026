@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { checkoutSchema } from "@shared/schema";
+import { checkoutSchema, contactMessageSchema, newsletterSchema } from "@shared/schema";
 import { getStripeClient, getStripePublishableKey } from "./stripeClient";
 import { z } from "zod";
 import rateLimit from "express-rate-limit";
@@ -145,6 +145,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error("Checkout error:", error);
       res.status(500).json({ message: "Failed to create checkout session" });
+    }
+  });
+
+  app.post("/api/contact", async (req, res) => {
+    try {
+      const data = contactMessageSchema.parse(req.body);
+      const result = await storage.addContactMessage(data);
+      res.json({ success: true, id: result.id });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid contact data", errors: error.errors });
+      }
+      console.error("Contact form error:", error);
+      res.status(500).json({ message: "Failed to submit contact form" });
+    }
+  });
+
+  app.post("/api/newsletter", async (req, res) => {
+    try {
+      const data = newsletterSchema.parse(req.body);
+      const result = await storage.addNewsletterSubscriber(data.email);
+      res.json({ success: true, id: result.id });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid email", errors: error.errors });
+      }
+      console.error("Newsletter error:", error);
+      res.status(500).json({ message: "Failed to subscribe" });
+    }
+  });
+
+  app.get("/api/checkout/verify", async (req, res) => {
+    try {
+      const sessionId = req.query.session_id as string;
+      if (!sessionId) return res.status(400).json({ valid: false });
+      const stripe = getStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      res.json({ valid: session.payment_status === "paid" });
+    } catch (error) {
+      console.error("Session verify error:", error);
+      res.json({ valid: false });
     }
   });
 

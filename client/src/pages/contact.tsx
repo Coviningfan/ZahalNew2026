@@ -22,17 +22,30 @@ export default function Contact() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed");
       toast({
         title: "Mensaje enviado",
         description: "Gracias por contactarnos. Te responderemos a la brevedad.",
       });
       setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch {
+      toast({
+        title: "Error al enviar",
+        description: "No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos por WhatsApp.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (

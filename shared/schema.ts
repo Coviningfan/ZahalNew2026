@@ -31,3 +31,16 @@ export const checkoutSchema = z.object({
 });
 
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
+
+export const contactMessageSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  phone: z.string().optional().default(""),
+  message: z.string().optional().default(""),
+});
+export type ContactMessage = z.infer<typeof contactMessageSchema> & { id: number; createdAt: string };
+
+export const newsletterSchema = z.object({
+  email: z.string().email(),
+});
+export type NewsletterSubscriber = z.infer<typeof newsletterSchema> & { id: number; createdAt: string };
