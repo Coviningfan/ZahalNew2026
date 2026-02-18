@@ -31,13 +31,13 @@ const brands = [
 function BrandItem({ brand }: { brand: typeof brands[0] }) {
   return (
     <div
-      className="flex-shrink-0 w-[130px] md:w-[170px] h-16 md:h-20 flex items-center justify-center px-3"
+      className="flex-shrink-0 w-[110px] md:w-[140px] h-14 md:h-18 flex items-center justify-center px-2"
       data-testid={`brand-logo-${brand.name.toLowerCase().replace(/ /g, "-")}`}
     >
       <img
         src={brand.logo}
         alt={brand.name}
-        className={`${brand.style} w-auto max-w-[140px] md:max-w-[180px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300`}
+        className={`${brand.style} w-auto max-w-[100px] md:max-w-[130px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300`}
       />
     </div>
   );
