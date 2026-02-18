@@ -24,15 +24,6 @@ const categories = [
   { value: "manos", label: "Limpieza de Manos" },
 ];
 
-const breadcrumbJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Inicio", item: BASE_URL },
-    { "@type": "ListItem", position: 2, name: "Productos", item: `${BASE_URL}/productos` },
-  ],
-};
-
 export default function Products() {
   const searchString = useSearch();
   const [, navigate] = useLocation();
@@ -43,7 +34,6 @@ export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState(categoriaParam || "all");
   const [searchQuery, setSearchQuery] = useState(buscarParam || "");
 
-  // Sync category state from URL (handles navigation from other pages + back/forward)
   useEffect(() => {
     if (categoriaParam && categories.some(c => c.value === categoriaParam)) {
       setSelectedCategory(categoriaParam);
@@ -52,7 +42,6 @@ export default function Products() {
     }
   }, [categoriaParam]);
 
-  // Sync search state from URL (handles browser back/forward)
   useEffect(() => {
     const val = buscarParam || "";
     setSearchQuery(prev => (prev !== val ? val : prev));
@@ -98,13 +87,40 @@ export default function Products() {
     return matchesSearch && matchesCategory;
   }) || [];
 
+  // Build page schemas: BreadcrumbList always + ItemList once products load
+  const breadcrumbSchema = {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "Productos", item: `${BASE_URL}/productos` },
+    ],
+  };
+
+  const pageSchemas = [
+    breadcrumbSchema,
+    ...(products && products.length > 0
+      ? [{
+          "@type": "ItemList",
+          name: "Productos Zahal - Desodorantes Naturales de Alumbre",
+          description: "Cat\u00e1logo completo de desodorantes naturales de piedra de alumbre para toda la familia.",
+          numberOfItems: products.length,
+          itemListElement: products.map((product, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: product.name,
+            url: `${BASE_URL}/productos/${product.id}`,
+          })),
+        }]
+      : []),
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
         title="Tienda de Productos Naturales"
         description="Cat\u00e1logo completo de desodorantes naturales de piedra de alumbre Zahal: sprays, roll-ons, sticks y kits de viaje. Env\u00edo a todo M\u00e9xico."
         path="/productos"
-        jsonLd={breadcrumbJsonLd}
+        jsonLd={pageSchemas}
       />
       <Navigation />
 
