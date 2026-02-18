@@ -20,6 +20,24 @@ const products = [
     }
   },
   {
+    name: "Limpiador de Manos Spray 30ml",
+    description: "Limpiador natural para manos en spray tamaño viaje. Hecho a base de sales minerales, sin alcohol, sin aroma. Deja la piel suave y limpia sin enjuagar. Rinde más que el gel porque no se volatiliza al contacto con la piel. No contamina el medio ambiente.",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/17.png?v=1753754062",
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/84.jpg?v=1753817049"
+    ],
+    price: 4200,
+    metadata: {
+      slug: "zahal-limpiador-de-manos-natural-30-ml",
+      category: "manos",
+      weight: "30ml",
+      features: JSON.stringify(["Sales minerales", "Sin alcohol", "Sin aroma", "Tamaño viaje", "No se enjuaga", "Eco-friendly"]),
+      inStock: "true",
+      isFeatured: "false",
+      isNew: "true",
+    }
+  },
+  {
     name: "Roll On con Aloe Vera 30ml",
     description: "Desodorante natural roll on elaborado con piedra de alumbre y extracto de sábila. Protección antibacterial por 24 horas. Sin clorhidrato de aluminio, sin alcohol, sin parabenos. Ideal para aplicación ligera y rápida.",
     images: [
@@ -50,6 +68,41 @@ const products = [
       category: "teens",
       weight: "30ml",
       features: JSON.stringify(["Con aroma fresco", "Para niños y adolescentes", "Con aloe vera", "Sin clorhidrato de aluminio", "Sin alcohol", "Sin parabenos", "Vegano", "Orgánico", "Piel sensible"]),
+      inStock: "true",
+      isFeatured: "false",
+      isNew: "true",
+    }
+  },
+  {
+    name: "Jabón Natural Árbol de Té 100g",
+    description: "Jabón corporal natural de amplio espectro elaborado con aceite esencial de árbol de té. Elimina bacterias, hongos y ayuda en el tratamiento del acné y pie de atleta. Ideal para después de tatuar tu piel, ya que evita infección y acelera la cicatrización.",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/14_e454b680-c7d9-44e4-8bdc-8b1984a6974d.png?v=1753753777",
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/15.png?v=1753753788"
+    ],
+    price: 6800,
+    metadata: {
+      slug: "zahal-jabon-natural-arbol-de-te-100g",
+      category: "cuidado",
+      weight: "100g",
+      features: JSON.stringify(["Aceite de árbol de té", "Antibacterial natural", "Auxiliar anti-acné", "Post-tatuaje", "Sin químicos", "100% biodegradable"]),
+      inStock: "true",
+      isFeatured: "false",
+      isNew: "true",
+    }
+  },
+  {
+    name: "Limpiador de Manos Spray 240ml",
+    description: "Limpiador natural para manos en spray tamaño familiar. Hecho a base de piedra de alumbre, sin alcohol, sin aroma. Libre de residuos, deja la piel suave y limpia. Rinde más que las presentaciones en gel. No contamina el medio ambiente.",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/16.png?v=1753753019"
+    ],
+    price: 9000,
+    metadata: {
+      slug: "zahal-limpiador-de-manos-natural-en-spray-240-ml",
+      category: "manos",
+      weight: "240ml",
+      features: JSON.stringify(["Piedra de alumbre", "Sin alcohol", "Sin aroma", "Tamaño familiar", "No se enjuaga", "Eco-friendly"]),
       inStock: "true",
       isFeatured: "false",
       isNew: "true",
@@ -127,6 +180,24 @@ const products = [
     }
   },
   {
+    name: "Spray para Pies 240ml",
+    description: "Desodorante natural en spray especialmente formulado para pies, elaborado con piedra de alumbre. Protección antibacterial hasta por 24 horas. Sin alcohol, sin aroma, vegano y orgánico. Aplicar en pies y calzado para mejores resultados.",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/12_8cd0f3a8-7767-4859-b2cd-c58573b9c24a.png?v=1753753663",
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/13.png?v=1753753677"
+    ],
+    price: 13000,
+    metadata: {
+      slug: "zahal-desodorante-natural-en-spray-para-pies-240ml",
+      category: "unisex",
+      weight: "240ml",
+      features: JSON.stringify(["Para pies y calzado", "Piedra de alumbre", "24h protección", "Sin alcohol", "Sin aroma", "pH neutro", "Vegano"]),
+      inStock: "true",
+      isFeatured: "false",
+      isNew: "true",
+    }
+  },
+  {
     name: "Spray Corporal 240ml",
     description: "Desodorante corporal natural en spray de gran tamaño. Elaborado con piedra de alumbre. Protección antibacterial hasta por 24 horas. Ideal para todo el cuerpo. Sin clorhidrato de aluminio, sin alcohol, sin parabenos.",
     images: [
@@ -146,19 +217,38 @@ const products = [
   },
   {
     name: "Kit Eco Viajero",
-    description: "Kit completo de viaje con desodorantes naturales + limpiador de manos + jabón. Tamaños permitidos en puntos de revisión durante viajes. Permitido en aguas y playas protegidas. Sin aceites ni químicos que perjudiquen el medio ambiente.",
+    description: "Kit completo de viaje con desodorantes naturales + limpiador de manos + jabón. Tamaños permitidos en puntos de revisión durante viajes. Permitido en aguas y playas protegidas. Incluye 2 jabones de árbol de té 30g, 1 Roll On 30ml, 1 Spray limpiador 30ml y 1 Eco 3 recargable 10g.",
     images: [
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/26.png?v=1753740213",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_momento_2.jpg?v=1753740213"
     ],
-    price: 15000,
+    price: 20700,
     metadata: {
       slug: "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
       category: "travel",
       weight: "Kit",
-      features: JSON.stringify(["Kit completo", "Tamaño viaje", "Eco-friendly", "Sin químicos", "Biodegradable", "Vegano", "Orgánico", "Ideal para viajeros"]),
+      features: JSON.stringify(["Kit completo 5 piezas", "Tamaño viaje", "Eco-friendly", "Sin químicos", "Biodegradable", "Vegano", "Orgánico", "Ideal para viajeros"]),
       inStock: "true",
       isFeatured: "true",
       isNew: "false",
+    }
+  },
+  {
+    name: "Eco Recargable 80g",
+    description: "Desodorante natural recargable hasta 3 veces. Elaborado con piedra de alumbre en formato spray. Solo agrega agua purificada hasta la línea verde y déjalo reposar 12 horas para reactivar los cristales. Sin clorhidrato de aluminio, sin parabenos, sin alcohol.",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/11.png?v=1753740323",
+      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/31.jpg?v=1753740498"
+    ],
+    price: 16300,
+    metadata: {
+      slug: "zahal-desodorante-natural-eco-recargable-3-veces-80-g",
+      category: "unisex",
+      weight: "80g",
+      features: JSON.stringify(["Recargable 3 veces", "Piedra de alumbre", "Eco-friendly", "Sin parabenos", "Sin alcohol", "Piel sensible"]),
+      inStock: "true",
+      isFeatured: "false",
+      isNew: "true",
     }
   },
   {
@@ -202,10 +292,14 @@ const products = [
 async function seedProducts() {
   const stripe = getStripeClient();
 
+  const existingProducts = await stripe.products.list({ active: true, limit: 100 });
+  const existingSlugs = new Set(
+    existingProducts.data.map(p => p.metadata?.slug).filter(Boolean)
+  );
+
   for (const product of products) {
-    const existing = await stripe.products.search({ query: `name:'${product.name.replace(/'/g, "\\'")}'` });
-    if (existing.data.length > 0) {
-      console.log(`Skipping "${product.name}" - already exists (${existing.data[0].id})`);
+    if (existingSlugs.has(product.metadata.slug)) {
+      console.log(`Skipping "${product.name}" - already exists`);
       continue;
     }
 
