@@ -58,7 +58,7 @@ export default function AboutSection() {
               <img 
                 src={zahalEscudo} 
                 alt="Libre de parabenos, clorhidrato de aluminio y alcohol" 
-                className="w-32 h-32 lg:w-36 lg:h-36 object-contain pointer-events-none select-none"
+                className="w-40 h-40 lg:w-44 lg:h-44 object-contain pointer-events-none select-none"
               />
             </div>
           </div>
