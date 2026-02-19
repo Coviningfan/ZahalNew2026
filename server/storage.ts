@@ -1,5 +1,8 @@
 import { type Product, type ContactMessage, type NewsletterSubscriber } from "@shared/schema";
 import { getStripeClient } from "./stripeClient";
+import pg from "pg";
+
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 
 function mapStripeProductToProduct(product: any, price: any): Product {
   const metadata = product.metadata || {};
@@ -39,12 +42,6 @@ function mapStripeProductToProduct(product: any, price: any): Product {
 let cachedProducts: Product[] | null = null;
 let cacheTimestamp = 0;
 const CACHE_TTL = 60000;
-
-const contactMessages: ContactMessage[] = [];
-let contactMessageNextId = 1;
-
-const newsletterSubscribers: NewsletterSubscriber[] = [];
-let newsletterNextId = 1;
 
 export interface IStorage {
   getProducts(): Promise<Product[]>;
@@ -108,15 +105,19 @@ class StripeApiStorage implements IStorage {
   }
 
   async addContactMessage(msg: { name: string; email: string; phone: string; message: string }): Promise<{ id: number }> {
-    const id = contactMessageNextId++;
-    contactMessages.push({ ...msg, id, createdAt: new Date().toISOString() });
-    return { id };
+    const result = await pool.query(
+      `INSERT INTO contact_messages (name, email, phone, message) VALUES ($1, $2, $3, $4) RETURNING id`,
+      [msg.name, msg.email, msg.phone || '', msg.message || '']
+    );
+    return { id: result.rows[0].id };
   }
 
   async addNewsletterSubscriber(email: string): Promise<{ id: number }> {
-    const id = newsletterNextId++;
-    newsletterSubscribers.push({ email, id, createdAt: new Date().toISOString() });
-    return { id };
+    const result = await pool.query(
+      `INSERT INTO newsletter_subscribers (email) VALUES ($1) ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email RETURNING id`,
+      [email]
+    );
+    return { id: result.rows[0].id };
   }
 }
 

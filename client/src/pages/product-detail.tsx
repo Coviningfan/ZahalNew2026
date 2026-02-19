@@ -13,6 +13,7 @@ import { Link } from "wouter";
 import { useState } from "react";
 import type { Product } from "@shared/schema";
 import SEO from "@/components/seo";
+import LaunchBanner from "@/components/launch-banner";
 import { BASE_URL } from "@/lib/config";
 
 export default function ProductDetail() {
@@ -135,14 +136,7 @@ export default function ProductDetail() {
       <Navigation />
       
       <main id="main-content" className="pt-20">
-        <div className="bg-amber-50 border-b border-amber-200">
-          <div className="container mx-auto px-4 lg:px-8 py-3 flex items-center justify-center gap-3 text-center">
-            <span className="text-amber-600 text-lg flex-shrink-0">⚠️</span>
-            <p className="text-amber-800 text-sm font-medium">
-              Estamos en modo de prueba. Las compras estarán disponibles el 20 de febrero a las 10:00 AM (hora CDMX). ¡Falta poco!
-            </p>
-          </div>
-        </div>
+        <LaunchBanner />
         <div className="container mx-auto px-4 lg:px-8 py-8">
           <Link href="/productos" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 gap-1.5" data-testid="link-back">
             <ArrowLeft className="h-4 w-4" />
