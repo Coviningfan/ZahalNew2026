@@ -1,8 +1,10 @@
-import { type Product, type ContactMessage, type NewsletterSubscriber } from "@shared/schema";
+import { type Product, contactMessages, newsletterSubscribers } from "@shared/schema";
 import { getStripeClient } from "./stripeClient";
+import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const db = drizzle(pool);
 
 function mapStripeProductToProduct(product: any, price: any): Product {
   const metadata = product.metadata || {};
@@ -105,19 +107,20 @@ class StripeApiStorage implements IStorage {
   }
 
   async addContactMessage(msg: { name: string; email: string; phone: string; message: string }): Promise<{ id: number }> {
-    const result = await pool.query(
-      `INSERT INTO contact_messages (name, email, phone, message) VALUES ($1, $2, $3, $4) RETURNING id`,
-      [msg.name, msg.email, msg.phone || '', msg.message || '']
-    );
-    return { id: result.rows[0].id };
+    const [row] = await db.insert(contactMessages).values({
+      name: msg.name,
+      email: msg.email,
+      phone: msg.phone || '',
+      message: msg.message || '',
+    }).returning({ id: contactMessages.id });
+    return { id: row.id };
   }
 
   async addNewsletterSubscriber(email: string): Promise<{ id: number }> {
-    const result = await pool.query(
-      `INSERT INTO newsletter_subscribers (email) VALUES ($1) ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email RETURNING id`,
-      [email]
-    );
-    return { id: result.rows[0].id };
+    const [row] = await db.insert(newsletterSubscribers).values({ email })
+      .onConflictDoUpdate({ target: newsletterSubscribers.email, set: { email } })
+      .returning({ id: newsletterSubscribers.id });
+    return { id: row.id };
   }
 }
 
