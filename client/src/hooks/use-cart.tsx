@@ -1,6 +1,11 @@
-import { useState, useEffect, useCallback, createContext, useContext } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext } from "react";
 import type { Product, CartItem } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+
+function safePrice(val: string | number): number {
+  const n = typeof val === "number" ? val : parseFloat(val);
+  return Number.isFinite(n) ? n : 0;
+}
 
 interface CartContextType {
   cartItems: (CartItem & { product: Product })[];
@@ -35,24 +40,32 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [productCache, setProductCache] = useState<Map<string, Product>>(new Map());
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const { toast } = useToast();
+  const fetchedIdsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     saveCart(rawItems);
   }, [rawItems]);
 
+  const cartProductIds = useMemo(
+    () => rawItems.map(i => i.productId).sort().join(","),
+    [rawItems]
+  );
+
   useEffect(() => {
-    const missingIds = rawItems.map(i => i.productId).filter(id => !productCache.has(id));
-    if (missingIds.length === 0 && productCache.size > 0) return;
-    
+    const ids = cartProductIds ? cartProductIds.split(",") : [];
+    const neededIds = ids.filter(id => !fetchedIdsRef.current.has(id));
+    if (neededIds.length === 0) return;
+
     fetch("/api/products")
       .then(r => r.json())
       .then((products: Product[]) => {
+        products.forEach(p => fetchedIdsRef.current.add(p.id));
         setProductCache(prev => {
           const next = new Map(prev);
           products.forEach(p => next.set(p.id, p));
           return next;
         });
-        
+
         setRawItems(prev => prev.map(item => {
           const p = products.find(prod => prod.id === item.productId);
           if (p && p.stripePriceId !== item.stripePriceId) {
@@ -62,7 +75,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }));
       })
       .catch(() => {});
-  }, [rawItems.length]);
+  }, [cartProductIds]);
 
   const cartItems = rawItems
     .map(item => {
@@ -109,7 +122,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const totalItems = rawItems.reduce((sum, i) => sum + i.quantity, 0);
-  const totalPrice = cartItems.reduce((sum, i) => sum + (parseFloat(i.product.price) * i.quantity), 0);
+  const totalPrice = cartItems.reduce((sum, i) => sum + (safePrice(i.product.price) * i.quantity), 0);
 
   const checkout = useCallback(async () => {
     if (rawItems.length === 0) return;

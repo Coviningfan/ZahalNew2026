@@ -31,20 +31,15 @@ export default function Products() {
   const categoriaParam = urlParams.get("categoria");
   const buscarParam = urlParams.get("buscar");
 
-  const [selectedCategory, setSelectedCategory] = useState(categoriaParam || "all");
+  const selectedCategory =
+    categoriaParam && categories.some(c => c.value === categoriaParam)
+      ? categoriaParam
+      : "all";
+
   const [searchQuery, setSearchQuery] = useState(buscarParam || "");
 
   useEffect(() => {
-    if (categoriaParam && categories.some(c => c.value === categoriaParam)) {
-      setSelectedCategory(categoriaParam);
-    } else if (!categoriaParam) {
-      setSelectedCategory("all");
-    }
-  }, [categoriaParam]);
-
-  useEffect(() => {
-    const val = buscarParam || "";
-    setSearchQuery(prev => (prev !== val ? val : prev));
+    setSearchQuery(buscarParam || "");
   }, [buscarParam]);
 
   const updateUrl = (newCategory: string, newSearch: string) => {
@@ -56,7 +51,6 @@ export default function Products() {
   };
 
   const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value);
     updateUrl(value, searchQuery);
   };
 
@@ -68,7 +62,6 @@ export default function Products() {
 
   const handleClearFilters = () => {
     setSearchQuery("");
-    setSelectedCategory("all");
     navigate("/productos", { replace: true });
   };
 
