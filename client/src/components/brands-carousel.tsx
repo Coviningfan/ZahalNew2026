@@ -43,13 +43,18 @@ function BrandItem({ brand }: { brand: typeof brands[0] }) {
     <div
       className={`flex-shrink-0 ${brand.width} h-16 md:h-20 flex items-center justify-center`}
       data-testid={`brand-logo-${brand.name.toLowerCase().replace(/ /g, "-")}`}
+      onContextMenu={(e) => e.preventDefault()}
     >
-      <img
-        src={brand.logo}
-        alt={brand.name}
-        className={`${brand.style} w-auto max-w-[150px] md:max-w-[190px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 pointer-events-none select-none ${brand.invert ? "invert" : ""}`}
-        draggable={false}
-        onContextMenu={(e) => e.preventDefault()}
+      <div
+        role="img"
+        aria-label={brand.name}
+        className={`${brand.style} w-full max-w-[150px] md:max-w-[190px] grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 pointer-events-none select-none ${brand.invert ? "invert" : ""}`}
+        style={{
+          backgroundImage: `url(${brand.logo})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
       />
     </div>
   );
