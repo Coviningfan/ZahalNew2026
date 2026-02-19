@@ -10,6 +10,7 @@ import { useCart } from "@/hooks/use-cart";
 import { Shield, Leaf, Award, ArrowLeft, Check, Truck, ShieldCheck, ShoppingCart, Zap } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { Link } from "wouter";
+import { useState } from "react";
 import type { Product } from "@shared/schema";
 import SEO from "@/components/seo";
 import { BASE_URL } from "@/lib/config";
@@ -18,6 +19,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { toast } = useToast();
   const { addToCart, buyNow, isCheckingOut } = useCart();
+  const [selectedImage, setSelectedImage] = useState(0);
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ["/api/products", id],
@@ -151,7 +153,7 @@ export default function ProductDetail() {
             <div className="relative">
               <div className="bg-card/50 rounded-2xl overflow-hidden">
                 <img
-                  src={product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"}
+                  src={product.images[selectedImage] || product.images[0] || "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"}
                   alt={product.name}
                   className="w-full aspect-square object-cover"
                   data-testid="img-product"
@@ -172,7 +174,8 @@ export default function ProductDetail() {
                       key={i}
                       src={img}
                       alt={`${product.name} ${i + 1}`}
-                      className="w-20 h-20 object-cover rounded-xl border-2 border-border/50 hover:border-primary cursor-pointer transition-colors"
+                      className={`w-20 h-20 object-cover rounded-xl border-2 cursor-pointer transition-colors ${selectedImage === i ? "border-primary" : "border-border/50 hover:border-primary/60"}`}
+                      onClick={() => setSelectedImage(i)}
                       data-testid={`img-thumbnail-${i}`}
                     />
                   ))}

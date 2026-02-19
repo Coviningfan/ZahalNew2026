@@ -36,7 +36,7 @@ export default function CheckoutSuccess() {
       .finally(() => {
         setIsVerifying(false);
       });
-  }, [sessionId]);
+  }, [sessionId, clearCart]);
 
   if (isVerifying) {
     return (

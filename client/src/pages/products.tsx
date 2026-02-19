@@ -20,6 +20,7 @@ const categories = [
   { value: "sport", label: "Sport" },
   { value: "teens", label: "Teens" },
   { value: "travel", label: "Travel" },
+  { value: "soap", label: "Jabón" },
   { value: "cuidado", label: "Cuidado Personal" },
   { value: "manos", label: "Limpieza de Manos" },
 ];
