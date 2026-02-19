@@ -138,6 +138,8 @@ export default function HeroSection() {
             >
               <img
                 src={s.bgImage}
+                fetchPriority={i === 0 ? "high" : "auto"}
+                loading={i === 0 ? "eager" : "lazy"}
                 alt=""
                 className="w-full h-full object-cover object-center"
               />
@@ -235,6 +237,8 @@ export default function HeroSection() {
           >
             <img
               src={s.bgImage}
+              fetchPriority={i === 0 ? "high" : "auto"}
+              loading={i === 0 ? "eager" : "lazy"}
               alt=""
               className="w-full h-full object-cover"
             />
