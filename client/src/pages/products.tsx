@@ -122,7 +122,7 @@ export default function Products() {
           <div className="container mx-auto px-4 lg:px-8 py-3 flex items-center justify-center gap-3 text-center">
             <span className="text-amber-600 text-lg flex-shrink-0">⚠️</span>
             <p className="text-amber-800 text-sm font-medium">
-              Actualmente esto es un pedido de prueba. La página sigue en construcción. Podrás realizar compras a partir del 20 de febrero a las 10:00 AM (hora Ciudad de México).
+              Estamos en modo de prueba. Las compras estarán disponibles el 20 de febrero a las 10:00 AM (hora CDMX). ¡Falta poco!
             </p>
           </div>
         </div>
