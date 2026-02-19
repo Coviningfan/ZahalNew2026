@@ -47,7 +47,9 @@ function BrandItem({ brand }: { brand: typeof brands[0] }) {
       <img
         src={brand.logo}
         alt={brand.name}
-        className={`${brand.style} w-auto max-w-[150px] md:max-w-[190px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 ${brand.invert ? "invert" : ""}`}
+        className={`${brand.style} w-auto max-w-[150px] md:max-w-[190px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 pointer-events-none select-none ${brand.invert ? "invert" : ""}`}
+        draggable={false}
+        onContextMenu={(e) => e.preventDefault()}
       />
     </div>
   );
