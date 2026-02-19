@@ -14,7 +14,7 @@ import SEO from "@/components/seo";
 import { BASE_URL } from "@/lib/config";
 
 const categories = [
-  { value: "all", label: "Todas las categor\u00edas" },
+  { value: "all", label: "Todas las categorías" },
   { value: "unisex", label: "Unisex" },
   { value: "hombre", label: "Hombre" },
   { value: "sport", label: "Sport" },
@@ -95,7 +95,7 @@ export default function Products() {
       ? [{
           "@type": "ItemList",
           name: "Productos Zahal - Desodorantes Naturales de Alumbre",
-          description: "Cat\u00e1logo completo de desodorantes naturales de piedra de alumbre para toda la familia.",
+          description: "Catálogo completo de desodorantes naturales de piedra de alumbre para toda la familia.",
           numberOfItems: products.length,
           itemListElement: products.map((product, index) => ({
             "@type": "ListItem",
@@ -111,7 +111,7 @@ export default function Products() {
     <div className="min-h-screen bg-background">
       <SEO
         title="Tienda de Productos Naturales"
-        description="Cat\u00e1logo completo de desodorantes naturales de piedra de alumbre Zahal: sprays, roll-ons, sticks y kits de viaje. Env\u00edo a todo M\u00e9xico."
+        description="Catálogo completo de desodorantes naturales de piedra de alumbre Zahal: sprays, roll-ons, sticks y kits de viaje. Envío a todo México."
         path="/productos"
         jsonLd={pageSchemas}
       />
@@ -121,12 +121,12 @@ export default function Products() {
         <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="text-center mb-10">
-              <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Cat\u00e1logo</p>
+              <p className="text-primary font-semibold text-sm tracking-wider uppercase mb-3">Catálogo</p>
               <h1 className="text-3xl lg:text-5xl font-bold text-foreground mb-4 font-serif">
                 Nuestros Productos
               </h1>
               <p className="text-muted-foreground text-base lg:text-lg max-w-2xl mx-auto">
-                Descubre nuestra l\u00ednea completa de cuidado natural con piedra de alumbre
+                Descubre nuestra línea completa de cuidado natural con piedra de alumbre
               </p>
             </div>
 
@@ -144,7 +144,7 @@ export default function Products() {
               <Select value={selectedCategory} onValueChange={handleCategoryChange}>
                 <SelectTrigger className="w-full md:w-[220px] bg-white h-11" data-testid="select-category">
                   <SlidersHorizontal className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <SelectValue placeholder="Filtrar por categor\u00eda" />
+                  <SelectValue placeholder="Filtrar por categoría" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (

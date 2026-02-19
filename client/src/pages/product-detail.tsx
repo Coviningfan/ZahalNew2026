@@ -82,7 +82,7 @@ export default function ProductDetail() {
     sport: "Sport",
     travel: "Travel",
     teens: "Teens",
-    soap: "Jab\u00f3n",
+    soap: "Jabón",
   };
 
   const productJsonLd = [
@@ -201,7 +201,7 @@ export default function ProductDetail() {
                 <div className="bg-card rounded-xl p-5 border border-border/40">
                   <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
                     <Shield className="h-4 w-4 text-primary" />
-                    Caracter\u00edsticas
+                    Características
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
                     {product.features.map((feature, index) => (
@@ -257,7 +257,7 @@ export default function ProductDetail() {
               <div className="grid grid-cols-3 gap-3 pt-2">
                 <div className="text-center p-3 bg-card rounded-xl border border-border/30">
                   <Truck className="h-4 w-4 text-primary mx-auto mb-1" />
-                  <p className="text-xs text-muted-foreground">Env\u00edo a todo M\u00e9xico</p>
+                  <p className="text-xs text-muted-foreground">Envío a todo México</p>
                 </div>
                 <div className="text-center p-3 bg-card rounded-xl border border-border/30">
                   <ShieldCheck className="h-4 w-4 text-primary mx-auto mb-1" />
@@ -271,7 +271,7 @@ export default function ProductDetail() {
 
               {!product.inStock && (
                 <p className="text-destructive text-sm">
-                  Este producto no est\u00e1 disponible actualmente
+                  Este producto no está disponible actualmente
                 </p>
               )}
             </div>
