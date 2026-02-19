@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import alumbreNatural from "@assets/image_16_1771348502523.png";
-import zahalEscudo from "@assets/zahalescudo_1771431876032.png";
+import zahalEscudo from "@assets/Libre_de_escudoSin_Fondo_1771537061370.png";
 
 const benefits = [
   "Sin clorhidrato de aluminio",
