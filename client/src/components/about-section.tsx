@@ -54,11 +54,11 @@ export default function AboutSection() {
               alt="Piedra de Alumbre Natural Zahal" 
               className="w-full h-auto rounded-2xl shadow-lg" 
             />
-            <div className="absolute -bottom-5 -left-5 shadow-xl">
+            <div className="absolute -bottom-8 -left-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl p-4 shadow-xl">
               <img 
                 src={zahalEscudo} 
                 alt="Libre de parabenos, clorhidrato de aluminio y alcohol" 
-                className="w-28 h-28 lg:w-32 lg:h-32 object-contain rounded-2xl"
+                className="w-36 h-36 lg:w-44 lg:h-44 object-contain pointer-events-none select-none"
               />
             </div>
           </div>
