@@ -13,7 +13,7 @@ interface SEOProps {
   jsonLd?: JsonLdSchema | JsonLdSchema[];
 }
 
-const DEFAULT_OG_IMAGE = `${BASE_URL}/favicon.svg`;
+const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export default function SEO({
   title,
@@ -49,6 +49,8 @@ export default function SEO({
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content="es_MX" />
       <meta property="og:image" content={image} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />

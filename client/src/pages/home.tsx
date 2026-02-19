@@ -18,10 +18,16 @@ const homeJsonLd = [
     url: BASE_URL,
     logo: {
       "@type": "ImageObject",
-      url: `${BASE_URL}/favicon.svg`,
+      url: `${BASE_URL}/og-image.png`,
     },
     description:
       "Desodorantes naturales de piedra de alumbre. Sin aluminio, sin químicos. Protección 24h. Envío a todo México.",
+    sameAs: [
+      "https://www.facebook.com/zahalnatural",
+      "https://www.instagram.com/zahalnatural",
+      "https://www.tiktok.com/@zahalnatural",
+      "https://wa.me/5215545327249",
+    ],
     address: {
       "@type": "PostalAddress",
       addressCountry: "MX",
@@ -29,6 +35,8 @@ const homeJsonLd = [
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
+      telephone: "+52-55-4532-7249",
+      email: "contacto@zahal.com.mx",
       availableLanguage: "Spanish",
     },
   },

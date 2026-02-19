@@ -1,0 +1,35 @@
+ High Impact
+1. The default OG image is favicon.svg
+seo.tsx falls back to ${BASE_URL}/favicon.svg and index.html has no og:image at all. Every social share that doesn't have an explicit product image — homepage, catalog, about, contact — shows nothing or a tiny icon. You need a proper 1200×630 PNG as the default OG image, referenced in both places.
+
+2. FAQPage JSON-LD on /preguntas-frecuentes
+The FAQ page has no structured data. FAQPage schema gets your Q&A expanded directly in Google SERPs — accordion results that dwarf a normal blue link. Highest SERP real-estate gain for zero effort given the page already exists.
+
+3. No <lastmod> in sitemap
+The sitemap generates <changefreq> and <priority> but no <lastmod>. Google officially ignores changefreq and priority — <lastmod> is the only signal it actually uses to decide crawl frequency. Static pages should get today's date; product pages ideally reflect the Stripe product's updated timestamp.
+
+4. og:image missing from index.html
+Social scrapers (WhatsApp link previews, iMessage, Telegram) don't execute JavaScript. They hit the raw HTML. Right now they get zero OG image. Add the static fallback OG image directly in index.html.
+
+🟡 Medium Impact
+5. No apple-touch-icon
+Missing from index.html. iOS uses this for home screen bookmarks and iMessage link previews. One line: <link rel="apple-touch-icon" href="/apple-touch-icon.png"> with a 180×180 PNG.
+
+6. sameAs on Organization schema
+The Organization JSON-LD has no sameAs array. Adding Facebook, Instagram, and WhatsApp profile URLs helps Google connect Zahal's Knowledge Panel and improves entity disambiguation.
+
+7. Hero LCP preload
+No <link rel="preload"> for the hero image in index.html. The hero is almost certainly the Largest Contentful Paint element. A preload hint on the hero PNG/WebP can drop LCP by 300–600ms.
+
+8. og:image:width / og:image:height
+Missing from seo.tsx. Facebook's scraper uses these to validate images without downloading them. Without them, Facebook may reject or delay rendering the preview.
+
+9. theme-color meta
+Missing from index.html. One line — sets the browser chrome color on Android and Chrome. Also contributes to PWA installability signals.
+
+🟢 Low Impact / Nice-to-Have
+10. telephone + email on ContactPoint schema — fills out the Knowledge Panel more completely.
+
+11. <link rel="sitemap" href="/sitemap.xml"> in <head> — redundant with robots.txt but some crawlers look for it.
+
+12. aggregateRating on Product schema — unlocks star ratings in SERPs, but requires real review data to add. Worth planning for when you have reviews.

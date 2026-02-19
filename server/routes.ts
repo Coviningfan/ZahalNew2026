@@ -194,25 +194,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/sitemap.xml", async (_req, res) => {
     const baseUrl = process.env.BASE_URL || `${_req.protocol}://${_req.get("host")}`;
 
+    const today = new Date().toISOString().split("T")[0];
+
     const staticPages = [
-      { url: "/",                     priority: "1.0", changefreq: "weekly"  },
-      { url: "/productos",            priority: "0.9", changefreq: "weekly"  },
-      { url: "/nosotros",             priority: "0.7", changefreq: "monthly" },
-      { url: "/contacto",             priority: "0.7", changefreq: "monthly" },
-      { url: "/preguntas-frecuentes", priority: "0.6", changefreq: "monthly" },
-      { url: "/donde-encontrarnos",   priority: "0.5", changefreq: "monthly" },
-      { url: "/privacidad",           priority: "0.3", changefreq: "yearly"  },
-      { url: "/terminos",             priority: "0.3", changefreq: "yearly"  },
+      { url: "/",                     lastmod: today },
+      { url: "/productos",            lastmod: today },
+      { url: "/nosotros",             lastmod: today },
+      { url: "/contacto",             lastmod: today },
+      { url: "/preguntas-frecuentes", lastmod: today },
+      { url: "/donde-encontrarnos",   lastmod: today },
+      { url: "/privacidad",           lastmod: "2026-02-18" },
+      { url: "/terminos",             lastmod: "2026-02-18" },
     ];
 
-    // Fetch all products and add their pages dynamically
-    let productPages: { url: string; priority: string; changefreq: string }[] = [];
+    let productPages: { url: string; lastmod: string }[] = [];
     try {
       const products = await storage.getProducts();
       productPages = products.map(p => ({
         url: `/productos/${p.id}`,
-        priority: "0.8",
-        changefreq: "weekly",
+        lastmod: today,
       }));
     } catch (err) {
       console.error("Sitemap: failed to fetch products", err);
@@ -224,8 +224,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages.map(p => `  <url>
     <loc>${baseUrl}${p.url}</loc>
-    <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
+    <lastmod>${p.lastmod}</lastmod>
   </url>`).join("\n")}
 </urlset>`;
 
