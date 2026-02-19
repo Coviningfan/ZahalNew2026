@@ -5,6 +5,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { getStripeClient } from "./stripeClient";
 
 const app = express();
+app.set("trust proxy", 1);
 
 const isDev = process.env.NODE_ENV !== "production";
 

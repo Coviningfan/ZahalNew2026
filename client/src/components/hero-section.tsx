@@ -136,9 +136,10 @@ export default function HeroSection() {
               className="absolute inset-0 transition-opacity duration-700 ease-in-out"
               style={{ opacity: i === current ? 1 : 0 }}
             >
+              {/* eslint-disable-next-line react/no-unknown-property */}
               <img
                 src={s.bgImage}
-                fetchPriority={i === 0 ? "high" : "auto"}
+                {...(i === 0 ? { fetchpriority: "high" } : {})}
                 loading={i === 0 ? "eager" : "lazy"}
                 alt=""
                 className="w-full h-full object-cover object-center"
@@ -235,9 +236,10 @@ export default function HeroSection() {
             className="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out"
             style={{ opacity: i === current ? 1 : 0 }}
           >
+            {/* eslint-disable-next-line react/no-unknown-property */}
             <img
               src={s.bgImage}
-              fetchPriority={i === 0 ? "high" : "auto"}
+              {...(i === 0 ? { fetchpriority: "high" } : {})}
               loading={i === 0 ? "eager" : "lazy"}
               alt=""
               className="w-full h-full object-cover"
