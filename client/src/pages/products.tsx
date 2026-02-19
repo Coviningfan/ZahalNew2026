@@ -118,6 +118,14 @@ export default function Products() {
       <Navigation />
 
       <main id="main-content" className="pt-20">
+        <div className="bg-amber-50 border-b border-amber-200">
+          <div className="container mx-auto px-4 lg:px-8 py-3 flex items-center justify-center gap-3 text-center">
+            <span className="text-amber-600 text-lg flex-shrink-0">⚠️</span>
+            <p className="text-amber-800 text-sm font-medium">
+              Actualmente esto es un pedido de prueba. La página sigue en construcción. Podrás realizar compras a partir del 20 de febrero a las 10:00 AM (hora Ciudad de México).
+            </p>
+          </div>
+        </div>
         <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="text-center mb-10">
