@@ -164,9 +164,9 @@ export default function HeroSection() {
                 )}
                 {slide.showLogos && (
                   <div className="flex items-center gap-3 justify-end mb-3">
-                    <img src={zahalLogo} alt="Zahal" className="h-10 w-auto object-contain brightness-0 invert drop-shadow-lg" />
+                    <div role="img" aria-label="Zahal" className="h-10 w-20 pointer-events-none select-none brightness-0 invert drop-shadow-lg" style={{ backgroundImage: `url(${zahalLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
                     <span className="text-white/80 text-lg font-bold">×</span>
-                    <img src={enatureLogo} alt="eNature" className="h-10 w-auto object-contain drop-shadow-lg" />
+                    <div role="img" aria-label="eNature" className="h-10 w-20 pointer-events-none select-none drop-shadow-lg" style={{ backgroundImage: `url(${enatureLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
                   </div>
                 )}
                 {slide.alignRight ? (
@@ -317,9 +317,9 @@ export default function HeroSection() {
 
         {slide.showLogos && (
           <div className="absolute bottom-14 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
-            <img src={zahalLogo} alt="Zahal" className="h-12 md:h-16 w-auto object-contain brightness-0 invert" />
+            <div role="img" aria-label="Zahal" className="h-12 md:h-16 w-24 md:w-32 pointer-events-none select-none brightness-0 invert" style={{ backgroundImage: `url(${zahalLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
             <span className="text-white/80 text-2xl font-bold">×</span>
-            <img src={enatureLogo} alt="eNature" className="h-12 md:h-16 w-auto object-contain" />
+            <div role="img" aria-label="eNature" className="h-12 md:h-16 w-24 md:w-32 pointer-events-none select-none" style={{ backgroundImage: `url(${enatureLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
           </div>
         )}
 

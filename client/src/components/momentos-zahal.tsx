@@ -311,7 +311,7 @@ export default function MomentosZahal() {
           <div className="flex flex-col items-center justify-center gap-4 mb-4">
             <div className="flex items-center gap-3">
               <span className="text-3xl lg:text-4xl font-bold text-foreground font-serif">Elige tu</span>
-              <img src={zahalLogo} alt="Zahal" className="h-10 lg:h-12 w-auto object-contain" />
+              <div role="img" aria-label="Zahal" className="h-10 lg:h-12 w-24 lg:w-28 pointer-events-none select-none" style={{ backgroundImage: `url(${zahalLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
               <span className="text-3xl lg:text-4xl font-bold text-foreground font-serif">ideal</span>
             </div>
           </div>

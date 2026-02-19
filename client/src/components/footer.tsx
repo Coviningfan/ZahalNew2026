@@ -34,10 +34,11 @@ export default function Footer() {
         <div className="py-14 lg:py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-1">
             <div className="mb-5">
-              <img 
-                src={zahalLogo} 
-                alt="Zahal Natural" 
-                className="h-10 w-auto object-contain brightness-0 invert"
+              <div
+                role="img"
+                aria-label="Zahal Natural"
+                className="h-10 w-28 pointer-events-none select-none brightness-0 invert"
+                style={{ backgroundImage: `url(${zahalLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "left center" }}
               />
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">

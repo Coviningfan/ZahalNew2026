@@ -57,7 +57,7 @@ function StoreItem({ store }: { store: { name: string; logo: string | null } }) 
     >
       {store.logo ? (
         <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center">
-          <img src={store.logo} alt={store.name} className="h-7 w-auto max-w-[40px] object-contain" />
+          <div role="img" aria-label={store.name} className="h-7 w-[40px] pointer-events-none select-none" style={{ backgroundImage: `url(${store.logo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
         </div>
       ) : (
         <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-primary/5 rounded-lg">

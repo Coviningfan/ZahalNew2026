@@ -28,10 +28,11 @@ export default function Navigation() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-[72px]">
           <Link href="/" className="flex items-center" data-testid="link-home">
-            <img 
-              src={zahalLogo} 
-              alt="Zahal Natural" 
-              className="h-9 lg:h-11 w-auto object-contain"
+            <div
+              role="img"
+              aria-label="Zahal Natural"
+              className="h-9 lg:h-11 w-24 lg:w-28 pointer-events-none select-none"
+              style={{ backgroundImage: `url(${zahalLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "left center" }}
             />
           </Link>
 
