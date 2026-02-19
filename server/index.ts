@@ -6,11 +6,24 @@ import { getStripeClient } from "./stripeClient";
 
 const app = express();
 
+const isDev = process.env.NODE_ENV !== "production";
+
 app.use((req, res, next) => {
+  const scriptEval = isDev ? " 'unsafe-eval'" : "";
+  const csp = [
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline'${scriptEval} https://js.stripe.com https://www.googletagmanager.com`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    `connect-src 'self' https://api.stripe.com https://www.google-analytics.com https://analytics.google.com https://*.replit.dev https://*.replit.app wss://*.replit.dev wss://*.replit.app`,
+    "frame-src https://js.stripe.com https://hooks.stripe.com",
+  ].join("; ");
+
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://api.stripe.com https://*.replit.dev https://*.replit.app wss://*.replit.dev wss://*.replit.app; frame-src https://js.stripe.com https://hooks.stripe.com;");
+  res.setHeader('Content-Security-Policy', csp);
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   next();
