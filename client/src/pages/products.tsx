@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Search, SlidersHorizontal } from "lucide-react";
 import type { Product } from "@shared/schema";
 import SEO from "@/components/seo";
-import LaunchBanner from "@/components/launch-banner";
+
 import { BASE_URL } from "@/lib/config";
 
 const categories = [
@@ -120,7 +120,6 @@ export default function Products() {
       <Navigation />
 
       <main id="main-content" className="pt-20">
-        <LaunchBanner />
         <section className="py-14 lg:py-16 bg-card linen-texture">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="text-center mb-10">

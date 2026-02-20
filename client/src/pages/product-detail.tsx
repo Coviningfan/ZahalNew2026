@@ -13,7 +13,7 @@ import { Link } from "wouter";
 import { useState } from "react";
 import type { Product } from "@shared/schema";
 import SEO from "@/components/seo";
-import LaunchBanner from "@/components/launch-banner";
+
 import { BASE_URL } from "@/lib/config";
 
 export default function ProductDetail() {
@@ -136,7 +136,6 @@ export default function ProductDetail() {
       <Navigation />
       
       <main id="main-content" className="pt-20">
-        <LaunchBanner />
         <div className="container mx-auto px-4 lg:px-8 py-8">
           <Link href="/productos" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 gap-1.5" data-testid="link-back">
             <ArrowLeft className="h-4 w-4" />
