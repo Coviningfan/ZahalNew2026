@@ -3,7 +3,6 @@ import Footer from "@/components/footer";
 import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Heart, Leaf, Users, Sparkles, CheckCircle, Mail } from "lucide-react";
-import zahalEscudo from "@assets/zahalescudo_1771431876032.png";
 
 export default function About() {
   return (
@@ -42,7 +41,7 @@ export default function About() {
                 />
                 <div className="absolute -bottom-6 -left-6 shadow-xl hidden md:block">
                   <img 
-                    src={zahalEscudo} 
+                    src="/img/zahal-escudo.png" 
                     alt="Libre de parabenos, clorhidrato de aluminio y alcohol" 
                     className="w-28 h-28 lg:w-32 lg:h-32 object-contain rounded-2xl"
                   />
