@@ -118,8 +118,7 @@ const products = [
     name: "Roll On Unisex 90ml",
     description: "Desodorante natural roll on unisex elaborado con piedra de alumbre y extracto de sábila (aloe vera). Protección antibacterial hasta por 24 horas. Sin clorhidrato de aluminio, sin alcohol, sin fragancia, sin parabenos. Vegano, orgánico, no tóxico.",
     images: [
-      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/5_efaa77e3-dfbc-4f3f-b42b-9e3e55e47a54.png?v=1753739553",
-      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/107.jpg?v=1753738575"
+      "https://zahal.com.mx/products/roll-on-unisex-90ml.jpeg"
     ],
     price: 11500,
     metadata: {
