@@ -39,11 +39,11 @@ export default function About() {
                   alt="Filosofía Zahal" 
                   className="w-full h-[400px] lg:h-[500px] object-cover rounded-2xl"
                 />
-                <div className="absolute -bottom-6 -left-6 shadow-xl hidden md:block">
+                <div className="absolute -bottom-8 -left-8 w-32 h-32 lg:w-36 lg:h-36 bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-xl overflow-hidden flex items-center justify-center hidden md:flex">
                   <img 
                     src="/img/zahal-escudo.png" 
                     alt="Libre de parabenos, clorhidrato de aluminio y alcohol" 
-                    className="w-28 h-28 lg:w-32 lg:h-32 object-contain rounded-2xl"
+                    className="w-44 h-44 lg:w-52 lg:h-52 object-contain pointer-events-none select-none"
                   />
                 </div>
               </div>
