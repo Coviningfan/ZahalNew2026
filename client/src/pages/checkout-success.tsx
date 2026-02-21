@@ -7,6 +7,12 @@ import { useCart } from "@/hooks/use-cart";
 import { CheckCircle, ArrowRight, ShoppingBag, AlertTriangle, Loader2 } from "lucide-react";
 import SEO from "@/components/seo";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 export default function CheckoutSuccess() {
   const { clearCart } = useCart();
   const searchString = useSearch();
@@ -28,6 +34,12 @@ export default function CheckoutSuccess() {
         setIsValid(data.valid === true);
         if (data.valid === true) {
           clearCart();
+          // Fire Google Ads purchase conversion
+          if (typeof window.gtag === "function") {
+            window.gtag("event", "conversion_event_purchase_1", {
+              transaction_id: sessionId,
+            });
+          }
         }
       })
       .catch(() => {
