@@ -461,6 +461,70 @@ Disallow: /empleados/
 Sitemap: ${baseUrl}/sitemap.xml`);
   });
 
+  app.get("/llms.txt", (_req, res) => {
+    res.set("Content-Type", "text/plain");
+    res.send(`# Zahal - Desodorantes Naturales de Alumbre
+
+> Zahal offers natural stone-based deodorants free of aluminum, parabens, and harmful chemicals, emphasizing protection, eco-friendliness, and cruelty-free practices.
+
+Zahal is a brand dedicated to providing natural deodorant alternatives made from pure mineral alum stone. Their products are designed to ensure effective 24-hour protection while respecting health, the environment, and animal welfare. The website features detailed descriptions of product benefits, usage, and community testimonials, making it a comprehensive resource for natural personal care solutions.
+
+## Core Content
+
+[Productos naturales](https://zahal.com.mx/productos)
+
+### Product Descriptions and Benefits
+- Desodorantes con piedra de alumbre, sin químicos agresivos ni parabenos.
+- Protección antibacterial y duradera por 24 horas.
+- Productos en formato roll-on, stick y para toda la familia.
+- Libre de manchas y residuos en la ropa.
+- Libre de crueldad animal y empaques sostenibles.
+
+### Product Categories
+- Vida Cotidiana
+- Deportistas
+- Viajeros
+- Teens
+
+### Customer Testimonials
+- Experiencias de usuarios satisfechos sobre protección efectiva, sin irritación y sin manchas en la ropa.
+- Recomendaciones y comentarios en sección de reseñas con productos destacados como Roll On Teens, Aloe Vera, y Stick Natural.
+
+## Resources
+
+[Elige tu favorito](https://zahal.com.mx/productos)
+
+[Nuestros Más Vendidos](https://zahal.com.mx/productos)
+
+### Popular Products
+- Roll On con Aloe Vera 30ml
+- Stick Natural 120g
+- Limpiador de Manos Spray 30ml
+
+### Sobre la Marca
+- [Nuestra historia](https://zahal.com.mx/nosotros)
+- [Conoce más sobre el origen del alumbrado](https://zahal.com.mx/nosotros)
+
+## Why Choose Zahal?
+
+- Producto natural, sin químicos dañinos.
+- Adecuado para piel sensible y uso diario.
+- Eco-friendly y cruelty-free.
+- Garantía de protección efectiva sin residuos blancos ni manchas amarillas.
+
+## Optional
+
+### Comunidad y Suscripciones
+- Recibe tips de cuidado natural y ofertas exclusivas.
+- Suscríbete para recibir novedades, sin spam y con opción de cancelar.
+
+### Contacto y Puntos de Venta
+- Encuentra puntos de venta distribuidos en toda México.
+- Información sobre disponibilidad y compra en línea.
+
+[Ver Tienda Completa](https://zahal.com.mx/productos)`);
+  });
+
   // ─── Shopify → New Site 301 Redirects (preserves Google link equity) ───────
   //
   // Matches every URL pattern Shopify generates so no indexed page 404s.
