@@ -20,6 +20,7 @@ export default function Navigation() {
     { href: "/nosotros", label: "Nosotros" },
     { href: "/preguntas-frecuentes", label: "Preguntas" },
     { href: "/donde-encontrarnos", label: "¿Dónde encontrarnos?" },
+    { href: "/blog", label: "Blog" },
     { href: "/contacto", label: "Contacto" },
   ];
 

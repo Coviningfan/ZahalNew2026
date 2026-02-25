@@ -25,6 +25,25 @@ export const apiKeys = pgTable("api_keys", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  excerpt: text("excerpt").notNull().default(""),
+  content: text("content").notNull().default(""),
+  coverImage: text("cover_image").notNull().default(""),
+  author: text("author").notNull().default("Zahal"),
+  published: boolean("published").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const siteSettings = pgTable("site_settings", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  value: text("value").notNull().default(""),
+});
+
 export const insertContactMessageSchema = createInsertSchema(contactMessages).omit({ id: true, createdAt: true });
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type SelectContactMessage = typeof contactMessages.$inferSelect;
@@ -32,6 +51,12 @@ export type SelectContactMessage = typeof contactMessages.$inferSelect;
 export const insertNewsletterSubscriberSchema = createInsertSchema(newsletterSubscribers).omit({ id: true, createdAt: true });
 export type InsertNewsletterSubscriber = z.infer<typeof insertNewsletterSubscriberSchema>;
 export type SelectNewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+export type BlogPost = typeof blogPosts.$inferSelect;
+
+export type SiteSetting = typeof siteSettings.$inferSelect;
 
 export interface Product {
   id: string;
@@ -79,3 +104,13 @@ export const newsletterSchema = z.object({
 export type NewsletterSubscriber = z.infer<typeof newsletterSchema> & { id: number; createdAt: string };
 
 export type ApiKey = typeof apiKeys.$inferSelect;
+
+export const blogPostSchema = z.object({
+  title: z.string().min(1),
+  slug: z.string().min(1),
+  excerpt: z.string().optional().default(""),
+  content: z.string().optional().default(""),
+  coverImage: z.string().optional().default(""),
+  author: z.string().optional().default("Zahal"),
+  published: z.boolean().optional().default(false),
+});

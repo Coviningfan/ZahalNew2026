@@ -16,6 +16,7 @@ const infoLinks = [
   { href: "/contacto", label: "Contacto" },
   { href: "/preguntas-frecuentes", label: "Preguntas Frecuentes" },
   { href: "/donde-encontrarnos", label: "¿Dónde encontrarnos?" },
+  { href: "/blog", label: "Blog" },
   { href: "/privacidad", label: "Política de Privacidad" },
   { href: "/terminos", label: "Términos y Condiciones" },
 ];

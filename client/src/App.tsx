@@ -18,6 +18,9 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import DondeEncontrarnos from "@/pages/donde-encontrarnos";
 import Terms from "@/pages/terms";
 import AdminApiKeys from "@/pages/admin-api-keys";
+import Blog from "@/pages/blog";
+import BlogPostPage from "@/pages/blog-post";
+import MarketingPortal from "@/pages/marketing-portal";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -45,6 +48,9 @@ function Router() {
         <Route path="/donde-encontrarnos" component={DondeEncontrarnos} />
         <Route path="/terminos" component={Terms} />
         <Route path="/admin/api-keys" component={AdminApiKeys} />
+        <Route path="/blog" component={Blog} />
+        <Route path="/blog/:slug" component={BlogPostPage} />
+        <Route path="/empleados/Marketing" component={MarketingPortal} />
         <Route component={NotFound} />
       </Switch>
     </>

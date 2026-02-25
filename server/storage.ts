@@ -1,5 +1,6 @@
-import { type Product, type ApiKey, contactMessages, newsletterSubscribers, apiKeys } from "@shared/schema";
+import { type Product, type ApiKey, type BlogPost, type SiteSetting, contactMessages, newsletterSubscribers, apiKeys, blogPosts, siteSettings } from "@shared/schema";
 import crypto from "crypto";
+import { eq, and, desc } from "drizzle-orm";
 import { getStripeClient } from "./stripeClient";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
@@ -57,6 +58,15 @@ export interface IStorage {
   createApiKey(label: string): Promise<ApiKey>;
   revokeApiKey(id: number): Promise<void>;
   validateApiKey(key: string): Promise<boolean>;
+  listBlogPosts(includeUnpublished?: boolean): Promise<BlogPost[]>;
+  getBlogPost(slug: string): Promise<BlogPost | undefined>;
+  getBlogPostById(id: number): Promise<BlogPost | undefined>;
+  createBlogPost(data: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost>;
+  updateBlogPost(id: number, data: Partial<Omit<BlogPost, "id" | "createdAt">>): Promise<BlogPost>;
+  deleteBlogPost(id: number): Promise<void>;
+  getSetting(key: string): Promise<string | null>;
+  setSetting(key: string, value: string): Promise<void>;
+  invalidateProductCache(): void;
 }
 
 class StripeApiStorage implements IStorage {
@@ -90,6 +100,11 @@ class StripeApiStorage implements IStorage {
     cachedProducts = products;
     cacheTimestamp = now;
     return products;
+  }
+
+  invalidateProductCache(): void {
+    cachedProducts = null;
+    cacheTimestamp = 0;
   }
 
   async getProducts(): Promise<Product[]> {
@@ -139,14 +154,56 @@ class StripeApiStorage implements IStorage {
   }
 
   async revokeApiKey(id: number): Promise<void> {
-    const { eq } = await import("drizzle-orm");
     await db.update(apiKeys).set({ active: false }).where(eq(apiKeys.id, id));
   }
 
   async validateApiKey(key: string): Promise<boolean> {
-    const { eq, and } = await import("drizzle-orm");
     const [row] = await db.select().from(apiKeys).where(and(eq(apiKeys.key, key), eq(apiKeys.active, true)));
     return !!row;
+  }
+
+  async listBlogPosts(includeUnpublished = false): Promise<BlogPost[]> {
+    if (includeUnpublished) {
+      return db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt));
+    }
+    return db.select().from(blogPosts).where(eq(blogPosts.published, true)).orderBy(desc(blogPosts.createdAt));
+  }
+
+  async getBlogPost(slug: string): Promise<BlogPost | undefined> {
+    const [row] = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug));
+    return row;
+  }
+
+  async getBlogPostById(id: number): Promise<BlogPost | undefined> {
+    const [row] = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    return row;
+  }
+
+  async createBlogPost(data: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost> {
+    const [row] = await db.insert(blogPosts).values(data).returning();
+    return row;
+  }
+
+  async updateBlogPost(id: number, data: Partial<Omit<BlogPost, "id" | "createdAt">>): Promise<BlogPost> {
+    const [row] = await db.update(blogPosts)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(blogPosts.id, id))
+      .returning();
+    return row;
+  }
+
+  async deleteBlogPost(id: number): Promise<void> {
+    await db.delete(blogPosts).where(eq(blogPosts.id, id));
+  }
+
+  async getSetting(key: string): Promise<string | null> {
+    const [row] = await db.select().from(siteSettings).where(eq(siteSettings.key, key));
+    return row?.value ?? null;
+  }
+
+  async setSetting(key: string, value: string): Promise<void> {
+    await db.insert(siteSettings).values({ key, value })
+      .onConflictDoUpdate({ target: siteSettings.key, set: { value } });
   }
 }
 

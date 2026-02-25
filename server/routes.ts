@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { checkoutSchema, contactMessageSchema, newsletterSchema } from "@shared/schema";
+import { checkoutSchema, contactMessageSchema, newsletterSchema, blogPostSchema } from "@shared/schema";
 import { getStripeClient, getStripePublishableKey } from "./stripeClient";
 import { z } from "zod";
 import rateLimit from "express-rate-limit";
@@ -226,6 +226,160 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ─── Public Blog Routes ───────────────────────────────────────────────────
+
+  app.get("/api/blog", async (_req, res) => {
+    try {
+      const posts = await storage.listBlogPosts(false);
+      res.json(posts);
+    } catch (error) {
+      console.error("Error fetching blog posts:", error);
+      res.status(500).json({ message: "Failed to fetch blog posts" });
+    }
+  });
+
+  app.get("/api/blog/:slug", async (req, res) => {
+    try {
+      const post = await storage.getBlogPost(req.params.slug);
+      if (!post || !post.published) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      res.json(post);
+    } catch (error) {
+      console.error("Error fetching blog post:", error);
+      res.status(500).json({ message: "Failed to fetch blog post" });
+    }
+  });
+
+  // ─── Admin: Blog Management ──────────────────────────────────────────────
+
+  app.get("/api/admin/blog", requireAdminPassword, async (_req, res) => {
+    try {
+      const posts = await storage.listBlogPosts(true);
+      res.json(posts);
+    } catch (error) {
+      console.error("Error listing blog posts:", error);
+      res.status(500).json({ message: "Failed to list blog posts" });
+    }
+  });
+
+  app.post("/api/admin/blog", requireAdminPassword, async (req, res) => {
+    try {
+      const data = blogPostSchema.parse(req.body);
+      const post = await storage.createBlogPost(data);
+      res.json(post);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
+      }
+      console.error("Error creating blog post:", error);
+      res.status(500).json({ message: "Failed to create blog post" });
+    }
+  });
+
+  app.put("/api/admin/blog/:id", requireAdminPassword, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      const data = blogPostSchema.partial().parse(req.body);
+      const post = await storage.updateBlogPost(id, data);
+      res.json(post);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
+      }
+      console.error("Error updating blog post:", error);
+      res.status(500).json({ message: "Failed to update blog post" });
+    }
+  });
+
+  app.delete("/api/admin/blog/:id", requireAdminPassword, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      await storage.deleteBlogPost(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting blog post:", error);
+      res.status(500).json({ message: "Failed to delete blog post" });
+    }
+  });
+
+  // ─── Admin: Site Settings ─────────────────────────────────────────────────
+
+  app.get("/api/admin/settings/:key", requireAdminPassword, async (req, res) => {
+    try {
+      const value = await storage.getSetting(req.params.key);
+      res.json({ key: req.params.key, value });
+    } catch (error) {
+      console.error("Error getting setting:", error);
+      res.status(500).json({ message: "Failed to get setting" });
+    }
+  });
+
+  app.put("/api/admin/settings/:key", requireAdminPassword, async (req, res) => {
+    try {
+      const { value } = z.object({ value: z.string() }).parse(req.body);
+      await storage.setSetting(req.params.key, value);
+      res.json({ success: true });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Value is required" });
+      }
+      console.error("Error setting value:", error);
+      res.status(500).json({ message: "Failed to save setting" });
+    }
+  });
+
+  // ─── Admin: Product Management via Stripe ─────────────────────────────────
+
+  app.put("/api/admin/products/:stripeProductId", requireAdminPassword, async (req, res) => {
+    try {
+      const stripe = getStripeClient();
+      const { stripeProductId } = req.params;
+      const { name, description, images, metadata, newPrice } = req.body;
+
+      const updateData: any = {};
+      if (name) updateData.name = name;
+      if (description !== undefined) updateData.description = description;
+      if (images) updateData.images = images;
+      if (metadata) updateData.metadata = metadata;
+
+      await stripe.products.update(stripeProductId, updateData);
+
+      if (newPrice && typeof newPrice === "number") {
+        const existingPrices = await stripe.prices.list({ product: stripeProductId, active: true, limit: 1 });
+        const newPriceObj = await stripe.prices.create({
+          product: stripeProductId,
+          unit_amount: Math.round(newPrice * 100),
+          currency: "mxn",
+        });
+        for (const oldPrice of existingPrices.data) {
+          await stripe.prices.update(oldPrice.id, { active: false });
+        }
+        storage.invalidateProductCache();
+        res.json({ success: true, newPriceId: newPriceObj.id });
+      } else {
+        storage.invalidateProductCache();
+        res.json({ success: true });
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+      res.status(500).json({ message: "Failed to update product" });
+    }
+  });
+
+  // ─── Public: Site Settings (for dynamic banner) ───────────────────────────
+
+  app.get("/api/settings/:key", async (req, res) => {
+    try {
+      const value = await storage.getSetting(req.params.key);
+      res.json({ key: req.params.key, value });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get setting" });
+    }
+  });
+
   app.get("/api/checkout/verify", async (req, res) => {
     try {
       const sessionId = req.query.session_id as string;
@@ -253,6 +407,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       { url: "/contacto",             lastmod: today },
       { url: "/preguntas-frecuentes", lastmod: today },
       { url: "/donde-encontrarnos",   lastmod: today },
+      { url: "/blog",                 lastmod: today },
       { url: "/privacidad",           lastmod: "2026-02-18" },
       { url: "/terminos",             lastmod: "2026-02-18" },
     ];
@@ -268,7 +423,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Sitemap: failed to fetch products", err);
     }
 
-    const allPages = [...staticPages, ...productPages];
+    let blogPages: { url: string; lastmod: string }[] = [];
+    try {
+      const posts = await storage.listBlogPosts(false);
+      blogPages = posts.map(p => ({
+        url: `/blog/${p.slug}`,
+        lastmod: p.updatedAt.toISOString().split("T")[0],
+      }));
+    } catch (err) {
+      console.error("Sitemap: failed to fetch blog posts", err);
+    }
+
+    const allPages = [...staticPages, ...productPages, ...blogPages];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -289,6 +455,8 @@ ${allPages.map(p => `  <url>
 Allow: /
 Disallow: /checkout/
 Disallow: /api/
+Disallow: /admin/
+Disallow: /empleados/
 
 Sitemap: ${baseUrl}/sitemap.xml`);
   });

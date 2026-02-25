@@ -84,6 +84,10 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 - `hero-section.tsx`: Full-screen hero with green gradient overlay
 - `featured-products.tsx`: Shows first 3 products with "Ver Tienda Completa" CTA
 - `product-categories.tsx`: 4 category cards (Unisex, Sport, Travel, Teens) linking to /productos
+- `blog.tsx`: Public blog listing page with card grid
+- `blog-post.tsx`: Individual blog post page with markdown rendering
+- `marketing-portal.tsx`: Employee portal with blog editor, banner manager, product management
+- `admin-api-keys.tsx`: API key management page
 
 # User Preferences
 
@@ -95,7 +99,7 @@ Mexican market UX: WhatsApp integration, trust signals, Spanish-first copy.
 
 ## Frontend Architecture
 - **React SPA**: Single-page application built with React 18 and TypeScript
-- **Routing**: Wouter — routes: /, /productos, /productos/:id, /nosotros, /preguntas-frecuentes, /contacto, /privacidad, /terminos, /donde-encontrarnos, /checkout/exito, /checkout/cancelado
+- **Routing**: Wouter — routes: /, /productos, /productos/:id, /nosotros, /preguntas-frecuentes, /contacto, /privacidad, /terminos, /donde-encontrarnos, /blog, /blog/:slug, /checkout/exito, /checkout/cancelado, /admin/api-keys, /empleados/Marketing
 - **State Management**: TanStack Query v5 (product data) + React Context (cart)
 - **Cart**: Client-side localStorage-based cart via CartProvider
 - **UI Framework**: Shadcn/ui + Radix UI + Tailwind CSS
@@ -105,11 +109,20 @@ Mexican market UX: WhatsApp integration, trust signals, Spanish-first copy.
 - **Express.js Server**: RESTful API server with TypeScript
 - **Storage Layer**: Reads products from Stripe sync tables (stripe.products, stripe.prices) in PostgreSQL
 - **Stripe Integration**: Managed webhook + backfill sync for products/prices
+- **Database Tables**: contact_messages, newsletter_subscribers, api_keys, blog_posts, site_settings
 - **API Endpoints**:
   - GET /api/products — list all products
   - GET /api/products/:id — single product by slug
   - POST /api/checkout — create Stripe Checkout session
   - GET /api/stripe/publishable-key — frontend Stripe key
+  - GET /api/blog — list published blog posts
+  - GET /api/blog/:slug — single blog post
+  - GET /api/settings/:key — public site settings
+  - Admin (requires x-admin-password header):
+    - GET/POST/PUT/DELETE /api/admin/blog — blog CRUD
+    - GET/PUT /api/admin/settings/:key — site settings
+    - PUT /api/admin/products/:stripeProductId — update products in Stripe
+    - GET/POST/DELETE /api/admin/api-keys — API key management
 
 ## Payment Flow
 1. User adds items to cart (client-side localStorage)
