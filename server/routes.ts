@@ -176,6 +176,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ─── Admin: API Key Management ─────────────────────────────────────────────
+
+  function requireAdminPassword(req: any, res: any, next: any) {
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
+      return res.status(503).json({ message: "Admin access not configured. Set ADMIN_PASSWORD environment variable." });
+    }
+    const provided = req.headers["x-admin-password"] as string;
+    if (!provided || provided !== adminPassword) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    next();
+  }
+
+  app.get("/api/admin/api-keys", requireAdminPassword, async (_req, res) => {
+    try {
+      const keys = await storage.listApiKeys();
+      res.json(keys);
+    } catch (error) {
+      console.error("Error listing API keys:", error);
+      res.status(500).json({ message: "Failed to list API keys" });
+    }
+  });
+
+  app.post("/api/admin/api-keys", requireAdminPassword, async (req, res) => {
+    try {
+      const { label } = z.object({ label: z.string().min(1) }).parse(req.body);
+      const key = await storage.createApiKey(label);
+      res.json(key);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Label is required" });
+      }
+      console.error("Error creating API key:", error);
+      res.status(500).json({ message: "Failed to create API key" });
+    }
+  });
+
+  app.delete("/api/admin/api-keys/:id", requireAdminPassword, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      await storage.revokeApiKey(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error revoking API key:", error);
+      res.status(500).json({ message: "Failed to revoke API key" });
+    }
+  });
+
   app.get("/api/checkout/verify", async (req, res) => {
     try {
       const sessionId = req.query.session_id as string;

@@ -1,4 +1,5 @@
-import { type Product, contactMessages, newsletterSubscribers } from "@shared/schema";
+import { type Product, type ApiKey, contactMessages, newsletterSubscribers, apiKeys } from "@shared/schema";
+import crypto from "crypto";
 import { getStripeClient } from "./stripeClient";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
@@ -52,6 +53,10 @@ export interface IStorage {
   getFeaturedProducts(): Promise<Product[]>;
   addContactMessage(msg: { name: string; email: string; phone: string; message: string }): Promise<{ id: number }>;
   addNewsletterSubscriber(email: string): Promise<{ id: number }>;
+  listApiKeys(): Promise<ApiKey[]>;
+  createApiKey(label: string): Promise<ApiKey>;
+  revokeApiKey(id: number): Promise<void>;
+  validateApiKey(key: string): Promise<boolean>;
 }
 
 class StripeApiStorage implements IStorage {
@@ -121,6 +126,27 @@ class StripeApiStorage implements IStorage {
       .onConflictDoUpdate({ target: newsletterSubscribers.email, set: { email } })
       .returning({ id: newsletterSubscribers.id });
     return { id: row.id };
+  }
+
+  async listApiKeys(): Promise<ApiKey[]> {
+    return db.select().from(apiKeys).orderBy(apiKeys.createdAt);
+  }
+
+  async createApiKey(label: string): Promise<ApiKey> {
+    const key = `zahal_live_${crypto.randomBytes(24).toString("hex")}`;
+    const [row] = await db.insert(apiKeys).values({ label, key }).returning();
+    return row;
+  }
+
+  async revokeApiKey(id: number): Promise<void> {
+    const { eq } = await import("drizzle-orm");
+    await db.update(apiKeys).set({ active: false }).where(eq(apiKeys.id, id));
+  }
+
+  async validateApiKey(key: string): Promise<boolean> {
+    const { eq, and } = await import("drizzle-orm");
+    const [row] = await db.select().from(apiKeys).where(and(eq(apiKeys.key, key), eq(apiKeys.active, true)));
+    return !!row;
   }
 }
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
 export const contactMessages = pgTable("contact_messages", {
@@ -14,6 +14,14 @@ export const contactMessages = pgTable("contact_messages", {
 export const newsletterSubscribers = pgTable("newsletter_subscribers", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const apiKeys = pgTable("api_keys", {
+  id: serial("id").primaryKey(),
+  label: text("label").notNull(),
+  key: text("key").notNull().unique(),
+  active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -69,3 +77,5 @@ export const newsletterSchema = z.object({
   email: z.string().email(),
 });
 export type NewsletterSubscriber = z.infer<typeof newsletterSchema> & { id: number; createdAt: string };
+
+export type ApiKey = typeof apiKeys.$inferSelect;
