@@ -305,6 +305,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ─── Admin: BabyLoveGrowth Sync ────────────────────────────────────────────
+
+  app.post("/api/admin/sync-articles", requireAdminPassword, async (_req, res) => {
+    try {
+      const apiKey = process.env.BABYLOVE_API_KEY;
+      if (!apiKey) {
+        return res.status(503).json({ message: "BABYLOVE_API_KEY not configured" });
+      }
+
+      const response = await fetch("https://api.babylovegrowth.ai/api/integrations/v1/articles?limit=100&page=1", {
+        headers: { "X-API-Key": apiKey, "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("BabyLoveGrowth API error:", response.status, errText);
+        return res.status(502).json({ message: `BabyLoveGrowth API error: ${response.status}` });
+      }
+
+      const articles = await response.json();
+      if (!Array.isArray(articles)) {
+        return res.status(502).json({ message: "Unexpected response from BabyLoveGrowth API" });
+      }
+
+      let created = 0;
+      let skipped = 0;
+
+      for (const article of articles) {
+        const slug = article.slug || `article-${article.id}`;
+        const existing = await storage.getBlogPost(slug);
+        if (existing) {
+          skipped++;
+          continue;
+        }
+
+        await storage.createBlogPost({
+          title: article.title || "Sin título",
+          slug,
+          excerpt: article.excerpt || article.meta_description || "",
+          content: article.content_markdown || article.content_html || "",
+          coverImage: article.hero_image_url || "",
+          author: "Zahal",
+          published: true,
+        });
+        created++;
+      }
+
+      res.json({ success: true, created, skipped, total: articles.length });
+    } catch (error) {
+      console.error("Sync error:", error);
+      res.status(500).json({ message: "Failed to sync articles" });
+    }
+  });
+
   // ─── Admin: Site Settings ─────────────────────────────────────────────────
 
   app.get("/api/admin/settings/:key", requireAdminPassword, async (req, res) => {

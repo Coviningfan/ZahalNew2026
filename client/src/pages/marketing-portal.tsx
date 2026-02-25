@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { useToast } from "@/hooks/use-toast";
 import {
   Lock, Eye, EyeOff, FileText, Image, Package, Plus, Pencil, Trash2, Save,
-  ArrowLeft, LogOut, LayoutDashboard, ExternalLink,
+  ArrowLeft, LogOut, LayoutDashboard, ExternalLink, RefreshCw,
 } from "lucide-react";
 import type { BlogPost, Product } from "@shared/schema";
 
@@ -141,6 +141,16 @@ function BlogEditor({ password }: { password: string }) {
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
+  const syncMutation = useMutation({
+    mutationFn: () => adminFetch("/api/admin/sync-articles", password, { method: "POST" }),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/blog"] });
+      toast({ title: "Sincronización completada", description: `${data.created} nuevos artículos importados, ${data.skipped} ya existían.` });
+    },
+    onError: (err: any) => toast({ title: "Error de sincronización", description: err.message, variant: "destructive" }),
+  });
+
   function startCreate() {
     setForm(emptyPost);
     setCreating(true);
@@ -218,9 +228,14 @@ function BlogEditor({ password }: { password: string }) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-foreground">Artículos del Blog</h2>
-        <Button onClick={startCreate} className="bg-primary hover:bg-primary/90 text-white gap-2" data-testid="button-new-blog-post">
-          <Plus className="h-4 w-4" /> Nuevo artículo
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => syncMutation.mutate()} disabled={syncMutation.isPending} className="gap-2" data-testid="button-sync-articles">
+            <RefreshCw className={`h-4 w-4 ${syncMutation.isPending ? "animate-spin" : ""}`} /> {syncMutation.isPending ? "Sincronizando..." : "Sincronizar AI"}
+          </Button>
+          <Button onClick={startCreate} className="bg-primary hover:bg-primary/90 text-white gap-2" data-testid="button-new-blog-post">
+            <Plus className="h-4 w-4" /> Nuevo artículo
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
