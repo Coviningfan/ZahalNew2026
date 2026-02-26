@@ -62,8 +62,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Zahal - Desodorantes Naturales de Alumbre"
-        description="Desodorantes naturales de piedra de alumbre. Sin aluminio, sin químicos. Protección 24h. Envío a todo México."
+        title="Zahal - Desodorantes de Alumbre Naturales: Protección 24h"
+        description="Desodorantes de piedra de alumbre para toda la familia. 24h de protección natural, sin aluminio, sin parabenos y sin químicos dañinos. Envío a todo México."
         path="/"
         jsonLd={homeJsonLd}
       />
