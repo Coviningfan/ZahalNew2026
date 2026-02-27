@@ -679,6 +679,49 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
     res.redirect(301, q ? `/productos?buscar=${encodeURIComponent(q)}` : "/productos");
   });
 
+  // ─── Soft-404 Prevention: force proper HTTP 404 for unknown SPA routes ────
+  //
+  // The Vite / static catch-all always sends index.html with status 200.
+  // This middleware runs first and overrides res.status so the final response
+  // uses 404 for routes Google should not index.
+
+  function mark404(res: import("express").Response) {
+    res.statusCode = 404;
+    const orig = res.status.bind(res);
+    res.status = ((code: number) => orig(404)) as any;
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  }
+
+  app.get("/productos/:id", async (req, res, next) => {
+    try {
+      const product = await storage.getProductById(req.params.id);
+      if (!product) mark404(res);
+    } catch { /* let Vite handle render */ }
+    next();
+  });
+
+  app.get("/blog/:slug", async (req, res, next) => {
+    try {
+      const post = await storage.getBlogPost(req.params.slug);
+      if (!post || !post.published) mark404(res);
+    } catch { /* let Vite handle render */ }
+    next();
+  });
+
+  app.use((req, res, next) => {
+    const p = req.path;
+    if (p.startsWith("/api") || p === "/sitemap.xml" || p === "/robots.txt" || p === "/llms.txt") {
+      return next();
+    }
+    if (/\.\w{2,5}$/.test(p)) {
+      return next();
+    }
+    if (!isKnownSpaRoute(p)) {
+      mark404(res);
+    }
+    next();
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
