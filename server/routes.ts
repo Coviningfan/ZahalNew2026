@@ -74,7 +74,45 @@ const PAGE_MAP: Record<string, string> = {
   "find-us": "/donde-encontrarnos",
 };
 
+const KNOWN_SPA_ROUTES = new Set([
+  "/", "/productos", "/nosotros", "/contacto",
+  "/preguntas-frecuentes", "/donde-encontrarnos",
+  "/blog", "/privacidad", "/terminos",
+  "/checkout/exito", "/checkout/cancelado",
+  "/admin/api-keys", "/empleados/Marketing",
+]);
+
+const NOINDEX_ROUTES = new Set([
+  "/checkout/exito", "/checkout/cancelado",
+  "/privacidad", "/terminos",
+  "/admin/api-keys", "/empleados/Marketing",
+]);
+
+function isKnownSpaRoute(path: string): boolean {
+  if (KNOWN_SPA_ROUTES.has(path)) return true;
+  if (path.startsWith("/productos/") && path.split("/").length === 3) return true;
+  if (path.startsWith("/blog/") && path.split("/").length === 3) return true;
+  return false;
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.use((req, res, next) => {
+    const { path, originalUrl } = req;
+    if (path !== "/" && path.endsWith("/")) {
+      const cleanUrl = originalUrl.replace(/\/(\?|$)/, "$1");
+      return res.redirect(301, cleanUrl);
+    }
+    next();
+  });
+
+  app.use((req, res, next) => {
+    const path = req.path;
+    if (NOINDEX_ROUTES.has(path)) {
+      res.setHeader("X-Robots-Tag", "noindex, nofollow");
+    }
+    next();
+  });
+
   app.use("/api", apiLimiter);
 
   // ─── API Routes ────────────────────────────────────────────────────────────
@@ -455,34 +493,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const today = new Date().toISOString().split("T")[0];
 
     const staticPages = [
-      { url: "/",                     lastmod: today },
-      { url: "/productos",            lastmod: today },
-      { url: "/nosotros",             lastmod: today },
-      { url: "/contacto",             lastmod: today },
-      { url: "/preguntas-frecuentes", lastmod: today },
-      { url: "/donde-encontrarnos",   lastmod: today },
-      { url: "/blog",                 lastmod: today },
-      { url: "/privacidad",           lastmod: "2026-02-18" },
-      { url: "/terminos",             lastmod: "2026-02-18" },
+      { url: "/",                     lastmod: today, changefreq: "weekly",  priority: "1.0" },
+      { url: "/productos",            lastmod: today, changefreq: "daily",   priority: "0.9" },
+      { url: "/nosotros",             lastmod: today, changefreq: "monthly", priority: "0.7" },
+      { url: "/contacto",             lastmod: today, changefreq: "monthly", priority: "0.6" },
+      { url: "/preguntas-frecuentes", lastmod: today, changefreq: "monthly", priority: "0.6" },
+      { url: "/donde-encontrarnos",   lastmod: today, changefreq: "monthly", priority: "0.7" },
+      { url: "/blog",                 lastmod: today, changefreq: "weekly",  priority: "0.8" },
     ];
 
-    let productPages: { url: string; lastmod: string }[] = [];
+    let productPages: { url: string; lastmod: string; changefreq: string; priority: string }[] = [];
     try {
       const products = await storage.getProducts();
       productPages = products.map(p => ({
         url: `/productos/${p.id}`,
         lastmod: today,
+        changefreq: "weekly",
+        priority: "0.8",
       }));
     } catch (err) {
       console.error("Sitemap: failed to fetch products", err);
     }
 
-    let blogPages: { url: string; lastmod: string }[] = [];
+    let blogPages: { url: string; lastmod: string; changefreq: string; priority: string }[] = [];
     try {
       const posts = await storage.listBlogPosts(false);
       blogPages = posts.map(p => ({
         url: `/blog/${p.slug}`,
         lastmod: p.updatedAt.toISOString().split("T")[0],
+        changefreq: "monthly",
+        priority: "0.7",
       }));
     } catch (err) {
       console.error("Sitemap: failed to fetch blog posts", err);
@@ -495,6 +535,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 ${allPages.map(p => `  <url>
     <loc>${baseUrl}${p.url}</loc>
     <lastmod>${p.lastmod}</lastmod>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
   </url>`).join("\n")}
 </urlset>`;
 

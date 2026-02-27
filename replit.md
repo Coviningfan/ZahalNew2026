@@ -2,7 +2,17 @@
 
 This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application uses a custom React frontend with direct Stripe payment processing — no Shopify dependency.
 
-# Recent Changes (February 18, 2026)
+# Recent Changes (February 27, 2026)
+
+## SEO Indexing Fixes (Google Search Console)
+- **Removed hardcoded og:url and og:image from index.html**: These static meta tags were causing Google to see the same canonical URL (homepage) for every page, resulting in 66 "alternate page with proper canonical tag" entries. React Helmet (via `seo.tsx`) is now the sole authority for page-specific OG/canonical meta.
+- **Removed noindexed pages from sitemap**: `/privacidad` and `/terminos` were listed in sitemap.xml despite having `noindex` — contradictory signals removed.
+- **Added changefreq and priority to sitemap**: All sitemap entries now include `<changefreq>` and `<priority>` tags for better crawl guidance.
+- **Trailing-slash 301 redirect middleware**: Normalizes `/path/` → `/path` to prevent duplicate URL indexing.
+- **X-Robots-Tag HTTP header middleware**: Server-side `noindex, nofollow` header reinforces client-side meta for checkout, privacy, terms, admin, and internal routes.
+- **Dependency update**: rollup@4.24.4 → rollup@2.80.0 added as direct dependency per security scan requirement; Vite retains its own rollup@4.x internally.
+
+# Previous Changes (February 18, 2026)
 
 ## External Audit Fixes
 - **Server hardening**: Error handler no longer throws after response (was causing unhandled rejections), added request body size limits (1MB), rate limiting on /api/* (100 req/min) and /api/checkout (5 req/min) via express-rate-limit
