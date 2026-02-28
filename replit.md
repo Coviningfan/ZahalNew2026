@@ -10,6 +10,10 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 - **Added changefreq and priority to sitemap**: All sitemap entries now include `<changefreq>` and `<priority>` tags for better crawl guidance.
 - **Trailing-slash 301 redirect middleware**: Normalizes `/path/` → `/path` to prevent duplicate URL indexing.
 - **X-Robots-Tag HTTP header middleware**: Server-side `noindex, nofollow` header reinforces client-side meta for checkout, privacy, terms, admin, and internal routes.
+- **Soft 404 prevention**: Server-side middleware returns proper HTTP 404 for unknown SPA routes, non-existent products (`/productos/:id`), and unpublished blog posts (`/blog/:slug`). Uses `res.status` override + `res.statusCode` to work with both Vite dev and production static serving.
+- **LCP optimization**: Hero banner image (`hero-banner.png`) copied to `/public/` with `<link rel="preload" as="image" fetchpriority="high">` in index.html for immediate browser discovery.
+- **Removed render-blocking Nunito font**: CSS `@import` for unused Google Font removed; font variables updated to system font stacks (system-ui for sans, Georgia for serif).
+- **CSP updated for Google Ads**: Added `googleads.g.doubleclick.net`, `www.google.com` to script-src/connect-src/frame-src; removed unused Google Fonts domains from style-src/font-src.
 - **Dependency update**: rollup@4.24.4 → rollup@2.80.0 added as direct dependency per security scan requirement; Vite retains its own rollup@4.x internally.
 
 # Previous Changes (February 18, 2026)
