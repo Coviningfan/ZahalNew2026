@@ -14,6 +14,7 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 - **LCP optimization**: Hero banner image (`hero-banner.png`) copied to `/public/` with `<link rel="preload" as="image" fetchpriority="high">` in index.html for immediate browser discovery.
 - **Removed render-blocking Nunito font**: CSS `@import` for unused Google Font removed; font variables updated to system font stacks (system-ui for sans, Georgia for serif).
 - **CSP updated for Google Ads**: Added `googleads.g.doubleclick.net`, `www.google.com` to script-src/connect-src/frame-src; removed unused Google Fonts domains from style-src/font-src.
+- **Cookie consent banner**: GDPR/privacy-compliant banner with Accept All, Reject, and Customize (analytics + marketing toggles). Uses Google Consent Mode v2 — defaults to denied, only grants after explicit consent. Google Analytics/GTM/Ads scripts removed from index.html and loaded dynamically only after consent. Consent stored in localStorage (`zahal-cookie-consent`).
 - **Dependency update**: rollup@4.24.4 → rollup@2.80.0 added as direct dependency per security scan requirement; Vite retains its own rollup@4.x internally.
 
 # Previous Changes (February 18, 2026)
