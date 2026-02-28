@@ -13,12 +13,12 @@ app.use((req, res, next) => {
   const scriptEval = isDev ? " 'unsafe-eval'" : "";
   const csp = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${scriptEval} https://js.stripe.com https://www.googletagmanager.com`,
+    `script-src 'self' 'unsafe-inline'${scriptEval} https://js.stripe.com https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.google.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
-    `connect-src 'self' https://api.stripe.com https://www.google-analytics.com https://analytics.google.com https://*.replit.dev https://*.replit.app wss://*.replit.dev wss://*.replit.app`,
-    "frame-src https://js.stripe.com https://hooks.stripe.com",
+    `connect-src 'self' https://api.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.google.com https://googleads.g.doubleclick.net https://*.replit.dev https://*.replit.app wss://*.replit.dev wss://*.replit.app`,
+    "frame-src https://js.stripe.com https://hooks.stripe.com https://www.googletagmanager.com https://googleads.g.doubleclick.net",
   ].join("; ");
 
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
