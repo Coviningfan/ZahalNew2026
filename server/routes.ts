@@ -22,7 +22,6 @@ const checkoutLimiter = rateLimit({
   message: { message: "Too many checkout attempts, please try again later." },
 });
 
-// Normalize a string to a URL-friendly slug (strips accents, lowercases, hyphens)
 function toSlug(str: string): string {
   return str
     .toLowerCase()
@@ -32,7 +31,6 @@ function toSlug(str: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-// Shopify collection handle → new site category param
 const COLLECTION_MAP: Record<string, string> = {
   unisex: "unisex",
   hombre: "hombre",
@@ -51,7 +49,6 @@ const COLLECTION_MAP: Record<string, string> = {
   manos: "manos",
 };
 
-// Shopify page handle → new site route
 const PAGE_MAP: Record<string, string> = {
   "politica-de-privacidad": "/privacidad",
   "privacy-policy": "/privacidad",
@@ -95,37 +92,8 @@ function isKnownSpaRoute(path: string): boolean {
   return false;
 }
 
-// ─── Shipping rate IDs (set these after running createShippingRates once) ────
-// Free shipping applied when order total >= FREE_SHIPPING_THRESHOLD_CENTS.
-// Replace the placeholder values with real IDs from your Stripe dashboard.
+// ─── Shipping config ──────────────────────────────────────────────────────────
 const FREE_SHIPPING_THRESHOLD_CENTS = 60000; // 600.00 MXN
-const SHIPPING_RATE_FREE = process.env.STRIPE_SHIPPING_RATE_FREE ?? "";
-const SHIPPING_RATE_PAID = process.env.STRIPE_SHIPPING_RATE_PAID ?? "";
-
-/**
- * One-time helper — call this once via a script or temporary endpoint to
- * create the two shipping rates in your Stripe sandbox/live account,
- * then store the returned IDs as env vars:
- *   STRIPE_SHIPPING_RATE_FREE=shr_...
- *   STRIPE_SHIPPING_RATE_PAID=shr_...
- */
-export async function createShippingRatesIfNeeded(): Promise<void> {
-  if (SHIPPING_RATE_FREE && SHIPPING_RATE_PAID) return;
-  const stripe = getStripeClient();
-  const free = await stripe.shippingRates.create({
-    display_name: "Envío estándar gratuito (600 MXN en adelante)",
-    type: "fixed_amount",
-    fixed_amount: { amount: 0, currency: "mxn" },
-  });
-  const paid = await stripe.shippingRates.create({
-    display_name: "Envío estándar",
-    type: "fixed_amount",
-    fixed_amount: { amount: 1500, currency: "mxn" },
-  });
-  console.log("✅ STRIPE_SHIPPING_RATE_FREE=", free.id);
-  console.log("✅ STRIPE_SHIPPING_RATE_PAID=", paid.id);
-  console.log("Add these to your .env file and restart the server.");
-}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.use((req, res, next) => {
@@ -190,59 +158,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ─── One-time shipping-rate setup endpoint (admin-protected) ─────────────
-  app.post("/api/admin/setup-shipping-rates", requireAdminPassword, async (_req, res) => {
-    try {
-      await createShippingRatesIfNeeded();
-      res.json({ success: true, message: "Check server logs for the new shipping rate IDs." });
-    } catch (error) {
-      console.error("Error creating shipping rates:", error);
-      res.status(500).json({ message: "Failed to create shipping rates" });
-    }
-  });
-  const FREE_SHIPPING_THRESHOLD_CENTS = 60000; // 600.00 MXN
-
   app.post("/api/checkout", checkoutLimiter, async (req, res) => {
     try {
       const { items } = checkoutSchema.parse(req.body);
       const stripe = getStripeClient();
+
+      if (items.length === 0) {
+        return res.status(400).json({ message: "Cart is empty" });
+      }
 
       const lineItems = items.map(item => ({
         price: item.stripePriceId,
         quantity: item.quantity,
       }));
 
-      // ── Compute subtotal to decide shipping rate ──────────────────────────
-      // Fetch unit amounts for all price IDs so we can total them here.
-      const priceFetches = await Promise.all(
-        items.map(item => stripe.prices.retrieve(item.stripePriceId))
-      );
-      const subtotalCents = priceFetches.reduce((sum, price, i) => {
-        return sum + (price.unit_amount ?? 0) * items[i].quantity;
-      }, 0);
-
-      // ── Choose shipping rate based on threshold ───────────────────────────
-      const shippingRateId =
-        subtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS
-          ? SHIPPING_RATE_FREE
-          : SHIPPING_RATE_PAID;
-
-      const baseUrl = `${req.protocol}://${req.get("host")}`;
-
-      const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
-      if (items.length === 0) {
-        return res.status(400).json({ message: "Cart is empty" });
-      }
-
+      // Compute subtotal to decide shipping rate
       let subtotalCents = 0;
       for (const item of items) {
         try {
           const price = await stripe.prices.retrieve(item.stripePriceId);
           if (!price.unit_amount || price.unit_amount <= 0) {
             return res.status(400).json({ message: `Invalid price for item ${item.stripePriceId}` });
-          }
-          if (price.currency !== "mxn") {
-            return res.status(400).json({ message: `Unsupported currency for item ${item.stripePriceId}` });
           }
           subtotalCents += price.unit_amount * item.quantity;
         } catch (priceError: any) {
@@ -271,9 +207,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         locale: "es",
       };
 
-      // Only attach shipping_options when rate IDs are configured
-      if (shippingRateId) {
-        sessionParams.shipping_options = [{ shipping_rate: shippingRateId }];
       if (shippingOptions.length > 0) {
         sessionParams.shipping_options = shippingOptions;
       }
@@ -317,7 +250,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ─── Admin: API Key Management ─────────────────────────────────────────────
+  // ─── Admin helpers ────────────────────────────────────────────────────────
 
   function requireAdminPassword(req: any, res: any, next: any) {
     const adminPassword = process.env.ADMIN_PASSWORD;
@@ -331,37 +264,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   }
 
-  // ─── Admin: Shipping Rate Setup ──────────────────────────────────────────────
-
-  app.post("/api/admin/setup-shipping-rates", requireAdminPassword, async (_req, res) => {
+  // ─── Admin: Create correct 100 MXN paid shipping rate ────────────────────
+  // Call this once via POST /api/admin/create-paid-shipping-rate
+  // then update STRIPE_SHIPPING_RATE_PAID in Replit Secrets with the returned ID.
+  app.post("/api/admin/create-paid-shipping-rate", requireAdminPassword, async (_req, res) => {
     try {
       const stripe = getStripeClient();
-
-      const free = await stripe.shippingRates.create({
-        display_name: "Envío estándar gratuito (600 MXN en adelante)",
-        type: "fixed_amount",
-        fixed_amount: { amount: 0, currency: "mxn" },
-      });
-      console.log("✅ STRIPE_SHIPPING_RATE_FREE=", free.id);
-
       const paid = await stripe.shippingRates.create({
         display_name: "Envío estándar (MXN)",
         type: "fixed_amount",
-        fixed_amount: { amount: 1500, currency: "mxn" },
+        fixed_amount: { amount: 10000, currency: "mxn" }, // 100.00 MXN
       });
-      console.log("✅ STRIPE_SHIPPING_RATE_PAID=", paid.id);
-
+      console.log("✅ New STRIPE_SHIPPING_RATE_PAID=", paid.id);
       res.json({
         success: true,
-        freeShippingRateId: free.id,
-        paidShippingRateId: paid.id,
-        message: "Shipping rates created. Add these IDs to your environment secrets.",
+        newPaidShippingRateId: paid.id,
+        message: "Update STRIPE_SHIPPING_RATE_PAID in Replit Secrets with this ID, then restart.",
       });
     } catch (error) {
-      console.error("Error creating shipping rates:", error);
-      res.status(500).json({ message: "Failed to create shipping rates" });
+      console.error("Error creating paid shipping rate:", error);
+      res.status(500).json({ message: "Failed to create paid shipping rate" });
     }
   });
+
+  // ─── Admin: API Key Management ────────────────────────────────────────────
 
   app.get("/api/admin/api-keys", requireAdminPassword, async (_req, res) => {
     try {
@@ -486,33 +412,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!apiKey) {
         return res.status(503).json({ message: "BABYLOVE_API_KEY not configured" });
       }
-
       const response = await fetch("https://api.babylovegrowth.ai/api/integrations/v1/articles?limit=100&page=1", {
         headers: { "X-API-Key": apiKey, "Content-Type": "application/json" },
       });
-
       if (!response.ok) {
         const errText = await response.text();
         console.error("BabyLoveGrowth API error:", response.status, errText);
         return res.status(502).json({ message: `BabyLoveGrowth API error: ${response.status}` });
       }
-
       const articles = await response.json();
       if (!Array.isArray(articles)) {
         return res.status(502).json({ message: "Unexpected response from BabyLoveGrowth API" });
       }
-
       let created = 0;
       let skipped = 0;
-
       for (const article of articles) {
         const slug = article.slug || `article-${article.id}`;
         const existing = await storage.getBlogPost(slug);
-        if (existing) {
-          skipped++;
-          continue;
-        }
-
+        if (existing) { skipped++; continue; }
         await storage.createBlogPost({
           title: article.title || "Sin título",
           slug,
@@ -524,7 +441,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         created++;
       }
-
       res.json({ success: true, created, skipped, total: articles.length });
     } catch (error) {
       console.error("Sync error:", error);
@@ -565,15 +481,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const stripe = getStripeClient();
       const { stripeProductId } = req.params;
       const { name, description, images, metadata, newPrice } = req.body;
-
       const updateData: any = {};
       if (name) updateData.name = name;
       if (description !== undefined) updateData.description = description;
       if (images) updateData.images = images;
       if (metadata) updateData.metadata = metadata;
-
       await stripe.products.update(stripeProductId, updateData);
-
       if (newPrice && typeof newPrice === "number") {
         const existingPrices = await stripe.prices.list({ product: stripeProductId, active: true, limit: 1 });
         const newPriceObj = await stripe.prices.create({
@@ -596,7 +509,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ─── Public: Site Settings (for dynamic banner) ───────────────────────────
+  // ─── Public: Site Settings ────────────────────────────────────────────────
 
   app.get("/api/settings/:key", async (req, res) => {
     try {
@@ -624,9 +537,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/sitemap.xml", async (_req, res) => {
     const baseUrl = process.env.BASE_URL || `${_req.protocol}://${_req.get("host")}`;
-
     const today = new Date().toISOString().split("T")[0];
-
     const staticPages = [
       { url: "/",                     lastmod: today, changefreq: "weekly",  priority: "1.0" },
       { url: "/productos",            lastmod: today, changefreq: "daily",   priority: "0.9" },
@@ -636,35 +547,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       { url: "/donde-encontrarnos",   lastmod: today, changefreq: "monthly", priority: "0.7" },
       { url: "/blog",                 lastmod: today, changefreq: "weekly",  priority: "0.8" },
     ];
-
     let productPages: { url: string; lastmod: string; changefreq: string; priority: string }[] = [];
     try {
       const products = await storage.getProducts();
-      productPages = products.map(p => ({
-        url: `/productos/${p.id}`,
-        lastmod: today,
-        changefreq: "weekly",
-        priority: "0.8",
-      }));
-    } catch (err) {
-      console.error("Sitemap: failed to fetch products", err);
-    }
-
+      productPages = products.map(p => ({ url: `/productos/${p.id}`, lastmod: today, changefreq: "weekly", priority: "0.8" }));
+    } catch (err) { console.error("Sitemap: failed to fetch products", err); }
     let blogPages: { url: string; lastmod: string; changefreq: string; priority: string }[] = [];
     try {
       const posts = await storage.listBlogPosts(false);
-      blogPages = posts.map(p => ({
-        url: `/blog/${p.slug}`,
-        lastmod: p.updatedAt.toISOString().split("T")[0],
-        changefreq: "monthly",
-        priority: "0.7",
-      }));
-    } catch (err) {
-      console.error("Sitemap: failed to fetch blog posts", err);
-    }
-
+      blogPages = posts.map(p => ({ url: `/blog/${p.slug}`, lastmod: p.updatedAt.toISOString().split("T")[0], changefreq: "monthly", priority: "0.7" }));
+    } catch (err) { console.error("Sitemap: failed to fetch blog posts", err); }
     const allPages = [...staticPages, ...productPages, ...blogPages];
-
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages.map(p => `  <url>
@@ -674,7 +567,6 @@ ${allPages.map(p => `  <url>
     <priority>${p.priority}</priority>
   </url>`).join("\n")}
 </urlset>`;
-
     res.set("Content-Type", "application/xml");
     res.send(xml);
   });
@@ -682,81 +574,15 @@ ${allPages.map(p => `  <url>
   app.get("/robots.txt", (_req, res) => {
     const baseUrl = process.env.BASE_URL || `${_req.protocol}://${_req.get("host")}`;
     res.set("Content-Type", "text/plain");
-    res.send(`User-agent: *
-Allow: /
-Disallow: /checkout/
-Disallow: /api/
-Disallow: /admin/
-Disallow: /empleados/
-
-Sitemap: ${baseUrl}/sitemap.xml`);
+    res.send(`User-agent: *\nAllow: /\nDisallow: /checkout/\nDisallow: /api/\nDisallow: /admin/\nDisallow: /empleados/\n\nSitemap: ${baseUrl}/sitemap.xml`);
   });
 
   app.get("/llms.txt", (_req, res) => {
     res.set("Content-Type", "text/plain");
-    res.send(`# Zahal - Desodorantes Naturales de Alumbre
-
-> Zahal offers natural stone-based deodorants free of aluminum, parabens, and harmful chemicals, emphasizing protection, eco-friendliness, and cruelty-free practices.
-
-Zahal is a brand dedicated to providing natural deodorant alternatives made from pure mineral alum stone. Their products are designed to ensure effective 24-hour protection while respecting health, the environment, and animal welfare. The website features detailed descriptions of product benefits, usage, and community testimonials, making it a comprehensive resource for natural personal care solutions.
-
-## Core Content
-
-[Productos naturales](https://zahal.com.mx/productos)
-
-### Product Descriptions and Benefits
-- Desodorantes con piedra de alumbre, sin químicos agresivos ni parabenos.
-- Protección antibacterial y duradera por 24 horas.
-- Productos en formato roll-on, stick y para toda la familia.
-- Libre de manchas y residuos en la ropa.
-- Libre de crueldad animal y empaques sostenibles.
-
-### Product Categories
-- Vida Cotidiana
-- Deportistas
-- Viajeros
-- Teens
-
-### Customer Testimonials
-- Experiencias de usuarios satisfechos sobre protección efectiva, sin irritación y sin manchas en la ropa.
-- Recomendaciones y comentarios en sección de reseñas con productos destacados como Roll On Teens, Aloe Vera, y Stick Natural.
-
-## Resources
-
-[Elige tu favorito](https://zahal.com.mx/productos)
-
-[Nuestros Más Vendidos](https://zahal.com.mx/productos)
-
-### Popular Products
-- Roll On con Aloe Vera 30ml
-- Stick Natural 120g
-- Limpiador de Manos Spray 30ml
-
-### Sobre la Marca
-- [Nuestra historia](https://zahal.com.mx/nosotros)
-- [Conoce más sobre el origen del alumbrado](https://zahal.com.mx/nosotros)
-
-## Why Choose Zahal?
-
-- Producto natural, sin químicos dañinos.
-- Adecuado para piel sensible y uso diario.
-- Eco-friendly y cruelty-free.
-- Garantía de protección efectiva sin residuos blancos ni manchas amarillas.
-
-## Optional
-
-### Comunidad y Suscripciones
-- Recibe tips de cuidado natural y ofertas exclusivas.
-- Suscríbete para recibir novedades, sin spam y con opción de cancelar.
-
-### Contacto y Puntos de Venta
-- Encuentra puntos de venta distribuidos en toda México.
-- Información sobre disponibilidad y compra en línea.
-
-[Ver Tienda Completa](https://zahal.com.mx/productos)`);
+    res.send(`# Zahal - Desodorantes Naturales de Alumbre\n\n> Zahal offers natural stone-based deodorants free of aluminum, parabens, and harmful chemicals, emphasizing protection, eco-friendliness, and cruelty-free practices.\n\nZahal is a brand dedicated to providing natural deodorant alternatives made from pure mineral alum stone. Their products are designed to ensure effective 24-hour protection while respecting health, the environment, and animal welfare.\n\n## Core Content\n\n[Productos naturales](https://zahal.com.mx/productos)\n\n### Product Descriptions and Benefits\n- Desodorantes con piedra de alumbre, sin químicos agresivos ni parabenos.\n- Protección antibacterial y duradera por 24 horas.\n- Productos en formato roll-on, stick y para toda la familia.\n- Libre de manchas y residuos en la ropa.\n- Libre de crueldad animal y empaques sostenibles.\n\n[Ver Tienda Completa](https://zahal.com.mx/productos)`);
   });
 
-  // ─── Shopify → New Site 301 Redirects (preserves Google link equity) ───────
+  // ─── Shopify → New Site 301 Redirects ─────────────────────────────────────
 
   app.get("/products/:slug", async (req, res) => {
     try {
@@ -764,7 +590,7 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
       const slug = req.params.slug.toLowerCase();
       const match = products.find(p => toSlug(p.name) === slug);
       if (match) return res.redirect(301, `/productos/${match.id}`);
-    } catch { /* fall through to catalog */ }
+    } catch { }
     res.redirect(301, "/productos");
   });
 
@@ -774,7 +600,7 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
       const slug = req.params.slug.toLowerCase();
       const match = products.find(p => toSlug(p.name) === slug);
       if (match) return res.redirect(301, `/productos/${match.id}`);
-    } catch { /* fall through */ }
+    } catch { }
     const cat = COLLECTION_MAP[req.params.collection.toLowerCase()];
     res.redirect(301, cat ? `/productos?categoria=${cat}` : "/productos");
   });
@@ -785,12 +611,10 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
   });
 
   app.get("/collections", (_req, res) => res.redirect(301, "/productos"));
-
   app.get("/pages/:page", (req, res) => {
     const dest = PAGE_MAP[req.params.page.toLowerCase()];
     res.redirect(301, dest || "/");
   });
-
   app.get("/cart", (_req, res) => res.redirect(301, "/"));
   app.get("/cart/:token", (_req, res) => res.redirect(301, "/"));
   app.get("/checkout", (_req, res) => res.redirect(301, "/"));
@@ -815,7 +639,7 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
     try {
       const product = await storage.getProductById(req.params.id);
       if (!product) mark404(res);
-    } catch { /* let Vite handle render */ }
+    } catch { }
     next();
   });
 
@@ -823,21 +647,15 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
     try {
       const post = await storage.getBlogPost(req.params.slug);
       if (!post || !post.published) mark404(res);
-    } catch { /* let Vite handle render */ }
+    } catch { }
     next();
   });
 
   app.use((req, res, next) => {
     const p = req.path;
-    if (p.startsWith("/api") || p === "/sitemap.xml" || p === "/robots.txt" || p === "/llms.txt") {
-      return next();
-    }
-    if (/\.\w{2,5}$/.test(p)) {
-      return next();
-    }
-    if (!isKnownSpaRoute(p)) {
-      mark404(res);
-    }
+    if (p.startsWith("/api") || p === "/sitemap.xml" || p === "/robots.txt" || p === "/llms.txt") return next();
+    if (/\.\w{2,5}$/.test(p)) return next();
+    if (!isKnownSpaRoute(p)) mark404(res);
     next();
   });
 
