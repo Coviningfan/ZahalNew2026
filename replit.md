@@ -2,7 +2,15 @@
 
 This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application uses a custom React frontend with direct Stripe payment processing — no Shopify dependency.
 
-# Recent Changes (February 27, 2026)
+# Recent Changes (March 5, 2026)
+
+## Free Shipping from 600 MXN
+- **Shipping rate logic in checkout**: Cart subtotal is calculated by fetching Stripe prices; if >= 600 MXN (60000 centavos), free shipping is applied, otherwise 15 MXN standard shipping
+- **Environment variables**: `STRIPE_SHIPPING_RATE_FREE` and `STRIPE_SHIPPING_RATE_PAID` store the Stripe shipping rate IDs
+- **Admin endpoint**: `POST /api/admin/setup-shipping-rates` creates both shipping rates in Stripe (one-time use, protected by admin password)
+- **Backwards compatible**: If shipping rate env vars are not set, checkout works as before without shipping options
+
+# Previous Changes (February 27, 2026)
 
 ## SEO Indexing Fixes (Google Search Console)
 - **Removed hardcoded og:url and og:image from index.html**: These static meta tags were causing Google to see the same canonical URL (homepage) for every page, resulting in 66 "alternate page with proper canonical tag" entries. React Helmet (via `seo.tsx`) is now the sole authority for page-specific OG/canonical meta.
@@ -10,6 +18,11 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 - **Added changefreq and priority to sitemap**: All sitemap entries now include `<changefreq>` and `<priority>` tags for better crawl guidance.
 - **Trailing-slash 301 redirect middleware**: Normalizes `/path/` → `/path` to prevent duplicate URL indexing.
 - **X-Robots-Tag HTTP header middleware**: Server-side `noindex, nofollow` header reinforces client-side meta for checkout, privacy, terms, admin, and internal routes.
+- **Soft 404 prevention**: Server-side middleware returns proper HTTP 404 for unknown SPA routes, non-existent products (`/productos/:id`), and unpublished blog posts (`/blog/:slug`). Uses `res.status` override + `res.statusCode` to work with both Vite dev and production static serving.
+- **LCP optimization**: Hero banner image (`hero-banner.png`) copied to `/public/` with `<link rel="preload" as="image" fetchpriority="high">` in index.html for immediate browser discovery.
+- **Removed render-blocking Nunito font**: CSS `@import` for unused Google Font removed; font variables updated to system font stacks (system-ui for sans, Georgia for serif).
+- **CSP updated for Google Ads**: Added `googleads.g.doubleclick.net`, `www.google.com` to script-src/connect-src/frame-src; removed unused Google Fonts domains from style-src/font-src.
+- **Cookie consent banner**: GDPR/privacy-compliant banner with Accept All, Reject, and Customize (analytics + marketing toggles). Uses Google Consent Mode v2 — defaults to denied, only grants after explicit consent. Google Analytics/GTM/Ads scripts removed from index.html and loaded dynamically only after consent. Consent stored in localStorage (`zahal-cookie-consent`).
 - **Dependency update**: rollup@4.24.4 → rollup@2.80.0 added as direct dependency per security scan requirement; Vite retains its own rollup@4.x internally.
 
 # Previous Changes (February 18, 2026)

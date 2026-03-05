@@ -200,6 +200,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to create shipping rates" });
     }
   });
+  const FREE_SHIPPING_THRESHOLD_CENTS = 60000; // 600.00 MXN
 
   app.post("/api/checkout", checkoutLimiter, async (req, res) => {
     try {
@@ -229,6 +230,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const baseUrl = `${req.protocol}://${req.get("host")}`;
 
       const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
+      if (items.length === 0) {
+        return res.status(400).json({ message: "Cart is empty" });
+      }
+
+      let subtotalCents = 0;
+      for (const item of items) {
+        try {
+          const price = await stripe.prices.retrieve(item.stripePriceId);
+          if (!price.unit_amount || price.unit_amount <= 0) {
+            return res.status(400).json({ message: `Invalid price for item ${item.stripePriceId}` });
+          }
+          if (price.currency !== "mxn") {
+            return res.status(400).json({ message: `Unsupported currency for item ${item.stripePriceId}` });
+          }
+          subtotalCents += price.unit_amount * item.quantity;
+        } catch (priceError: any) {
+          console.error(`Error retrieving price ${item.stripePriceId}:`, priceError);
+          return res.status(400).json({ message: `Invalid price ID: ${item.stripePriceId}` });
+        }
+      }
+
+      const freeRateId = process.env.STRIPE_SHIPPING_RATE_FREE;
+      const paidRateId = process.env.STRIPE_SHIPPING_RATE_PAID;
+
+      const shippingOptions: { shipping_rate: string }[] = [];
+      if (freeRateId && paidRateId) {
+        const selectedRate = subtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS ? freeRateId : paidRateId;
+        shippingOptions.push({ shipping_rate: selectedRate });
+      }
+
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      const sessionParams: any = {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
@@ -241,6 +274,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Only attach shipping_options when rate IDs are configured
       if (shippingRateId) {
         sessionParams.shipping_options = [{ shipping_rate: shippingRateId }];
+      if (shippingOptions.length > 0) {
+        sessionParams.shipping_options = shippingOptions;
       }
 
       const session = await stripe.checkout.sessions.create(sessionParams);
@@ -295,6 +330,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     next();
   }
+
+  // ─── Admin: Shipping Rate Setup ──────────────────────────────────────────────
+
+  app.post("/api/admin/setup-shipping-rates", requireAdminPassword, async (_req, res) => {
+    try {
+      const stripe = getStripeClient();
+
+      const free = await stripe.shippingRates.create({
+        display_name: "Envío estándar gratuito (600 MXN en adelante)",
+        type: "fixed_amount",
+        fixed_amount: { amount: 0, currency: "mxn" },
+      });
+      console.log("✅ STRIPE_SHIPPING_RATE_FREE=", free.id);
+
+      const paid = await stripe.shippingRates.create({
+        display_name: "Envío estándar (MXN)",
+        type: "fixed_amount",
+        fixed_amount: { amount: 1500, currency: "mxn" },
+      });
+      console.log("✅ STRIPE_SHIPPING_RATE_PAID=", paid.id);
+
+      res.json({
+        success: true,
+        freeShippingRateId: free.id,
+        paidShippingRateId: paid.id,
+        message: "Shipping rates created. Add these IDs to your environment secrets.",
+      });
+    } catch (error) {
+      console.error("Error creating shipping rates:", error);
+      res.status(500).json({ message: "Failed to create shipping rates" });
+    }
+  });
 
   app.get("/api/admin/api-keys", requireAdminPassword, async (_req, res) => {
     try {

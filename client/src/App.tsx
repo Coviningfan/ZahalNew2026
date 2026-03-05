@@ -6,6 +6,9 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/hooks/use-cart";
+import CookieConsent, { initConsentOnLoad } from "@/components/cookie-consent";
+
+initConsentOnLoad();
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
@@ -68,6 +71,7 @@ function App() {
               Saltar al contenido principal
             </a>
             <Router />
+            <CookieConsent />
           </TooltipProvider>
         </CartProvider>
       </QueryClientProvider>
