@@ -2,7 +2,15 @@
 
 This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application uses a custom React frontend with direct Stripe payment processing — no Shopify dependency.
 
-# Recent Changes (February 27, 2026)
+# Recent Changes (March 5, 2026)
+
+## Free Shipping from 600 MXN
+- **Shipping rate logic in checkout**: Cart subtotal is calculated by fetching Stripe prices; if >= 600 MXN (60000 centavos), free shipping is applied, otherwise 15 MXN standard shipping
+- **Environment variables**: `STRIPE_SHIPPING_RATE_FREE` and `STRIPE_SHIPPING_RATE_PAID` store the Stripe shipping rate IDs
+- **Admin endpoint**: `POST /api/admin/setup-shipping-rates` creates both shipping rates in Stripe (one-time use, protected by admin password)
+- **Backwards compatible**: If shipping rate env vars are not set, checkout works as before without shipping options
+
+# Previous Changes (February 27, 2026)
 
 ## SEO Indexing Fixes (Google Search Console)
 - **Removed hardcoded og:url and og:image from index.html**: These static meta tags were causing Google to see the same canonical URL (homepage) for every page, resulting in 66 "alternate page with proper canonical tag" entries. React Helmet (via `seo.tsx`) is now the sole authority for page-specific OG/canonical meta.
