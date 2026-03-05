@@ -95,6 +95,38 @@ function isKnownSpaRoute(path: string): boolean {
   return false;
 }
 
+// ─── Shipping rate IDs (set these after running createShippingRates once) ────
+// Free shipping applied when order total >= FREE_SHIPPING_THRESHOLD_CENTS.
+// Replace the placeholder values with real IDs from your Stripe dashboard.
+const FREE_SHIPPING_THRESHOLD_CENTS = 60000; // 600.00 MXN
+const SHIPPING_RATE_FREE = process.env.STRIPE_SHIPPING_RATE_FREE ?? "";
+const SHIPPING_RATE_PAID = process.env.STRIPE_SHIPPING_RATE_PAID ?? "";
+
+/**
+ * One-time helper — call this once via a script or temporary endpoint to
+ * create the two shipping rates in your Stripe sandbox/live account,
+ * then store the returned IDs as env vars:
+ *   STRIPE_SHIPPING_RATE_FREE=shr_...
+ *   STRIPE_SHIPPING_RATE_PAID=shr_...
+ */
+export async function createShippingRatesIfNeeded(): Promise<void> {
+  if (SHIPPING_RATE_FREE && SHIPPING_RATE_PAID) return;
+  const stripe = getStripeClient();
+  const free = await stripe.shippingRates.create({
+    display_name: "Envío estándar gratuito (600 MXN en adelante)",
+    type: "fixed_amount",
+    fixed_amount: { amount: 0, currency: "mxn" },
+  });
+  const paid = await stripe.shippingRates.create({
+    display_name: "Envío estándar",
+    type: "fixed_amount",
+    fixed_amount: { amount: 1500, currency: "mxn" },
+  });
+  console.log("✅ STRIPE_SHIPPING_RATE_FREE=", free.id);
+  console.log("✅ STRIPE_SHIPPING_RATE_PAID=", paid.id);
+  console.log("Add these to your .env file and restart the server.");
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   app.use((req, res, next) => {
     const { path, originalUrl } = req;
@@ -158,16 +190,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ─── One-time shipping-rate setup endpoint (admin-protected) ─────────────
+  app.post("/api/admin/setup-shipping-rates", requireAdminPassword, async (_req, res) => {
+    try {
+      await createShippingRatesIfNeeded();
+      res.json({ success: true, message: "Check server logs for the new shipping rate IDs." });
+    } catch (error) {
+      console.error("Error creating shipping rates:", error);
+      res.status(500).json({ message: "Failed to create shipping rates" });
+    }
+  });
+
   app.post("/api/checkout", checkoutLimiter, async (req, res) => {
     try {
       const { items } = checkoutSchema.parse(req.body);
       const stripe = getStripeClient();
+
       const lineItems = items.map(item => ({
         price: item.stripePriceId,
         quantity: item.quantity,
       }));
+
+      // ── Compute subtotal to decide shipping rate ──────────────────────────
+      // Fetch unit amounts for all price IDs so we can total them here.
+      const priceFetches = await Promise.all(
+        items.map(item => stripe.prices.retrieve(item.stripePriceId))
+      );
+      const subtotalCents = priceFetches.reduce((sum, price, i) => {
+        return sum + (price.unit_amount ?? 0) * items[i].quantity;
+      }, 0);
+
+      // ── Choose shipping rate based on threshold ───────────────────────────
+      const shippingRateId =
+        subtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS
+          ? SHIPPING_RATE_FREE
+          : SHIPPING_RATE_PAID;
+
       const baseUrl = `${req.protocol}://${req.get("host")}`;
-      const session = await stripe.checkout.sessions.create({
+
+      const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
@@ -175,7 +236,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         cancel_url: `${baseUrl}/checkout/cancelado`,
         shipping_address_collection: { allowed_countries: ["MX"] },
         locale: "es",
-      });
+      };
+
+      // Only attach shipping_options when rate IDs are configured
+      if (shippingRateId) {
+        sessionParams.shipping_options = [{ shipping_rate: shippingRateId }];
+      }
+
+      const session = await stripe.checkout.sessions.create(sessionParams);
       res.json({ url: session.url });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -622,12 +690,7 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
   });
 
   // ─── Shopify → New Site 301 Redirects (preserves Google link equity) ───────
-  //
-  // Matches every URL pattern Shopify generates so no indexed page 404s.
-  // Product slugs are matched dynamically against the product catalog.
-  // Unmatched slugs fall back to the catalog page (/productos).
 
-  // /products/:slug  →  /productos/:id  (or /productos if no match)
   app.get("/products/:slug", async (req, res) => {
     try {
       const products = await storage.getProducts();
@@ -638,7 +701,6 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
     res.redirect(301, "/productos");
   });
 
-  // /collections/:collection/products/:slug  →  specific product or catalog
   app.get("/collections/:collection/products/:slug", async (req, res) => {
     try {
       const products = await storage.getProducts();
@@ -650,22 +712,18 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
     res.redirect(301, cat ? `/productos?categoria=${cat}` : "/productos");
   });
 
-  // /collections/:collection  →  /productos?categoria=X  (or /productos)
   app.get("/collections/:collection", (req, res) => {
     const cat = COLLECTION_MAP[req.params.collection.toLowerCase()];
     res.redirect(301, cat ? `/productos?categoria=${cat}` : "/productos");
   });
 
-  // /collections  →  /productos
   app.get("/collections", (_req, res) => res.redirect(301, "/productos"));
 
-  // /pages/:page  →  mapped route or homepage
   app.get("/pages/:page", (req, res) => {
     const dest = PAGE_MAP[req.params.page.toLowerCase()];
     res.redirect(301, dest || "/");
   });
 
-  // Legacy Shopify utility routes
   app.get("/cart", (_req, res) => res.redirect(301, "/"));
   app.get("/cart/:token", (_req, res) => res.redirect(301, "/"));
   app.get("/checkout", (_req, res) => res.redirect(301, "/"));
@@ -678,12 +736,6 @@ Zahal is a brand dedicated to providing natural deodorant alternatives made from
     const q = (_req.query.q || "") as string;
     res.redirect(301, q ? `/productos?buscar=${encodeURIComponent(q)}` : "/productos");
   });
-
-  // ─── Soft-404 Prevention: force proper HTTP 404 for unknown SPA routes ────
-  //
-  // The Vite / static catch-all always sends index.html with status 200.
-  // This middleware runs first and overrides res.status so the final response
-  // uses 404 for routes Google should not index.
 
   function mark404(res: import("express").Response) {
     res.statusCode = 404;
