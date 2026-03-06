@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { Leaf, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-const banner1 = "/hero-banner.png";
+import banner1 from "@assets/WhatsApp_Image_2026-03-06_at_17.52.44_1772841271835.webp";
 import banner2 from "@assets/BANNER_Febrero_1771433657501.png";
 import banner3 from "@assets/Banners_enature_1771436433184.png";
 import enatureLogo from "@assets/LOGO-ENATURE_340x_1771436603136.avif";
