@@ -14,24 +14,25 @@ const slides = [
     badge: "Productos naturales",
     title: (
       <>
-        Cuida tu piel,{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">respeta</span>{" "}
-        tu cuerpo
+        Manos limpias,{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">Protección natural</span>{" "}
+        todos los días
       </>
     ),
     mobileTitle: (
       <>
-        Cuida tu piel,{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">respeta</span>{" "}
-        tu cuerpo
+        Manos limpias,{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">Protección natural</span>{" "}
+        todos los días
       </>
     ),
     description:
-      "Desodorantes de piedra de alumbre: protección natural que dura 24 horas, sin químicos que dañen tu piel ni tu ropa.",
-    mobileDescription: "Protección natural 24h sin químicos.",
+      "Manos limpias, Protección natural todos los días.",
+    mobileDescription: "Protección natural todos los días.",
     cta: { label: "Ver Productos", href: "/productos" },
     ctaSecondary: { label: "Nuestra Historia", href: "/nosotros" },
     bgImage: banner1,
+    alignRight: true,
   },
   {
     badge: "100% Natural",
