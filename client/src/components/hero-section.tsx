@@ -27,8 +27,8 @@ const slides = [
       </>
     ),
     description:
-      "Manos limpias, Protección natural todos los días.",
-    mobileDescription: "Protección natural todos los días.",
+      "La higiene que necesitas, con el cuidado natural que amas.",
+    mobileDescription: "La higiene que necesitas, con el cuidado natural que amas.",
     cta: { label: "Ver Productos", href: "/productos" },
     ctaSecondary: { label: "Nuestra Historia", href: "/nosotros" },
     bgImage: banner1,
