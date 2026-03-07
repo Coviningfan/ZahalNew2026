@@ -76,6 +76,7 @@ const slides = [
     ctaSecondary: null,
     bgImage: banner3,
     alignRight: true,
+    externalLink: true,
     showLogos: true,
     hideBadge: true,
   },
@@ -173,7 +174,7 @@ export default function HeroSection() {
                     <div role="img" aria-label="eNature" className="h-10 w-20 pointer-events-none select-none drop-shadow-lg" style={{ backgroundImage: `url(${enatureLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
                   </div>
                 )}
-                {slide.alignRight ? (
+                {slide.externalLink ? (
                   <a
                     href={slide.cta.href}
                     target="_blank"
@@ -274,7 +275,7 @@ export default function HeroSection() {
                 </p>
               )}
               <div className={`flex flex-row gap-4 items-center ${slide.alignRight ? "justify-end" : ""}`}>
-                {slide.alignRight ? (
+                {slide.externalLink ? (
                   <a
                     href={slide.cta.href}
                     target="_blank"
