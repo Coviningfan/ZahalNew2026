@@ -55,7 +55,7 @@ const slides = [
     ctaSecondary: { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
     bgImage: banner2,
     alignRight: true,
-    bgPosition: "center 60%",
+    bgPosition: "center 80%",
   },
   {
     badge: "Zahal x eNature",
