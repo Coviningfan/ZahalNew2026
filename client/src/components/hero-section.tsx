@@ -15,14 +15,14 @@ const slides = [
     title: (
       <>
         Manos limpias,{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">Protección natural</span>{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">protección natural</span>{" "}
         todos los días
       </>
     ),
     mobileTitle: (
       <>
         Manos limpias,{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">Protección natural</span>{" "}
+        <span className="italic text-[hsl(99,30%,80%)]">protección natural</span>{" "}
         todos los días
       </>
     ),
