@@ -54,6 +54,7 @@ const slides = [
     cta: { label: "Explorar Catálogo", href: "/productos" },
     ctaSecondary: { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
     bgImage: banner2,
+    alignRight: true,
   },
   {
     badge: "Zahal x eNature",
