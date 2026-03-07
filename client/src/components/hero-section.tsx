@@ -55,6 +55,7 @@ const slides = [
     ctaSecondary: { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
     bgImage: banner2,
     alignRight: true,
+    bgPosition: "center 60%",
   },
   {
     badge: "Zahal x eNature",
@@ -145,7 +146,8 @@ export default function HeroSection() {
                 {...(i === 0 ? { fetchpriority: "high" } : {})}
                 loading={i === 0 ? "eager" : "lazy"}
                 alt=""
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover"
+                style={{ objectPosition: s.bgPosition || "center center" }}
               />
               <div className="absolute inset-0 bg-gradient-to-l from-black/55 via-black/20 to-transparent"></div>
             </div>
@@ -246,6 +248,7 @@ export default function HeroSection() {
               loading={i === 0 ? "eager" : "lazy"}
               alt=""
               className="w-full h-full object-cover"
+              style={{ objectPosition: s.bgPosition || "center center" }}
             />
             <div className="absolute inset-0 bg-black/45"></div>
           </div>
