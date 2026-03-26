@@ -54,3 +54,7 @@ VITE_GA4_ID = "G-NNR6S8V151"
 BABYLOVE_API_KEY = "96ce1d1e-8664-45b0-997f-aea29ab6a7b1"
 STRIPE_SHIPPING_RATE_FREE = "shr_1T7hpVARf6eeOJddZPFGmu4W"
 STRIPE_SHIPPING_RATE_PAID = "shr_1T7hpVARf6eeOJddRHLvOeHf"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
