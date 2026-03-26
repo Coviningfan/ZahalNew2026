@@ -84,7 +84,7 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 - Product cards: refined hover animations (lift + shadow), Eye icon on "Ver Detalles" button
 - Newsletter subscribe button: white on green instead of amber
 
-## Product Catalog (11 Products)
+## Product Catalog (10 Products)
 1. Desodorante Spray 15ml - $45.00
 2. Roll On con Aloe Vera 30ml - $56.00
 3. Roll On Teens con Aroma 30ml - $66.00
@@ -93,9 +93,8 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 6. Roll On Sport 90ml - $120.00
 7. Pack Dúo Stick + Spray - $130.00
 8. Spray Corporal 240ml - $131.00
-9. Kit Eco Viajero - $150.00
-10. Stick Natural 60g - $189.00
-11. Stick Natural 120g - $275.00
+9. Stick Natural 60g - $189.00
+10. Stick Natural 120g - $275.00
 
 ## Key Components
 - `use-cart.tsx`: CartProvider context with localStorage persistence, checkout via Stripe
@@ -106,7 +105,7 @@ This is a full-stack e-commerce application for Zahal, a natural skincare brand 
 - `proof-section.tsx`: Trust/reassurance component with highlights and stats
 - `hero-section.tsx`: Full-screen hero with green gradient overlay
 - `featured-products.tsx`: Shows first 3 products with "Ver Tienda Completa" CTA
-- `product-categories.tsx`: 4 category cards (Unisex, Sport, Travel, Teens) linking to /productos
+- `product-categories.tsx`: 3 category cards (Unisex, Sport, Teens) linking to /productos
 - `blog.tsx`: Public blog listing page with card grid
 - `blog-post.tsx`: Individual blog post page with markdown rendering
 - `marketing-portal.tsx`: Employee portal with blog editor, banner manager, product management

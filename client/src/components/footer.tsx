@@ -8,7 +8,6 @@ const productLinks = [
   { href: "/productos?categoria=unisex", label: "Unisex" },
   { href: "/productos?categoria=sport", label: "Sport" },
   { href: "/productos?categoria=teens", label: "Teens" },
-  { href: "/productos/eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon", label: "Kit Eco Viajero" },
 ];
 
 const infoLinks = [

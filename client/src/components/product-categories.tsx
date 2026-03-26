@@ -14,12 +14,6 @@ const categories = [
     image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_15_39055246-6ec5-49ef-87a0-7e1de3b85b9a.jpg?v=1730323398&width=1500",
   },
   {
-    id: "travel",
-    title: "Travel",
-    description: "Tamaño perfecto",
-    image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_13_959e9a9d-14fb-4d0b-bf05-9df00ec8fe20.jpg?v=1729194974&width=1500",
-  },
-  {
     id: "teens",
     title: "Teens",
     description: "Suave y efectivo",

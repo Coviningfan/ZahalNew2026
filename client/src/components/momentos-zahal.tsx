@@ -32,19 +32,6 @@ const categories = [
     }
   },
   {
-    id: "travel",
-    title: "Viajeros",
-    description: "Tamaño perfecto",
-    image: "https://5b32c9-07.myshopify.com/cdn/shop/files/ZAHAL_Shopify_13_959e9a9d-14fb-4d0b-bf05-9df00ec8fe20.jpg?v=1729194974&width=800",
-    featuredProduct: {
-      id: "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
-      name: "Kit Eco Viajero",
-      description: "Todo lo que necesitas en tu maleta. Incluye mini desodorantes, jabón y limpiador. Cumple con normativas de aeropuerto y es 100% biodegradable.",
-      price: "$207",
-      image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_momento_2.jpg?v=1753740213"
-    }
-  },
-  {
     id: "teens",
     title: "Teens",
     description: "Suave y efectivo",

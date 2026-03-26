@@ -13,7 +13,6 @@ const products = [
       slug: "desodorante-corporal-de-piedra-de-alumbre-sales-naturales-en-spray-240-ml-copia",
       category: "unisex",
       weight: "15ml",
-      additionalCategories: "travel",
       features: JSON.stringify(["Sin clorhidrato de aluminio", "Sin parabenos", "Sin alcohol", "Sin aroma", "Vegano", "Orgánico", "No mancha", "pH neutro", "Protección 24hrs"]),
       inStock: "true",
       isFeatured: "true",
@@ -32,7 +31,6 @@ const products = [
       slug: "zahal-limpiador-de-manos-natural-30-ml",
       category: "manos",
       weight: "30ml",
-      additionalCategories: "travel",
       features: JSON.stringify(["Sales minerales", "Sin alcohol", "Sin aroma", "Tamaño viaje", "No se enjuaga", "Eco-friendly"]),
       inStock: "true",
       isFeatured: "false",
@@ -51,7 +49,6 @@ const products = [
       slug: "desodorante-natural-de-piedra-de-alumbre-roll-on-unisex-90-ml",
       category: "unisex",
       weight: "30ml",
-      additionalCategories: "travel",
       features: JSON.stringify(["Con aloe vera", "Sin clorhidrato de aluminio", "Sin alcohol", "Sin fragancia", "Sin parabenos", "Vegano", "Orgánico", "No tóxico", "pH neutro"]),
       inStock: "true",
       isFeatured: "true",
@@ -70,7 +67,6 @@ const products = [
       slug: "zahal-desodorante-natural-roll-on-teens-con-aroma-30-ml",
       category: "teens",
       weight: "30ml",
-      additionalCategories: "travel",
       features: JSON.stringify(["Con aroma fresco", "Para niños y adolescentes", "Con aloe vera", "Sin clorhidrato de aluminio", "Sin alcohol", "Sin parabenos", "Vegano", "Orgánico", "Piel sensible"]),
       inStock: "true",
       isFeatured: "false",
@@ -240,24 +236,6 @@ const products = [
     }
   },
   {
-    name: "Kit Eco Viajero",
-    description: "Kit completo de viaje con desodorantes naturales + limpiador de manos + jabón. Tamaños permitidos en puntos de revisión durante viajes. Permitido en aguas y playas protegidas. Incluye 2 jabones de árbol de té 30g, 1 Roll On 30ml, 1 Spray limpiador 30ml y 1 Eco 3 recargable 10g.",
-    images: [
-      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/26.png?v=1753740213",
-      "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_momento_2.jpg?v=1753740213"
-    ],
-    price: 20700,
-    metadata: {
-      slug: "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
-      category: "travel",
-      weight: "Kit",
-      features: JSON.stringify(["Kit completo 5 piezas", "Tamaño viaje", "Eco-friendly", "Sin químicos", "Biodegradable", "Vegano", "Orgánico", "Ideal para viajeros"]),
-      inStock: "true",
-      isFeatured: "true",
-      isNew: "false",
-    }
-  },
-  {
     name: "Eco Recargable 80g",
     description: "Desodorante natural recargable hasta 3 veces. Elaborado con piedra de alumbre en formato spray. Solo agrega agua purificada hasta la línea verde y déjalo reposar 12 horas para reactivar los cristales. Sin clorhidrato de aluminio, sin parabenos, sin alcohol.",
     images: [
@@ -313,6 +291,10 @@ const products = [
   },
 ];
 
+const removedSlugs = [
+  "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
+];
+
 async function seedProducts() {
   const stripe = getStripeClient();
 
@@ -320,6 +302,21 @@ async function seedProducts() {
   const existingSlugs = new Set(
     existingProducts.data.map(p => p.metadata?.slug).filter(Boolean)
   );
+
+  for (const existing of existingProducts.data) {
+    const slug = existing.metadata?.slug;
+    if (slug && removedSlugs.includes(slug)) {
+      await stripe.products.update(existing.id, { active: false });
+      console.log(`Deactivated removed product: "${existing.name}" (${slug})`);
+    }
+
+    if (existing.metadata?.additionalCategories === "travel") {
+      await stripe.products.update(existing.id, {
+        metadata: { ...existing.metadata, additionalCategories: "" },
+      });
+      console.log(`Cleared travel additionalCategories from: "${existing.name}" (${slug})`);
+    }
+  }
 
   for (const product of products) {
     if (existingSlugs.has(product.metadata.slug)) {
