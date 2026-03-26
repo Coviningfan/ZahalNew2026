@@ -20,6 +20,7 @@ const categories = [
   { value: "hombre", label: "Hombre" },
   { value: "sport", label: "Sport" },
   { value: "teens", label: "Teens" },
+  { value: "travel", label: "Travel" },
   { value: "soap", label: "Jabón" },
   { value: "cuidado", label: "Cuidado Personal" },
   { value: "manos", label: "Limpieza de Manos" },
@@ -112,7 +113,7 @@ export default function Products() {
     <div className="min-h-screen bg-background">
       <SEO
         title="Tienda de Productos Naturales"
-        description="Catálogo completo de desodorantes naturales de piedra de alumbre Zahal: sprays, roll-ons y sticks. Envío a todo México."
+        description="Catálogo completo de desodorantes naturales de piedra de alumbre Zahal: sprays, roll-ons, sticks y kits de viaje. Envío a todo México."
         path="/productos"
         jsonLd={pageSchemas}
       />

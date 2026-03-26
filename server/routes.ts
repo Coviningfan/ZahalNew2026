@@ -39,6 +39,8 @@ const COLLECTION_MAP: Record<string, string> = {
   deportivo: "sport",
   teens: "teens",
   "para-jovenes": "teens",
+  travel: "travel",
+  viaje: "travel",
   jabon: "soap",
   "jabon-natural": "soap",
   soap: "soap",

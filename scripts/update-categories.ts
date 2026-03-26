@@ -4,6 +4,10 @@ const categoryUpdates: Record<string, string> = {
   "zahal-desodorante-natural-en-spray-para-pies-240ml": "sport",
   "zahal-jabon-natural-arbol-de-te-100g": "sport",
   "zahal-limpiador-de-manos-natural-en-spray-240-ml": "sport",
+  "desodorante-corporal-de-piedra-de-alumbre-sales-naturales-en-spray-240-ml-copia": "travel",
+  "zahal-limpiador-de-manos-natural-30-ml": "travel",
+  "desodorante-natural-de-piedra-de-alumbre-roll-on-unisex-90-ml": "travel",
+  "zahal-desodorante-natural-roll-on-teens-con-aroma-30-ml": "travel",
 };
 
 async function updateCategories() {
