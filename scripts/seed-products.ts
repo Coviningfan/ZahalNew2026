@@ -27,7 +27,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/17.png?v=1753754062",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/84.jpg?v=1753817049"
     ],
-    price: 4200,
+    price: 5500,
     metadata: {
       slug: "zahal-limpiador-de-manos-natural-30-ml",
       category: "manos",
@@ -46,7 +46,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/3.png?v=1753738575",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/107.jpg?v=1753738575"
     ],
-    price: 5600,
+    price: 6000,
     metadata: {
       slug: "desodorante-natural-de-piedra-de-alumbre-roll-on-unisex-90-ml",
       category: "unisex",
@@ -65,7 +65,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/24.png?v=1753740898",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/25.png?v=1753740898"
     ],
-    price: 6600,
+    price: 7000,
     metadata: {
       slug: "zahal-desodorante-natural-roll-on-teens-con-aroma-30-ml",
       category: "teens",
@@ -84,7 +84,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/14_e454b680-c7d9-44e4-8bdc-8b1984a6974d.png?v=1753753777",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/15.png?v=1753753788"
     ],
-    price: 6800,
+    price: 7500,
     metadata: {
       slug: "zahal-jabon-natural-arbol-de-te-100g",
       category: "cuidado",
@@ -120,7 +120,7 @@ const products = [
     images: [
       "https://zahal.com.mx/img/roll-on-unisex-90ml.jpeg"
     ],
-    price: 11500,
+    price: 12000,
     metadata: {
       slug: "zahal-desodorante-natural-roll-on-unisex-90-ml",
       category: "unisex",
@@ -138,7 +138,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/18_b12bb71f-34f5-474a-b9dc-9bd50802f32c.png?v=1753750893",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/19.png?v=1753750910"
     ],
-    price: 11500,
+    price: 12500,
     metadata: {
       slug: "zahal-desodorante-natural-roll-on-men-90-ml",
       category: "hombre",
@@ -156,7 +156,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/20_03593599-4a47-4229-9ab9-13ddd0b88349.png?v=1753748140",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/20.png?v=1753747633"
     ],
-    price: 11500,
+    price: 12500,
     metadata: {
       slug: "zahal-desodorante-natural-roll-on-teens-90-ml",
       category: "teens",
@@ -174,7 +174,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/22_ff2e0357-efb6-461e-afc0-46f05cc19f51.png?v=1753751451",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/23.png?v=1753751463"
     ],
-    price: 12000,
+    price: 13000,
     metadata: {
       slug: "zahal-desodorante-natural-roll-on-sport-con-carbon-activado-90-ml",
       category: "sport",
@@ -228,7 +228,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/1_c7be3dfa-4d93-46ce-836c-67dbe4a66b92.png?v=1753753301",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/2.png?v=1753753312"
     ],
-    price: 13100,
+    price: 13500,
     metadata: {
       slug: "zahal-desodorante-corporal-natural-en-spray-240-ml",
       category: "unisex",
@@ -246,7 +246,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/26.png?v=1753740213",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_momento_2.jpg?v=1753740213"
     ],
-    price: 20700,
+    price: 22000,
     metadata: {
       slug: "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
       category: "travel",
@@ -264,7 +264,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/11.png?v=1753740323",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/31.jpg?v=1753740498"
     ],
-    price: 16300,
+    price: 16500,
     metadata: {
       slug: "zahal-desodorante-natural-eco-recargable-3-veces-80-g",
       category: "unisex",
@@ -282,7 +282,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/9_8bfc3190-0f7b-4627-b0a3-08f674e99f15.png?v=1753751926",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/10.png?v=1753752239"
     ],
-    price: 18900,
+    price: 20000,
     metadata: {
       slug: "zahal-desodorante-natural-stick-60-g",
       category: "unisex",
@@ -300,7 +300,7 @@ const products = [
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242",
       "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/SQUARE_ZAHAL_9.jpg?v=1753731242"
     ],
-    price: 27500,
+    price: 28500,
     metadata: {
       slug: "zahal-desodorante-natural-stik-120-g",
       category: "unisex",

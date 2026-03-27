@@ -14,7 +14,7 @@ const categories = [
       id: "zahal-desodorante-natural-stik-120-g",
       name: "Stick Natural 120g",
       description: "Nuestra pieza estrella. Piedra de alumbre pura en formato stick de 120g. Protección total por 24 horas. Sin manchas, sin olor, sin químicos.",
-      price: "$275",
+      price: "$285",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242"
     }
   },
@@ -27,7 +27,7 @@ const categories = [
       id: "zahal-desodorante-natural-roll-on-sport-con-carbon-activado-90-ml",
       name: "Roll On Sport 90ml",
       description: "Diseñado para el movimiento. Con carbón activado y aloe vera para una absorción y frescura superior durante el ejercicio intenso.",
-      price: "$120",
+      price: "$130",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/22_ff2e0357-efb6-461e-afc0-46f05cc19f51.png?v=1753751451"
     }
   },
@@ -40,7 +40,7 @@ const categories = [
       id: "eco-traveler-kit-de-viaje-natural-desodorantes-limpiador-de-manos-jabon",
       name: "Kit Eco Viajero",
       description: "Todo lo que necesitas en tu maleta. Incluye mini desodorantes, jabón y limpiador. Cumple con normativas de aeropuerto y es 100% biodegradable.",
-      price: "$207",
+      price: "$220",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/ZAHAL_momento_2.jpg?v=1753740213"
     }
   },
@@ -53,7 +53,7 @@ const categories = [
       id: "zahal-desodorante-natural-roll-on-teens-con-aroma-30-ml",
       name: "Roll On Teens con Aroma 30ml",
       description: "La introducción perfecta al cuidado natural. Aroma fresco y fórmula ultra suave para pieles jóvenes en desarrollo.",
-      price: "$66",
+      price: "$70",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/24.png?v=1753740898"
     }
   },
@@ -85,7 +85,7 @@ const momentos: Momento[] = [
     relatedProduct: {
       id: "zahal-desodorante-natural-roll-on-teens-90-ml",
       name: "Roll On Teens 90ml",
-      price: "$115",
+      price: "$125",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/20_03593599-4a47-4229-9ab9-13ddd0b88349.png?v=1753748140"
     }
   },
@@ -99,7 +99,7 @@ const momentos: Momento[] = [
     relatedProduct: {
       id: "zahal-desodorante-natural-roll-on-con-aloe-vera-30-ml",
       name: "Roll On con Aloe Vera 30ml",
-      price: "$56",
+      price: "$60",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/4_92b57410-71ea-4240-8827-cb1106f7cc70.png?v=1753748770"
     }
   },
@@ -113,7 +113,7 @@ const momentos: Momento[] = [
     relatedProduct: {
       id: "zahal-desodorante-natural-roll-on-sport-con-carbon-activado-90-ml",
       name: "Roll On Sport 90ml",
-      price: "$120",
+      price: "$130",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/22_ff2e0357-efb6-461e-afc0-46f05cc19f51.png?v=1753751451"
     }
   },
@@ -127,7 +127,7 @@ const momentos: Momento[] = [
     relatedProduct: {
       id: "zahal-desodorante-natural-stik-120-g",
       name: "Stick Natural 120g",
-      price: "$275",
+      price: "$285",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242"
     }
   },
@@ -141,7 +141,7 @@ const momentos: Momento[] = [
     relatedProduct: {
       id: "zahal-desodorante-natural-stik-60-g",
       name: "Stick Natural 60g",
-      price: "$189",
+      price: "$200",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/Imagenes_Pagina_Web_1.png?v=1753731242"
     }
   },
@@ -155,7 +155,7 @@ const momentos: Momento[] = [
     relatedProduct: {
       id: "zahal-desodorante-natural-roll-on-men-90-ml",
       name: "Roll On For Men 90ml",
-      price: "$115",
+      price: "$125",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/18_b12bb71f-34f5-474a-b9dc-9bd50802f32c.png?v=1753750893"
     }
   },
@@ -169,7 +169,7 @@ const momentos: Momento[] = [
     relatedProduct: {
       id: "zahal-desodorante-corporal-natural-en-spray-240-ml",
       name: "Spray Corporal 240ml",
-      price: "$131",
+      price: "$135",
       image: "https://cdn.shopify.com/s/files/1/0622/1004/8065/files/1_c7be3dfa-4d93-46ce-836c-67dbe4a66b92.png?v=1753753301"
     }
   },
