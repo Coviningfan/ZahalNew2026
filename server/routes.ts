@@ -427,18 +427,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ─── Admin: BabyLoveGrowth Sync ────────────────────────────────────────────
 
+  async function resolveBabyloveKey(): Promise<string> {
+    if (process.env.BABYLOVE_API_KEY) return process.env.BABYLOVE_API_KEY;
+    const stored = await storage.getSetting("babylove_api_key");
+    return stored || "";
+  }
+
   app.get("/api/admin/sync-articles/status", requireAdminPassword, async (_req, res) => {
-    res.json({ configured: !!process.env.BABYLOVE_API_KEY });
+    const apiKey = await resolveBabyloveKey();
+    res.json({ configured: !!apiKey, source: process.env.BABYLOVE_API_KEY ? "env" : (apiKey ? "settings" : "none") });
+  });
+
+  app.put("/api/admin/sync-articles/key", requireAdminPassword, async (req, res) => {
+    try {
+      const { value } = z.object({ value: z.string().min(8).max(500) }).parse(req.body);
+      await storage.setSetting("babylove_api_key", value);
+      res.json({ success: true });
+    } catch (error) {
+      if (error instanceof z.ZodError) return res.status(400).json({ message: "Clave inválida (mínimo 8 caracteres)." });
+      console.error("Error saving babylove key:", error);
+      res.status(500).json({ message: "No se pudo guardar la clave." });
+    }
+  });
+
+  app.delete("/api/admin/sync-articles/key", requireAdminPassword, async (_req, res) => {
+    try {
+      await storage.setSetting("babylove_api_key", "");
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error clearing babylove key:", error);
+      res.status(500).json({ message: "No se pudo borrar la clave." });
+    }
   });
 
   app.post("/api/admin/sync-articles", requireAdminPassword, async (_req, res) => {
     try {
-      const apiKey = process.env.BABYLOVE_API_KEY;
+      const apiKey = await resolveBabyloveKey();
       if (!apiKey) {
         return res.status(503).json({
           message: "Configura tu clave de sincronización AI",
           code: "BABYLOVE_NOT_CONFIGURED",
-          hint: "Pide al administrador que añada la variable BABYLOVE_API_KEY en los secretos.",
+          hint: "Guarda la clave desde el portal o añade la variable BABYLOVE_API_KEY en los secretos.",
         });
       }
       const response = await fetch("https://api.babylovegrowth.ai/api/integrations/v1/articles?limit=100&page=1", {

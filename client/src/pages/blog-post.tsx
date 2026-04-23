@@ -70,7 +70,7 @@ export default function BlogPostPage() {
         title={post.seoTitle || `${post.title} — Blog Zahal`}
         description={post.seoDescription || post.excerpt || post.title}
         path={`/blog/${post.slug}`}
-        image={post.coverImage || undefined}
+        ogImage={post.coverImage || undefined}
       />
       <Navigation />
 

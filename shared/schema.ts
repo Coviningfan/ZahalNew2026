@@ -35,6 +35,7 @@ export const blogPosts = pgTable("blog_posts", {
   author: text("author").notNull().default("Zahal"),
   published: boolean("published").notNull().default(false),
   tags: text("tags").array().notNull().default([]),
+  categories: text("categories").array().notNull().default([]),
   seoTitle: text("seo_title").notNull().default(""),
   seoDescription: text("seo_description").notNull().default(""),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -129,6 +130,7 @@ export const blogPostSchema = z.object({
   author: z.string().optional().default("Zahal"),
   published: z.boolean().optional().default(false),
   tags: z.array(z.string()).optional().default([]),
+  categories: z.array(z.string()).optional().default([]),
   seoTitle: z.string().optional().default(""),
   seoDescription: z.string().optional().default(""),
 });

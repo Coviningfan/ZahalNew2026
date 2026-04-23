@@ -207,7 +207,7 @@ export default function RichTextEditor({ value, onChange, password, testId }: Pr
       setHydratedFor(value);
       return;
     }
-    editor.commands.setContent(normalizeInitialContent(value), false);
+    editor.commands.setContent(normalizeInitialContent(value), { emitUpdate: false });
     setHydratedFor(value);
   }, [value, editor, hydratedFor]);
 

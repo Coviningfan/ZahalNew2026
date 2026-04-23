@@ -132,13 +132,14 @@ interface BlogForm {
   author: string;
   published: boolean;
   tags: string[];
+  categories: string[];
   seoTitle: string;
   seoDescription: string;
 }
 
 const emptyPost: BlogForm = {
   title: "", slug: "", excerpt: "", content: "", coverImage: "",
-  author: "Zahal", published: false, tags: [], seoTitle: "", seoDescription: "",
+  author: "Zahal", published: false, tags: [], categories: [], seoTitle: "", seoDescription: "",
 };
 
 function BlogEditor({ password }: { password: string }) {
@@ -148,6 +149,7 @@ function BlogEditor({ password }: { password: string }) {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
   const [tagInput, setTagInput] = useState("");
+  const [categoryInput, setCategoryInput] = useState("");
 
   const [form, setForm] = useState<BlogForm>(emptyPost);
 
@@ -181,7 +183,7 @@ function BlogEditor({ password }: { password: string }) {
     queryFn: () => adminFetch("/api/admin/blog", password),
   });
 
-  const { data: syncStatus } = useQuery<{ configured: boolean }>({
+  const { data: syncStatus } = useQuery<{ configured: boolean; source?: string }>({
     queryKey: ["/api/admin/sync-articles/status"],
     queryFn: () => adminFetch("/api/admin/sync-articles/status", password),
   });
@@ -260,6 +262,7 @@ function BlogEditor({ password }: { password: string }) {
       author: post.author,
       published: post.published,
       tags: post.tags || [],
+      categories: post.categories || [],
       seoTitle: post.seoTitle || "",
       seoDescription: post.seoDescription || "",
     });
@@ -286,6 +289,17 @@ function BlogEditor({ password }: { password: string }) {
 
   function removeTag(t: string) {
     setForm((f) => ({ ...f, tags: f.tags.filter((x) => x !== t) }));
+  }
+
+  function addCategory() {
+    const c = categoryInput.trim();
+    if (!c || form.categories.includes(c)) return;
+    setForm((f) => ({ ...f, categories: [...f.categories, c] }));
+    setCategoryInput("");
+  }
+
+  function removeCategory(c: string) {
+    setForm((f) => ({ ...f, categories: f.categories.filter((x) => x !== c) }));
   }
 
   if (creating || editing) {
@@ -347,6 +361,32 @@ function BlogEditor({ password }: { password: string }) {
           <div>
             <Label className="text-sm font-medium mb-1.5 block">Autor</Label>
             <Input value={form.author} onChange={(e) => setForm((f) => ({ ...f, author: e.target.value }))} placeholder="Zahal" data-testid="input-blog-author" />
+          </div>
+
+          <div>
+            <Label className="text-sm font-medium mb-1.5 block">Categorías</Label>
+            <div className="flex gap-2 mb-2">
+              <Input
+                value={categoryInput}
+                onChange={(e) => setCategoryInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCategory(); } }}
+                placeholder='Ej. "Guías para padres" — presiona Enter'
+                data-testid="input-blog-category"
+              />
+              <Button type="button" variant="outline" onClick={addCategory} data-testid="button-add-category">Añadir</Button>
+            </div>
+            {form.categories.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-2">
+                {form.categories.map((c) => (
+                  <Badge key={c} variant="default" className="gap-1 pr-1 bg-primary/15 text-primary border-primary/20 hover:bg-primary/20" data-testid={`category-${c}`}>
+                    {c}
+                    <button type="button" onClick={() => removeCategory(c)} className="ml-1 hover:text-red-600">
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
@@ -433,42 +473,7 @@ function BlogEditor({ password }: { password: string }) {
       </div>
 
       {syncStatus && !syncStatus.configured && (
-        <div className="mb-4 flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-900">
-          <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-          <div className="text-xs flex-1">
-            <p className="font-medium">Sincronización AI no configurada</p>
-            <p className="mt-0.5">Para importar artículos automáticamente hace falta la clave <code className="bg-amber-100 px-1 rounded">BABYLOVE_API_KEY</code>.</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              <Button
-                size="sm"
-                variant="outline"
-                className="h-7 text-xs gap-1 border-amber-300 bg-white hover:bg-amber-100"
-                onClick={() => {
-                  void navigator.clipboard.writeText("BABYLOVE_API_KEY").then(() => {
-                    toast({ title: "Copiado", description: "Pega este nombre al añadir el secreto." });
-                  });
-                }}
-                data-testid="button-copy-secret-name"
-              >
-                Copiar nombre del secreto
-              </Button>
-              <a
-                href="https://docs.replit.com/cloud-services/deployments/environment-variables-and-secrets"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-7 text-xs gap-1 border-amber-300 bg-white hover:bg-amber-100"
-                  data-testid="button-open-secrets-help"
-                >
-                  Cómo añadirlo <ExternalLink className="h-3 w-3" />
-                </Button>
-              </a>
-            </div>
-          </div>
-        </div>
+        <BabyloveKeyPanel password={password} />
       )}
 
       {isLoading ? (
@@ -975,4 +980,69 @@ export default function MarketingPortal() {
 
   if (!password) return <Login onLogin={setPassword} />;
   return <Dashboard password={password} onLogout={() => { sessionStorage.removeItem(PW_KEY); setPassword(null); }} />;
+}
+
+function BabyloveKeyPanel({ password }: { password: string }) {
+  const { toast } = useToast();
+  const [keyValue, setKeyValue] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    const trimmed = keyValue.trim();
+    if (trimmed.length < 8) {
+      toast({ title: "Clave demasiado corta", description: "Pega la clave completa.", variant: "destructive" });
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/sync-articles/key", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "X-Admin-Password": password },
+        body: JSON.stringify({ value: trimmed }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || "Error al guardar");
+      }
+      setKeyValue("");
+      await queryClient.invalidateQueries({ queryKey: ["/api/admin/sync-articles/status"] });
+      toast({ title: "Clave guardada", description: "La sincronización AI ya está activa." });
+    } catch (err) {
+      toast({ title: "Error", description: err instanceof Error ? err.message : "No se pudo guardar.", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="mb-4 flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-900" data-testid="banner-babylove-missing">
+      <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+      <div className="text-xs flex-1">
+        <p className="font-medium">Sincronización AI no configurada</p>
+        <p className="mt-0.5 mb-2">Pega tu clave de BabyLoveGrowth abajo para activar la importación. La clave se guarda de forma segura en el servidor sin redeploy.</p>
+        <div className="flex flex-col sm:flex-row gap-2 max-w-lg">
+          <Input
+            type="password"
+            value={keyValue}
+            onChange={(e) => setKeyValue(e.target.value)}
+            placeholder="blg_xxxxxxxxxxxxxxxxxxxxxxxx"
+            className="h-8 text-xs bg-white border-amber-300"
+            data-testid="input-babylove-key"
+          />
+          <Button
+            size="sm"
+            onClick={save}
+            disabled={saving}
+            className="h-8 text-xs bg-amber-600 hover:bg-amber-700 text-white"
+            data-testid="button-save-babylove-key"
+          >
+            {saving ? "Guardando…" : "Guardar clave"}
+          </Button>
+        </div>
+        <p className="mt-2 text-[11px] text-amber-800/80">
+          Alternativa: añade <code className="bg-amber-100 px-1 rounded">BABYLOVE_API_KEY</code> en los secretos del proyecto (tiene prioridad sobre la clave guardada aquí).
+        </p>
+      </div>
+    </div>
+  );
 }

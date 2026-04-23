@@ -112,6 +112,15 @@ export function registerUploadRoutes(app: Express, requireAdminPassword: Request
     try {
       const id = parseInt(req.params.id, 10);
       if (Number.isNaN(id)) return res.status(400).json({ message: "ID inválido" });
+      const assets = await storage.listMediaAssets();
+      const target = assets.find((a) => a.id === id);
+      if (target?.url?.startsWith("/objects/")) {
+        try {
+          await objectStorageService.deleteObjectEntity(target.url);
+        } catch (err) {
+          console.error("[uploads] delete object from storage failed", err);
+        }
+      }
       await storage.deleteMediaAsset(id);
       res.json({ success: true });
     } catch (error) {
