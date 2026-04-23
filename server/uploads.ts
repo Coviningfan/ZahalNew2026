@@ -12,7 +12,6 @@ const ALLOWED_MIME = new Set([
   "image/png",
   "image/webp",
   "image/avif",
-  "image/gif",
 ]);
 const MAX_BYTES = 5 * 1024 * 1024;
 

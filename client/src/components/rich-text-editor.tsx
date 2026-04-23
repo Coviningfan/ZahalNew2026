@@ -157,7 +157,7 @@ function Toolbar({ editor, password, onImageUploadStart }: { editor: Editor | nu
       <input
         ref={fileRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+        accept="image/jpeg,image/png,image/webp,image/avif"
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];

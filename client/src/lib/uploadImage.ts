@@ -3,9 +3,9 @@
  * Returns the canonical /objects/<id> URL once finalized.
  */
 export async function uploadAdminImage(file: File, adminPassword: string): Promise<string> {
-  const allowed = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"];
+  const allowed = ["image/jpeg", "image/png", "image/webp", "image/avif"];
   if (!allowed.includes(file.type)) {
-    throw new Error("Tipo de archivo no permitido. Usa JPG, PNG, WEBP, AVIF o GIF.");
+    throw new Error("Tipo de archivo no permitido. Usa JPG, PNG, WEBP o AVIF.");
   }
   if (file.size > 5 * 1024 * 1024) {
     throw new Error("El archivo supera el límite de 5 MB.");

@@ -60,7 +60,7 @@ export function ImageUpload({ value, onChange, password, label, testId }: Props)
       <input
         ref={inputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+        accept="image/jpeg,image/png,image/webp,image/avif"
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
