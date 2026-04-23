@@ -114,11 +114,9 @@ export function registerUploadRoutes(app: Express, requireAdminPassword: Request
       const assets = await storage.listMediaAssets();
       const target = assets.find((a) => a.id === id);
       if (target?.url?.startsWith("/objects/")) {
-        try {
-          await objectStorageService.deleteObjectEntity(target.url);
-        } catch (err) {
-          console.error("[uploads] delete object from storage failed", err);
-        }
+        // Strict: fail the whole request if the object cannot be deleted so we
+        // never leave orphaned storage blobs.
+        await objectStorageService.deleteObjectEntity(target.url);
       }
       await storage.deleteMediaAsset(id);
       res.json({ success: true });
