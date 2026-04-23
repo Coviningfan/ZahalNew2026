@@ -50,7 +50,7 @@ export function registerUploadRoutes(app: Express, requireAdminPassword: Request
       const parsed = requestUrlSchema.parse(req.body);
       if (!ALLOWED_MIME.has(parsed.contentType)) {
         return res.status(400).json({
-          message: "Tipo de archivo no permitido. Usa JPG, PNG, WEBP, AVIF o GIF.",
+          message: "Tipo de archivo no permitido. Usa JPG, PNG, WEBP o AVIF.",
         });
       }
       const uploadURL = await objectStorageService.getObjectEntityUploadURL();
