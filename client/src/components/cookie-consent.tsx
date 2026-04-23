@@ -4,7 +4,7 @@ import { Cookie, Settings, X } from "lucide-react";
 import { Link } from "wouter";
 
 const CONSENT_KEY = "zahal-cookie-consent";
-const CONSENT_VERSION = "1";
+const CONSENT_VERSION = "2";
 
 type ConsentState = {
   version: string;
@@ -17,6 +17,7 @@ type ConsentState = {
 function gtag(...args: any[]) {
   const w = window as any;
   w.dataLayer = w.dataLayer || [];
+  w.gtag = gtag;
   w.dataLayer.push(arguments);
 }
 
