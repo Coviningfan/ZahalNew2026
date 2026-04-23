@@ -34,6 +34,9 @@ export const blogPosts = pgTable("blog_posts", {
   coverImage: text("cover_image").notNull().default(""),
   author: text("author").notNull().default("Zahal"),
   published: boolean("published").notNull().default(false),
+  tags: text("tags").array().notNull().default([]),
+  seoTitle: text("seo_title").notNull().default(""),
+  seoDescription: text("seo_description").notNull().default(""),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -43,6 +46,18 @@ export const siteSettings = pgTable("site_settings", {
   key: text("key").notNull().unique(),
   value: text("value").notNull().default(""),
 });
+
+export const mediaAssets = pgTable("media_assets", {
+  id: serial("id").primaryKey(),
+  url: text("url").notNull(),
+  filename: text("filename").notNull(),
+  mimeType: text("mime_type").notNull(),
+  size: text("size").notNull().default("0"),
+  uploadedBy: text("uploaded_by").notNull().default("admin"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type MediaAsset = typeof mediaAssets.$inferSelect;
 
 export const insertContactMessageSchema = createInsertSchema(contactMessages).omit({ id: true, createdAt: true });
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
@@ -113,4 +128,27 @@ export const blogPostSchema = z.object({
   coverImage: z.string().optional().default(""),
   author: z.string().optional().default("Zahal"),
   published: z.boolean().optional().default(false),
+  tags: z.array(z.string()).optional().default([]),
+  seoTitle: z.string().optional().default(""),
+  seoDescription: z.string().optional().default(""),
 });
+
+export const heroSlideSchema = z.object({
+  badge: z.string().optional().default(""),
+  title: z.string().min(1),
+  mobileTitle: z.string().optional().default(""),
+  description: z.string().optional().default(""),
+  mobileDescription: z.string().optional().default(""),
+  ctaLabel: z.string().optional().default(""),
+  ctaHref: z.string().optional().default(""),
+  ctaSecondaryLabel: z.string().optional().default(""),
+  ctaSecondaryHref: z.string().optional().default(""),
+  bgImage: z.string().min(1),
+  bgPosition: z.string().optional().default("center center"),
+  alignRight: z.boolean().optional().default(true),
+  externalLink: z.boolean().optional().default(false),
+  showLogos: z.boolean().optional().default(false),
+  hideBadge: z.boolean().optional().default(false),
+});
+export type HeroSlide = z.infer<typeof heroSlideSchema>;
+export const heroSlidesSchema = z.array(heroSlideSchema).min(1);

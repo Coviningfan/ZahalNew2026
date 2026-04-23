@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { checkoutSchema, contactMessageSchema, newsletterSchema, blogPostSchema } from "@shared/schema";
+import { checkoutSchema, contactMessageSchema, newsletterSchema, blogPostSchema, heroSlidesSchema } from "@shared/schema";
+import { registerUploadRoutes } from "./uploads";
 import { getStripeClient, getStripePublishableKey } from "./stripeClient";
 import { z } from "zod";
 import rateLimit from "express-rate-limit";
@@ -264,6 +265,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   }
 
+  registerUploadRoutes(app, requireAdminPassword);
+
+  // Public hero banners endpoint (no auth)
+  app.get("/api/hero-banners", async (_req, res) => {
+    try {
+      const value = await storage.getSetting("hero_banners");
+      if (!value) return res.json({ slides: null });
+      try {
+        const parsed = JSON.parse(value);
+        const validated = heroSlidesSchema.safeParse(parsed);
+        if (!validated.success) return res.json({ slides: null });
+        res.json({ slides: validated.data });
+      } catch {
+        res.json({ slides: null });
+      }
+    } catch {
+      res.json({ slides: null });
+    }
+  });
+
   // ─── Admin: Create correct 100 MXN paid shipping rate ────────────────────
   // Call this once via POST /api/admin/create-paid-shipping-rate
   // then update STRIPE_SHIPPING_RATE_PAID in Replit Secrets with the returned ID.
@@ -406,11 +427,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ─── Admin: BabyLoveGrowth Sync ────────────────────────────────────────────
 
+  app.get("/api/admin/sync-articles/status", requireAdminPassword, async (_req, res) => {
+    res.json({ configured: !!process.env.BABYLOVE_API_KEY });
+  });
+
   app.post("/api/admin/sync-articles", requireAdminPassword, async (_req, res) => {
     try {
       const apiKey = process.env.BABYLOVE_API_KEY;
       if (!apiKey) {
-        return res.status(503).json({ message: "BABYLOVE_API_KEY not configured" });
+        return res.status(503).json({
+          message: "Configura tu clave de sincronización AI",
+          code: "BABYLOVE_NOT_CONFIGURED",
+          hint: "Pide al administrador que añada la variable BABYLOVE_API_KEY en los secretos.",
+        });
       }
       const response = await fetch("https://api.babylovegrowth.ai/api/integrations/v1/articles?limit=100&page=1", {
         headers: { "X-API-Key": apiKey, "Content-Type": "application/json" },
@@ -463,6 +492,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/settings/:key", requireAdminPassword, async (req, res) => {
     try {
       const { value } = z.object({ value: z.string() }).parse(req.body);
+      // For hero_banners: empty string is allowed and means "reset to defaults" (public endpoint will fall back).
+      if (req.params.key === "hero_banners" && value.trim() !== "") {
+        try {
+          const parsed = JSON.parse(value);
+          heroSlidesSchema.parse(parsed);
+        } catch (e: any) {
+          return res.status(400).json({ message: "Banners inválidos: " + (e.message || "JSON malformado") });
+        }
+      }
       await storage.setSetting(req.params.key, value);
       res.json({ success: true });
     } catch (error) {

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { Leaf, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
@@ -7,76 +8,56 @@ import banner2 from "@assets/BANNER_Febrero_1771433657501.png";
 import banner3 from "@assets/Banners_enature_1771436433184.png";
 import enatureLogo from "@assets/LOGO-ENATURE_340x_1771436603136.avif";
 import zahalLogo from "@assets/Zahal_Verde_-_No_fondo_1771455710794.webp";
+import { renderHeroTitle } from "./hero-title";
+import type { HeroSlide } from "@shared/schema";
 
-
-const slides = [
+const FALLBACK_SLIDES: HeroSlide[] = [
   {
     badge: "Productos naturales",
-    title: (
-      <>
-        Manos limpias,{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">protección natural</span>{" "}
-        todos los días
-      </>
-    ),
-    mobileTitle: (
-      <>
-        Manos limpias,{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">protección natural</span>{" "}
-        todos los días
-      </>
-    ),
-    description:
-      "La higiene que necesitas, con el cuidado natural que amas.",
+    title: "Manos limpias, *protección natural* todos los días",
+    mobileTitle: "Manos limpias, *protección natural* todos los días",
+    description: "La higiene que necesitas, con el cuidado natural que amas.",
     mobileDescription: "La higiene que necesitas, con el cuidado natural que amas.",
-    cta: { label: "Ver Productos", href: "/productos" },
-    ctaSecondary: { label: "Nuestra Historia", href: "/nosotros" },
+    ctaLabel: "Ver Productos",
+    ctaHref: "/productos",
+    ctaSecondaryLabel: "Nuestra Historia",
+    ctaSecondaryHref: "/nosotros",
     bgImage: banner1,
+    bgPosition: "center center",
     alignRight: true,
+    externalLink: false,
+    showLogos: false,
+    hideBadge: false,
   },
   {
     badge: "100% Natural",
-    title: (
-      <>
-        Piedra de alumbre{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">auténtica</span>
-      </>
-    ),
-    mobileTitle: (
-      <>
-        Piedra de alumbre{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">auténtica</span>
-      </>
-    ),
-    description:
-      "Mineral volcánico con propiedades antibacteriales. Sin parabenos, sin alcohol, sin aluminio procesado.",
+    title: "Piedra de alumbre *auténtica*",
+    mobileTitle: "Piedra de alumbre *auténtica*",
+    description: "Mineral volcánico con propiedades antibacteriales. Sin parabenos, sin alcohol, sin aluminio procesado.",
     mobileDescription: "Mineral volcánico antibacterial. Sin parabenos ni alcohol.",
-    cta: { label: "Explorar Catálogo", href: "/productos" },
-    ctaSecondary: { label: "Preguntas Frecuentes", href: "/preguntas-frecuentes" },
+    ctaLabel: "Explorar Catálogo",
+    ctaHref: "/productos",
+    ctaSecondaryLabel: "Preguntas Frecuentes",
+    ctaSecondaryHref: "/preguntas-frecuentes",
     bgImage: banner2,
-    alignRight: true,
     bgPosition: "center 80%",
+    alignRight: true,
+    externalLink: false,
+    showLogos: false,
+    hideBadge: false,
   },
   {
     badge: "Zahal x eNature",
-    title: (
-      <>
-        Bienestar que acompaña{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">cada momento</span>{" "}
-        de tu rutina.
-      </>
-    ),
-    mobileTitle: (
-      <>
-        Bienestar en{" "}
-        <span className="italic text-[hsl(99,30%,80%)]">cada momento</span>
-      </>
-    ),
+    title: "Bienestar que acompaña *cada momento* de tu rutina.",
+    mobileTitle: "Bienestar en *cada momento*",
     description: "",
     mobileDescription: "",
-    cta: { label: "Visita eNature", href: "https://enature.com.mx/" },
-    ctaSecondary: null,
+    ctaLabel: "Visita eNature",
+    ctaHref: "https://enature.com.mx/",
+    ctaSecondaryLabel: "",
+    ctaSecondaryHref: "",
     bgImage: banner3,
+    bgPosition: "center center",
     alignRight: true,
     externalLink: true,
     showLogos: true,
@@ -90,6 +71,13 @@ export default function HeroSection() {
   const [, setLocation] = useLocation();
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const { data } = useQuery<{ slides: HeroSlide[] | null }>({
+    queryKey: ["/api/hero-banners"],
+    staleTime: 60_000,
+  });
+
+  const slides: HeroSlide[] = (data?.slides && data.slides.length > 0) ? data.slides : FALLBACK_SLIDES;
 
   const navigateTo = (path: string) => {
     const overlay = document.createElement("div");
@@ -116,18 +104,25 @@ export default function HeroSection() {
 
   const next = useCallback(() => {
     goTo((current + 1) % slides.length);
-  }, [current, goTo]);
+  }, [current, goTo, slides.length]);
 
   const prev = useCallback(() => {
     goTo((current - 1 + slides.length) % slides.length);
-  }, [current, goTo]);
+  }, [current, goTo, slides.length]);
 
   useEffect(() => {
     const timer = setInterval(next, AUTOPLAY_INTERVAL);
     return () => clearInterval(timer);
   }, [next]);
 
-  const slide = slides[current];
+  // Keep current within bounds when slides change.
+  useEffect(() => {
+    if (current >= slides.length) setCurrent(0);
+  }, [slides.length, current]);
+
+  const slide = slides[Math.min(current, slides.length - 1)];
+  const titleNode = renderHeroTitle(slide.title);
+  const mobileTitleNode = renderHeroTitle(slide.mobileTitle || slide.title);
 
   return (
     <>
@@ -156,14 +151,14 @@ export default function HeroSection() {
           <div className="absolute inset-0 z-10 flex items-center">
             <div className="w-full px-5" key={current}>
               <div className={`animate-carousel-fade ${slide.alignRight ? "ml-auto text-right max-w-[65%]" : "ml-auto max-w-[60%] text-right"}`}>
-                {!slide.hideBadge && (
+                {!slide.hideBadge && slide.badge && (
                   <div className="inline-flex items-center px-3 py-1.5 bg-white/20 backdrop-blur-sm text-white border border-white/25 rounded-full mb-3 text-[11px] font-semibold tracking-wider uppercase" data-testid="badge-natural-mobile">
                     <Leaf className="h-3.5 w-3.5 mr-1.5 text-[hsl(99,30%,70%)]" />
                     {slide.badge}
                   </div>
                 )}
                 <h2 className="text-2xl font-bold text-white leading-tight mb-2 font-serif drop-shadow-lg">
-                  {slide.mobileTitle}
+                  {mobileTitleNode}
                 </h2>
                 {slide.mobileDescription && (
                   <p className="text-sm text-white/90 leading-snug mb-4 drop-shadow-md">
@@ -177,27 +172,27 @@ export default function HeroSection() {
                     <div role="img" aria-label="eNature" className="h-10 w-20 pointer-events-none select-none drop-shadow-lg" style={{ backgroundImage: `url(${enatureLogo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />
                   </div>
                 )}
-                {slide.externalLink ? (
+                {slide.ctaLabel && (slide.externalLink ? (
                   <a
-                    href={slide.cta.href}
+                    href={slide.ctaHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 bg-white text-primary font-semibold rounded-xl h-10 px-5 text-sm shadow-lg"
                     data-testid="link-visita-enature-mobile"
                   >
-                    {slide.cta.label}
+                    {slide.ctaLabel}
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 ) : (
                   <Button
                     className="bg-primary text-white hover:bg-primary/90 font-semibold shadow-lg shadow-black/20 gap-2 h-10 px-5 text-sm rounded-xl"
-                    onClick={() => navigateTo(slide.cta.href)}
+                    onClick={() => navigateTo(slide.ctaHref)}
                     data-testid="button-shop-now-mobile"
                   >
-                    {slide.cta.label}
+                    {slide.ctaLabel}
                     <ArrowRight className="h-4 w-4" />
                   </Button>
-                )}
+                ))}
               </div>
             </div>
           </div>
@@ -264,14 +259,14 @@ export default function HeroSection() {
               <div className="hidden lg:block" />
             )}
             <div key={current} className={`animate-carousel-fade ${slide.alignRight ? "lg:text-right lg:ml-auto" : ""}`}>
-              {!slide.hideBadge && (
+              {!slide.hideBadge && slide.badge && (
                 <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md text-white/90 border border-white/15 rounded-full mb-8 text-sm font-medium tracking-wide" data-testid="badge-natural">
                   <Leaf className="h-4 w-4 mr-2 text-[hsl(99,30%,65%)]" />
                   {slide.badge}
                 </div>
               )}
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6 font-serif text-balance">
-                {slide.title}
+                {titleNode}
               </h1>
               {slide.description && (
                 <p className="text-lg lg:text-xl text-white/85 mb-10 leading-relaxed max-w-lg">
@@ -279,15 +274,15 @@ export default function HeroSection() {
                 </p>
               )}
               <div className={`flex flex-row gap-4 items-center ${slide.alignRight ? "justify-end" : ""}`}>
-                {slide.externalLink ? (
+                {slide.ctaLabel && (slide.externalLink ? (
                   <a
-                    href={slide.cta.href}
+                    href={slide.ctaHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all"
                     data-testid="link-visita-enature"
                   >
-                    <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">{slide.cta.label}</span>
+                    <span className="text-sm font-semibold text-white/90 tracking-wide border-b border-white/30 group-hover:border-white transition-all">{slide.ctaLabel}</span>
                     <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
                   </a>
                 ) : (
@@ -295,21 +290,21 @@ export default function HeroSection() {
                     <Button
                       size="lg"
                       className="bg-primary text-white hover:bg-primary/90 font-semibold shadow-lg shadow-black/20 gap-2 h-14 px-8 text-base"
-                      onClick={() => navigateTo(slide.cta.href)}
+                      onClick={() => navigateTo(slide.ctaHref)}
                       data-testid="button-shop-now"
                     >
-                      {slide.cta.label}
+                      {slide.ctaLabel}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
-                    {slide.ctaSecondary && (
+                    {slide.ctaSecondaryLabel && slide.ctaSecondaryHref && (
                       <Button
                         size="lg"
                         variant="outline"
                         className="border-2 border-white/40 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 font-semibold h-14 px-8 text-base"
-                        onClick={() => slide.ctaSecondary && navigateTo(slide.ctaSecondary.href)}
+                        onClick={() => navigateTo(slide.ctaSecondaryHref)}
                         data-testid="button-view-catalog"
                       >
-                        {slide.ctaSecondary?.label}
+                        {slide.ctaSecondaryLabel}
                       </Button>
                     )}
                     <Link href="/productos" className="group flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-full transition-all ml-2" data-testid="link-hero-catalog">
@@ -317,7 +312,7 @@ export default function HeroSection() {
                       <ArrowRight className="h-3.5 w-3.5 text-white/70 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </>
-                )}
+                ))}
               </div>
             </div>
 

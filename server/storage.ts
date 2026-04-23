@@ -1,4 +1,4 @@
-import { type Product, type ApiKey, type BlogPost, type SiteSetting, contactMessages, newsletterSubscribers, apiKeys, blogPosts, siteSettings } from "@shared/schema";
+import { type Product, type ApiKey, type BlogPost, type InsertBlogPost, type SiteSetting, type MediaAsset, contactMessages, newsletterSubscribers, apiKeys, blogPosts, siteSettings, mediaAssets } from "@shared/schema";
 import crypto from "crypto";
 import { eq, and, desc } from "drizzle-orm";
 import { getStripeClient } from "./stripeClient";
@@ -61,12 +61,15 @@ export interface IStorage {
   listBlogPosts(includeUnpublished?: boolean): Promise<BlogPost[]>;
   getBlogPost(slug: string): Promise<BlogPost | undefined>;
   getBlogPostById(id: number): Promise<BlogPost | undefined>;
-  createBlogPost(data: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost>;
+  createBlogPost(data: InsertBlogPost): Promise<BlogPost>;
   updateBlogPost(id: number, data: Partial<Omit<BlogPost, "id" | "createdAt">>): Promise<BlogPost>;
   deleteBlogPost(id: number): Promise<void>;
   getSetting(key: string): Promise<string | null>;
   setSetting(key: string, value: string): Promise<void>;
   invalidateProductCache(): void;
+  listMediaAssets(): Promise<MediaAsset[]>;
+  createMediaAsset(data: { url: string; filename: string; mimeType: string; size: string; uploadedBy?: string }): Promise<MediaAsset>;
+  deleteMediaAsset(id: number): Promise<void>;
 }
 
 class StripeApiStorage implements IStorage {
@@ -179,7 +182,7 @@ class StripeApiStorage implements IStorage {
     return row;
   }
 
-  async createBlogPost(data: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost> {
+  async createBlogPost(data: InsertBlogPost): Promise<BlogPost> {
     const [row] = await db.insert(blogPosts).values(data).returning();
     return row;
   }
@@ -204,6 +207,25 @@ class StripeApiStorage implements IStorage {
   async setSetting(key: string, value: string): Promise<void> {
     await db.insert(siteSettings).values({ key, value })
       .onConflictDoUpdate({ target: siteSettings.key, set: { value } });
+  }
+
+  async listMediaAssets(): Promise<MediaAsset[]> {
+    return db.select().from(mediaAssets).orderBy(desc(mediaAssets.createdAt));
+  }
+
+  async createMediaAsset(data: { url: string; filename: string; mimeType: string; size: string; uploadedBy?: string }): Promise<MediaAsset> {
+    const [row] = await db.insert(mediaAssets).values({
+      url: data.url,
+      filename: data.filename,
+      mimeType: data.mimeType,
+      size: data.size,
+      uploadedBy: data.uploadedBy || "admin",
+    }).returning();
+    return row;
+  }
+
+  async deleteMediaAsset(id: number): Promise<void> {
+    await db.delete(mediaAssets).where(eq(mediaAssets.id, id));
   }
 }
 

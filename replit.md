@@ -2,7 +2,20 @@
 
 This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application uses a custom React frontend with direct Stripe payment processing — no Shopify dependency.
 
-# Recent Changes (March 5, 2026)
+# Recent Changes (April 23, 2026)
+
+## Marketing Portal Overhaul (`/empleados/Marketing`)
+- **Safe blog rendering**: Replaced `dangerouslySetInnerHTML` with `react-markdown` + `remark-gfm` + `rehype-sanitize` (`MarkdownContent` component). Existing markdown posts render losslessly with no XSS risk.
+- **Image uploads**: New `multer`-backed disk storage at `uploads/` (5 MB cap, jpeg/png/webp/avif/gif), served via `express.static('/uploads/')`. Auth-gated `POST /api/admin/upload` requires `x-admin-password`. `ImageUpload` component reused by blog and banners.
+- **Markdown editor**: New `MarkdownEditor` with toolbar (bold/italic/headings/list/quote/link/code/image upload), Edit/Preview tabs using the same safe renderer.
+- **Blog editor extras**: Tag chips (Enter to add), SEO title/description override, autosave to `localStorage` (`zahal_blog_draft_*`), draft restoration with toast, friendlier confirm-on-cancel.
+- **Hero banners wired to real site**: `BannerManager` controls all hero fields — bgImage upload, vertical position slider, badge/title/mobileTitle, descriptions, primary+secondary CTAs, alignment/external/showLogos/hideBadge toggles, drag-style reorder. Public `GET /api/hero-banners` serves them; `HeroSection` falls back to original 3 banners when none configured. Title supports `*word*` → italic accent span via `renderHeroTitle`.
+- **Reset path**: Empty-string PUT to `/api/admin/settings/hero_banners` clears the override and triggers fallback (admin server allows empty as "reset"). Reset button explicitly clears local UI state to avoid stale slides.
+- **Friendlier UX**: AI sync button only shows when `BABYLOVE_API_KEY` is configured (status endpoint), otherwise an amber notice with config instructions. Stripe-edit toast warns about price-replacement consequences.
+- **Schema**: Added `tags text[]`, `seoTitle`, `seoDescription` columns on `blog_posts`; added `media_assets` table; `heroSlideSchema`/`heroSlidesSchema` zod definitions in `shared/schema.ts`. Migrated via `npm run db:push --force`.
+- **Storage**: `IStorage.createBlogPost` now uses `InsertBlogPost` so the AI-sync flow can omit optional new fields cleanly.
+
+# Previous Changes (March 5, 2026)
 
 ## Free Shipping from 600 MXN
 - **Shipping rate logic in checkout**: Cart subtotal is calculated by fetching Stripe prices; if >= 600 MXN (60000 centavos), free shipping is applied, otherwise 15 MXN standard shipping

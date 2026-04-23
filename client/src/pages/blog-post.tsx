@@ -3,25 +3,10 @@ import { useParams, Link } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import SEO from "@/components/seo";
-import { Calendar, User, ArrowLeft } from "lucide-react";
+import MarkdownContent from "@/components/markdown-content";
+import { Calendar, User, ArrowLeft, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { BlogPost } from "@shared/schema";
-
-function renderContent(content: string) {
-  const html = content
-    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold text-foreground mt-8 mb-3 font-serif">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold text-foreground mt-10 mb-4 font-serif">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-bold text-foreground mt-10 mb-4 font-serif">$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="w-full rounded-xl my-6" />')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary underline hover:text-primary/80">$1</a>')
-    .replace(/^- (.+)$/gm, '<li class="ml-4 text-muted-foreground">• $1</li>')
-    .replace(/\n\n/g, '</p><p class="text-muted-foreground leading-relaxed mb-4">')
-    .replace(/\n/g, '<br />');
-
-  return `<p class="text-muted-foreground leading-relaxed mb-4">${html}</p>`;
-}
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -82,8 +67,8 @@ export default function BlogPostPage() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title={`${post.title} — Blog Zahal`}
-        description={post.excerpt || post.title}
+        title={post.seoTitle || `${post.title} — Blog Zahal`}
+        description={post.seoDescription || post.excerpt || post.title}
         path={`/blog/${post.slug}`}
         image={post.coverImage || undefined}
       />
@@ -102,7 +87,7 @@ export default function BlogPostPage() {
               <h1 className="text-3xl lg:text-4xl font-bold text-foreground font-serif mb-4" data-testid="text-blog-post-title">
                 {post.title}
               </h1>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" />
                   {new Date(post.createdAt).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })}
@@ -111,6 +96,14 @@ export default function BlogPostPage() {
                   <User className="h-4 w-4" />
                   {post.author}
                 </span>
+                {post.tags && post.tags.length > 0 && (
+                  <span className="flex items-center gap-1.5 flex-wrap">
+                    <Tag className="h-3.5 w-3.5" />
+                    {post.tags.map((t) => (
+                      <span key={t} className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs font-medium" data-testid={`tag-${t}`}>{t}</span>
+                    ))}
+                  </span>
+                )}
               </div>
             </header>
 
@@ -124,10 +117,7 @@ export default function BlogPostPage() {
               </div>
             )}
 
-            <div
-              className="prose prose-green max-w-none"
-              dangerouslySetInnerHTML={{ __html: renderContent(post.content) }}
-            />
+            <MarkdownContent content={post.content} />
           </div>
         </article>
       </main>
