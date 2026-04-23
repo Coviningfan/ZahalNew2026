@@ -36,28 +36,25 @@ export function ImageUpload({ value, onChange, password, label, testId }: Props)
   return (
     <div className="space-y-2">
       {label && <div className="text-sm font-medium">{label}</div>}
-      <div className="flex gap-2">
-        <Input
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="https://… o sube una imagen"
-          className="flex-1 text-xs font-mono"
-          data-testid={testId}
-        />
+      <div className="flex items-center gap-2">
         <Button
           type="button"
           variant="outline"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="gap-1.5 flex-shrink-0"
+          className="gap-1.5"
+          data-testid={testId}
         >
           {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
-          {uploading ? "Subiendo…" : "Subir"}
+          {uploading ? "Subiendo…" : value ? "Reemplazar imagen" : "Subir imagen"}
         </Button>
         {value && (
-          <Button type="button" variant="ghost" size="icon" onClick={() => onChange("")} className="flex-shrink-0">
-            <X className="h-4 w-4" />
-          </Button>
+          <>
+            <span className="text-xs text-muted-foreground font-mono truncate max-w-[240px]" title={value}>{value.split("/").pop()}</span>
+            <Button type="button" variant="ghost" size="icon" onClick={() => onChange("")} className="flex-shrink-0" aria-label="Quitar imagen">
+              <X className="h-4 w-4" />
+            </Button>
+          </>
         )}
       </div>
       <input
