@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload, Loader2, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { uploadAdminImage } from "@/lib/uploadImage";
 
 interface Props {
   value: string;
@@ -18,25 +19,14 @@ export function ImageUpload({ value, onChange, password, label, testId }: Props)
   const { toast } = useToast();
 
   async function handleFile(file: File) {
-    if (file.size > 5 * 1024 * 1024) {
-      toast({ title: "Archivo muy grande", description: "El máximo es 5 MB.", variant: "destructive" });
-      return;
-    }
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        headers: { "x-admin-password": password },
-        body: fd,
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Error al subir");
-      onChange(data.url);
+      const url = await uploadAdminImage(file, password);
+      onChange(url);
       toast({ title: "Imagen subida" });
-    } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Error al subir";
+      toast({ title: "Error", description: message, variant: "destructive" });
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -77,7 +67,7 @@ export function ImageUpload({ value, onChange, password, label, testId }: Props)
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
-          if (f) handleFile(f);
+          if (f) void handleFile(f);
         }}
       />
       {value && (

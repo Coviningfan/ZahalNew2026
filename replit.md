@@ -1,129 +1,6 @@
 # Overview
 
-This is a full-stack e-commerce application for Zahal, a natural skincare brand specializing in alum stone deodorants and natural personal care products. The application uses a custom React frontend with direct Stripe payment processing — no Shopify dependency.
-
-# Recent Changes (April 23, 2026)
-
-## Marketing Portal Overhaul (`/empleados/Marketing`)
-- **Safe blog rendering**: Replaced `dangerouslySetInnerHTML` with `react-markdown` + `remark-gfm` + `rehype-sanitize` (`MarkdownContent` component). Existing markdown posts render losslessly with no XSS risk.
-- **Image uploads**: New `multer`-backed disk storage at `uploads/` (5 MB cap, jpeg/png/webp/avif/gif), served via `express.static('/uploads/')`. Auth-gated `POST /api/admin/upload` requires `x-admin-password`. `ImageUpload` component reused by blog and banners.
-- **Markdown editor**: New `MarkdownEditor` with toolbar (bold/italic/headings/list/quote/link/code/image upload), Edit/Preview tabs using the same safe renderer.
-- **Blog editor extras**: Tag chips (Enter to add), SEO title/description override, autosave to `localStorage` (`zahal_blog_draft_*`), draft restoration with toast, friendlier confirm-on-cancel.
-- **Hero banners wired to real site**: `BannerManager` controls all hero fields — bgImage upload, vertical position slider, badge/title/mobileTitle, descriptions, primary+secondary CTAs, alignment/external/showLogos/hideBadge toggles, drag-style reorder. Public `GET /api/hero-banners` serves them; `HeroSection` falls back to original 3 banners when none configured. Title supports `*word*` → italic accent span via `renderHeroTitle`.
-- **Reset path**: Empty-string PUT to `/api/admin/settings/hero_banners` clears the override and triggers fallback (admin server allows empty as "reset"). Reset button explicitly clears local UI state to avoid stale slides.
-- **Friendlier UX**: AI sync button only shows when `BABYLOVE_API_KEY` is configured (status endpoint), otherwise an amber notice with config instructions. Stripe-edit toast warns about price-replacement consequences.
-- **Schema**: Added `tags text[]`, `seoTitle`, `seoDescription` columns on `blog_posts`; added `media_assets` table; `heroSlideSchema`/`heroSlidesSchema` zod definitions in `shared/schema.ts`. Migrated via `npm run db:push --force`.
-- **Storage**: `IStorage.createBlogPost` now uses `InsertBlogPost` so the AI-sync flow can omit optional new fields cleanly.
-
-# Previous Changes (March 5, 2026)
-
-## Free Shipping from 600 MXN
-- **Shipping rate logic in checkout**: Cart subtotal is calculated by fetching Stripe prices; if >= 600 MXN (60000 centavos), free shipping is applied, otherwise 15 MXN standard shipping
-- **Environment variables**: `STRIPE_SHIPPING_RATE_FREE` and `STRIPE_SHIPPING_RATE_PAID` store the Stripe shipping rate IDs
-- **Admin endpoint**: `POST /api/admin/setup-shipping-rates` creates both shipping rates in Stripe (one-time use, protected by admin password)
-- **Backwards compatible**: If shipping rate env vars are not set, checkout works as before without shipping options
-
-# Previous Changes (February 27, 2026)
-
-## SEO Indexing Fixes (Google Search Console)
-- **Removed hardcoded og:url and og:image from index.html**: These static meta tags were causing Google to see the same canonical URL (homepage) for every page, resulting in 66 "alternate page with proper canonical tag" entries. React Helmet (via `seo.tsx`) is now the sole authority for page-specific OG/canonical meta.
-- **Removed noindexed pages from sitemap**: `/privacidad` and `/terminos` were listed in sitemap.xml despite having `noindex` — contradictory signals removed.
-- **Added changefreq and priority to sitemap**: All sitemap entries now include `<changefreq>` and `<priority>` tags for better crawl guidance.
-- **Trailing-slash 301 redirect middleware**: Normalizes `/path/` → `/path` to prevent duplicate URL indexing.
-- **X-Robots-Tag HTTP header middleware**: Server-side `noindex, nofollow` header reinforces client-side meta for checkout, privacy, terms, admin, and internal routes.
-- **Soft 404 prevention**: Server-side middleware returns proper HTTP 404 for unknown SPA routes, non-existent products (`/productos/:id`), and unpublished blog posts (`/blog/:slug`). Uses `res.status` override + `res.statusCode` to work with both Vite dev and production static serving.
-- **LCP optimization**: Hero banner image (`hero-banner.png`) copied to `/public/` with `<link rel="preload" as="image" fetchpriority="high">` in index.html for immediate browser discovery.
-- **Removed render-blocking Nunito font**: CSS `@import` for unused Google Font removed; font variables updated to system font stacks (system-ui for sans, Georgia for serif).
-- **CSP updated for Google Ads**: Added `googleads.g.doubleclick.net`, `www.google.com` to script-src/connect-src/frame-src; removed unused Google Fonts domains from style-src/font-src.
-- **Cookie consent banner**: GDPR/privacy-compliant banner with Accept All, Reject, and Customize (analytics + marketing toggles). Uses Google Consent Mode v2 — defaults to denied, only grants after explicit consent. Google Analytics/GTM/Ads scripts removed from index.html and loaded dynamically only after consent. Consent stored in localStorage (`zahal-cookie-consent`).
-- **Dependency update**: rollup@4.24.4 → rollup@2.80.0 added as direct dependency per security scan requirement; Vite retains its own rollup@4.x internally.
-
-# Previous Changes (February 18, 2026)
-
-## External Audit Fixes
-- **Server hardening**: Error handler no longer throws after response (was causing unhandled rejections), added request body size limits (1MB), rate limiting on /api/* (100 req/min) and /api/checkout (5 req/min) via express-rate-limit
-- **Query client fix**: staleTime changed from Infinity to 5 minutes so product data refreshes; retry set to 1 so failed fetches aren't permanent
-- **Dead code removal**: Deleted unused duplicate `client/src/lib/api.ts`
-- **Cart fetch optimization**: Product cache only re-fetches from API when new (uncached) product IDs are in cart
-- **Checkout UX**: Toast notifications on checkout failure (was silently swallowing errors); quantity cap of 10 per product; checkout success page verifies session_id from URL (prevents false confirmations)
-- **SEO improvements**: og:image and twitter:image meta tags now rendered in SEO component with default fallback; Nunito ghost font removed from index.html (was loaded but never used); /donde-encontrarnos and /terminos added to sitemap.xml
-- **Storage optimization**: Stripe price fetching parallelized with Promise.all (was sequential loop, N+1 API calls)
-- **Legal pages**: Added Términos y Condiciones page at /terminos with full content; footer "Términos" link now functional
-
-## Previous Website Audit & SEO Fixes
-- Per-page SEO meta tags via react-helmet-async (unique title, description, canonical, OG tags per page)
-- Fallback meta tags in index.html for crawlers that don't execute JavaScript
-- Viewport meta fixed: removed maximum-scale=1 to allow user zooming (accessibility + mobile)
-- Google Fonts trimmed from 20+ families to only Playfair Display + Inter (performance)
-- Favicon added (SVG with green "Z" logo at /favicon.svg)
-- Skip-to-content accessibility link (sr-only, visible on keyboard focus)
-- All pages wrapped in `<main id="main-content">` landmarks
-- Gzip compression middleware added to Express server
-- sitemap.xml route with all public pages + proper XML format
-- robots.txt route with crawl directives and sitemap reference
-- SEO component: `client/src/components/seo.tsx` — reusable Helmet wrapper
-- Invalid Tailwind classes fixed: h-13→h-14, duration-400→duration-500
-- font-serif registered in Tailwind config
-- 404 page translated to Spanish
-- Cart sidebar image fallback for products without images
-- Product category navigation fixed to pass ?categoria= query parameter
-
-# Previous Changes (February 17, 2026)
-
-## Stripe Integration (Replacing Shopify)
-- Complete migration from Shopify checkout to native Stripe Checkout
-- All 11 products created in Stripe with prices, metadata (category, weight, features, inStock, isFeatured, isNew)
-- Backend reads products from Stripe sync tables (stripe.products, stripe.prices) via PostgreSQL
-- Client-side shopping cart using React Context + localStorage
-- Cart sidebar in navigation with add/remove items, quantity controls, checkout button
-- POST /api/checkout creates Stripe Checkout session and redirects to Stripe-hosted checkout
-- Success page at /checkout/exito, cancel page at /checkout/cancelado
-- Stripe webhooks auto-sync product/price changes to local database
-- "Agregar al Carrito" replaces old "Comprar en Shopify" button on product detail pages
-- Removed all Shopify checkout/cart URLs; only legacy CDN image URLs remain (still functional)
-
-## Premium + Earthy Redesign
-- Complete visual overhaul: removed amber/yellow accent, replaced with all-green palette
-- Warm off-white backgrounds (hsl(80 20% 98%)) instead of stark white
-- Subtle linen-texture CSS pattern for organic feel
-- New `accent` color: sage green hsl(152 35% 38%) instead of amber
-- Improved glass-blur navigation with saturate(180%)
-- Hero section: dramatic serif headlines with emerald-200 italic accent, internal navigation
-- New ProofSection component: "¿Por qué cambiarte a ZAHAL?" with trust stats (24h, 0%, 100%)
-- Product detail page: WhatsApp button + trust badges (envío, pago seguro, 100% natural)
-- Footer: WhatsApp link added, all product links point internally to /productos
-- Contact page: prominent WhatsApp CTA banner at top
-- Smooth scroll-to-top blur transitions between pages
-- Product cards: refined hover animations (lift + shadow), Eye icon on "Ver Detalles" button
-- Newsletter subscribe button: white on green instead of amber
-
-## Product Catalog (11 Products)
-1. Desodorante Spray 15ml - $45.00
-2. Roll On con Aloe Vera 30ml - $56.00
-3. Roll On Teens con Aroma 30ml - $66.00
-4. Roll On For Men 90ml - $115.00
-5. Roll On Teens 90ml - $115.00
-6. Roll On Sport 90ml - $120.00
-7. Pack Dúo Stick + Spray - $130.00
-8. Spray Corporal 240ml - $131.00
-9. Kit Eco Viajero - $150.00
-10. Stick Natural 60g - $189.00
-11. Stick Natural 120g - $275.00
-
-## Key Components
-- `use-cart.tsx`: CartProvider context with localStorage persistence, checkout via Stripe
-- `navigation.tsx`: Glass-blur nav with cart sidebar (Sheet component)
-- `product-detail.tsx`: Product page with "Agregar al Carrito", WhatsApp, trust badges
-- `checkout-success.tsx`: Order confirmation page, clears cart
-- `checkout-cancel.tsx`: Payment cancelled page
-- `proof-section.tsx`: Trust/reassurance component with highlights and stats
-- `hero-section.tsx`: Full-screen hero with green gradient overlay
-- `featured-products.tsx`: Shows first 3 products with "Ver Tienda Completa" CTA
-- `product-categories.tsx`: 4 category cards (Unisex, Sport, Travel, Teens) linking to /productos
-- `blog.tsx`: Public blog listing page with card grid
-- `blog-post.tsx`: Individual blog post page with markdown rendering
-- `marketing-portal.tsx`: Employee portal with blog editor, banner manager, product management
-- `admin-api-keys.tsx`: API key management page
+This project is a full-stack e-commerce application for Zahal, a natural skincare brand. It offers a custom React frontend with direct Stripe payment processing for alum stone deodorants and natural personal care products. The platform aims to provide a premium, earthy brand experience tailored for the Mexican market, emphasizing trust signals, WhatsApp integration, and a Spanish-first approach.
 
 # User Preferences
 
@@ -134,57 +11,43 @@ Mexican market UX: WhatsApp integration, trust signals, Spanish-first copy.
 # System Architecture
 
 ## Frontend Architecture
-- **React SPA**: Single-page application built with React 18 and TypeScript
-- **Routing**: Wouter — routes: /, /productos, /productos/:id, /nosotros, /preguntas-frecuentes, /contacto, /privacidad, /terminos, /donde-encontrarnos, /blog, /blog/:slug, /checkout/exito, /checkout/cancelado, /admin/api-keys, /empleados/Marketing
-- **State Management**: TanStack Query v5 (product data) + React Context (cart)
-- **Cart**: Client-side localStorage-based cart via CartProvider
-- **UI Framework**: Shadcn/ui + Radix UI + Tailwind CSS
+- **Framework**: React 18 with TypeScript
+- **Routing**: Wouter for client-side navigation
+- **State Management**: TanStack Query v5 for data fetching, React Context for cart management
+- **UI**: Shadcn/ui, Radix UI, and Tailwind CSS for styling
 - **Build Tool**: Vite
+- **Key Features**: Client-side localStorage-based shopping cart, dynamic SEO via React Helmet, safe Markdown rendering, image uploads, and an advanced blog/banner marketing portal for employees.
 
 ## Backend Architecture
-- **Express.js Server**: RESTful API server with TypeScript
-- **Storage Layer**: Reads products from Stripe sync tables (stripe.products, stripe.prices) in PostgreSQL
-- **Stripe Integration**: Managed webhook + backfill sync for products/prices
-- **Database Tables**: contact_messages, newsletter_subscribers, api_keys, blog_posts, site_settings
-- **API Endpoints**:
-  - GET /api/products — list all products
-  - GET /api/products/:id — single product by slug
-  - POST /api/checkout — create Stripe Checkout session
-  - GET /api/stripe/publishable-key — frontend Stripe key
-  - GET /api/blog — list published blog posts
-  - GET /api/blog/:slug — single blog post
-  - GET /api/settings/:key — public site settings
-  - Admin (requires x-admin-password header):
-    - GET/POST/PUT/DELETE /api/admin/blog — blog CRUD
-    - GET/PUT /api/admin/settings/:key — site settings
-    - PUT /api/admin/products/:stripeProductId — update products in Stripe
-    - GET/POST/DELETE /api/admin/api-keys — API key management
+- **Server**: Express.js with TypeScript
+- **Database**: PostgreSQL, primarily storing contact messages, newsletter subscribers, API keys, blog posts, and site settings. It syncs product and pricing data from Stripe.
+- **API**: RESTful API supporting product listings, checkout session creation, blog management (CRUD), site settings, and admin functionalities secured by an `x-admin-password` header.
+- **Security**: Implements server hardening including request body size limits, rate limiting, and robust error handling.
+- **SEO Enhancements**: Server-side rendering considerations for SEO, including dynamic sitemap, robots.txt, 301 redirects for trailing slashes, and proper HTTP 404 responses for non-existent content.
 
 ## Payment Flow
-1. User adds items to cart (client-side localStorage)
-2. User clicks "Proceder al pago" in cart sidebar
-3. Frontend POSTs to /api/checkout with { items: [{ stripePriceId, quantity }] }
-4. Backend creates Stripe Checkout Session with line items, MX shipping
-5. User is redirected to Stripe-hosted checkout page
-6. On success → /checkout/exito (cart cleared), on cancel → /checkout/cancelado
+- Uses Stripe Checkout for secure payment processing.
+- Cart contents are sent to the backend, which creates a Stripe Checkout Session.
+- Users are redirected to a Stripe-hosted page for payment, then to success or cancellation pages on the Zahal site.
+- Shipping rates are dynamically applied based on cart subtotal (e.g., free shipping above 600 MXN).
 
 ## Design System
-- **Primary**: Deep green hsl(152 45% 28%) — brand color
-- **Accent**: Sage green hsl(152 35% 38%) — CTAs and secondary actions
-- **Background**: Warm off-white hsl(80 20% 98%)
-- **Card**: Light sage hsl(90 15% 96%)
-- **Foreground**: Dark green-tinted black hsl(150 10% 12%)
-- **Fonts**: Playfair Display (headings), Inter (body)
-- **Border radius**: 12px default
-- **Texture**: Subtle linen-like SVG pattern via `.linen-texture` class
+- **Color Palette**: Primary deep green (hsl(152 45% 28%)), accent sage green (hsl(152 35% 38%)), warm off-white backgrounds, and dark green-tinted black foreground.
+- **Typography**: Playfair Display for headings and Inter for body text.
+- **Aesthetics**: Subtle linen-like SVG pattern for organic texture, 12px default border-radius.
 
-## External Dependencies
-- Stripe (payments), Neon Database (PostgreSQL), Radix UI, Tailwind CSS, Lucide React, React Icons, React Hook Form, Zod, date-fns
+# External Dependencies
 
-## Important Files
-- `server/stripeClient.ts` — Stripe client initialization
-- `server/webhookHandlers.ts` — Stripe webhook event handlers
-- `server/storage.ts` — Product storage reading from Stripe sync tables
-- `server/routes.ts` — API routes including checkout
-- `client/src/hooks/use-cart.tsx` — Cart context provider
-- `scripts/seed-products.ts` — Script to seed products in Stripe
+- **Stripe**: For payment processing and product/price synchronization.
+- **Neon Database**: Managed PostgreSQL service.
+- **Radix UI**: Unstyled component primitives.
+- **Tailwind CSS**: Utility-first CSS framework.
+- **Lucide React / React Icons**: Icon libraries.
+- **React Hook Form**: Form management.
+- **Zod**: Schema validation.
+- **date-fns**: Date utility library.
+- **Replit Object Storage**: GCS-backed bucket for admin image uploads via presigned PUT URLs (no local disk). Uploaded objects are tagged with public ACL on finalize and served from `/objects/*` with ACL enforcement.
+- **TipTap**: WYSIWYG editor for the marketing blog (`RichTextEditor`). Posts persist as sanitized HTML; legacy markdown posts are auto-converted on load via `marked`. Public renderer (`MarkdownContent`) detects HTML vs markdown and sanitizes both paths (`isomorphic-dompurify` + `rehype-sanitize`).
+- **react-markdown**, **remark-gfm**, **rehype-sanitize**: For safe and robust markdown rendering.
+- **express-rate-limit**: For API rate limiting.
+- **Google Consent Mode v2**: For cookie consent management and analytics integration.

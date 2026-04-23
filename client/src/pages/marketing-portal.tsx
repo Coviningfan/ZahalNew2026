@@ -17,10 +17,20 @@ import {
 } from "lucide-react";
 import type { BlogPost, Product, HeroSlide } from "@shared/schema";
 import { ImageUpload } from "@/components/image-upload";
-import MarkdownEditor from "@/components/markdown-editor";
+import RichTextEditor from "@/components/rich-text-editor";
 
 const PW_KEY = "zahal_mkt_pw";
 const DRAFT_PREFIX = "zahal_blog_draft_";
+
+class AdminFetchError extends Error {
+  code?: string;
+  status?: number;
+  constructor(message: string, opts?: { code?: string; status?: number }) {
+    super(message);
+    this.code = opts?.code;
+    this.status = opts?.status;
+  }
+}
 
 async function adminFetch(path: string, password: string, options: RequestInit = {}) {
   const res = await fetch(path, {
@@ -32,13 +42,19 @@ async function adminFetch(path: string, password: string, options: RequestInit =
     },
   });
   if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    const err: any = new Error(data.message || "Error");
-    err.code = data.code;
-    err.status = res.status;
-    throw err;
+    const data = (await res.json().catch(() => ({}))) as { message?: string; code?: string };
+    throw new AdminFetchError(data.message || "Error", { code: data.code, status: res.status });
   }
   return res.json();
+}
+
+function errorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  return "Error desconocido";
+}
+
+function errorCode(err: unknown): string | undefined {
+  return err instanceof AdminFetchError ? err.code : undefined;
 }
 
 function autoSlug(title: string) {
@@ -61,8 +77,8 @@ function Login({ onLogin }: { onLogin: (pw: string) => void }) {
       await adminFetch("/api/admin/blog", pw);
       sessionStorage.setItem(PW_KEY, pw);
       onLogin(pw);
-    } catch (err: any) {
-      setError(err.message || "Contraseña incorrecta");
+    } catch (err) {
+      setError(errorMessage(err) || "Contraseña incorrecta");
     } finally {
       setLoading(false);
     }
@@ -184,7 +200,7 @@ function BlogEditor({ password }: { password: string }) {
       setForm(emptyPost);
       toast({ title: "Artículo creado" });
     },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+    onError: (err: unknown) => toast({ title: "Error", description: errorMessage(err), variant: "destructive" }),
   });
 
   const updateMutation = useMutation({
@@ -197,7 +213,7 @@ function BlogEditor({ password }: { password: string }) {
       setForm(emptyPost);
       toast({ title: "Artículo actualizado" });
     },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+    onError: (err: unknown) => toast({ title: "Error", description: errorMessage(err), variant: "destructive" }),
   });
 
   const deleteMutation = useMutation({
@@ -208,21 +224,21 @@ function BlogEditor({ password }: { password: string }) {
       setDeleteId(null);
       toast({ title: "Artículo eliminado" });
     },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+    onError: (err: unknown) => toast({ title: "Error", description: errorMessage(err), variant: "destructive" }),
   });
 
-  const syncMutation = useMutation({
+  const syncMutation = useMutation<{ created: number; skipped: number }>({
     mutationFn: () => adminFetch("/api/admin/sync-articles", password, { method: "POST" }),
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/blog"] });
       queryClient.invalidateQueries({ queryKey: ["/api/blog"] });
       toast({ title: "Sincronización completada", description: `${data.created} nuevos, ${data.skipped} ya existían.` });
     },
-    onError: (err: any) => {
-      if (err.code === "BABYLOVE_NOT_CONFIGURED") {
+    onError: (err: unknown) => {
+      if (errorCode(err) === "BABYLOVE_NOT_CONFIGURED") {
         toast({ title: "Configura tu clave AI", description: "Pide al admin que añada BABYLOVE_API_KEY.", variant: "destructive" });
       } else {
-        toast({ title: "Error de sincronización", description: err.message, variant: "destructive" });
+        toast({ title: "Error de sincronización", description: errorMessage(err), variant: "destructive" });
       }
     },
   });
@@ -361,7 +377,7 @@ function BlogEditor({ password }: { password: string }) {
 
           <div>
             <Label className="text-sm font-medium mb-1.5 block">Contenido</Label>
-            <MarkdownEditor
+            <RichTextEditor
               value={form.content}
               onChange={(v) => setForm((f) => ({ ...f, content: v }))}
               password={password}
@@ -419,9 +435,38 @@ function BlogEditor({ password }: { password: string }) {
       {syncStatus && !syncStatus.configured && (
         <div className="mb-4 flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-900">
           <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-          <div className="text-xs">
+          <div className="text-xs flex-1">
             <p className="font-medium">Sincronización AI no configurada</p>
-            <p className="mt-0.5">Para importar artículos automáticamente, pide al admin que configure la variable <code className="bg-amber-100 px-1 rounded">BABYLOVE_API_KEY</code>.</p>
+            <p className="mt-0.5">Para importar artículos automáticamente hace falta la clave <code className="bg-amber-100 px-1 rounded">BABYLOVE_API_KEY</code>.</p>
+            <div className="flex flex-wrap gap-2 mt-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-7 text-xs gap-1 border-amber-300 bg-white hover:bg-amber-100"
+                onClick={() => {
+                  void navigator.clipboard.writeText("BABYLOVE_API_KEY").then(() => {
+                    toast({ title: "Copiado", description: "Pega este nombre al añadir el secreto." });
+                  });
+                }}
+                data-testid="button-copy-secret-name"
+              >
+                Copiar nombre del secreto
+              </Button>
+              <a
+                href="https://docs.replit.com/cloud-services/deployments/environment-variables-and-secrets"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-xs gap-1 border-amber-300 bg-white hover:bg-amber-100"
+                  data-testid="button-open-secrets-help"
+                >
+                  Cómo añadirlo <ExternalLink className="h-3 w-3" />
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       )}
@@ -540,7 +585,7 @@ function BannerManager({ password }: { password: string }) {
       try {
         const parsed = JSON.parse(incoming);
         if (Array.isArray(parsed)) {
-          setSlides(parsed.map((s: any) => ({ ...emptySlide, ...s })));
+          setSlides(parsed.map((s: unknown) => ({ ...emptySlide, ...(s as Partial<HeroSlide>) })));
           return;
         }
       } catch {}
@@ -558,7 +603,7 @@ function BannerManager({ password }: { password: string }) {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings", "hero_banners"] });
       toast({ title: "Banners guardados", description: "Los cambios se verán en el sitio al recargar." });
     },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+    onError: (err: unknown) => toast({ title: "Error", description: errorMessage(err), variant: "destructive" }),
   });
 
   const resetMutation = useMutation({
@@ -740,21 +785,39 @@ function ProductManager({ password }: { password: string }) {
     queryKey: ["/api/products"],
   });
 
+  type ProductUpdateBody = {
+    name?: string;
+    description?: string;
+    images?: string[];
+    newPrice?: number;
+  };
+
   const updateMutation = useMutation({
     mutationFn: async () => {
-      const body: any = {};
+      const body: ProductUpdateBody = {};
       if (editForm.name && editForm.name !== editingProduct!.name) body.name = editForm.name;
       if (editForm.description !== editingProduct!.description) body.description = editForm.description;
       if (editForm.images) body.images = editForm.images.split("\n").map((s) => s.trim()).filter(Boolean);
       if (editForm.newPrice) body.newPrice = parseFloat(editForm.newPrice);
       return adminFetch(`/api/admin/products/${editingProduct!.stripeProductId}`, password, { method: "PUT", body: JSON.stringify(body) });
     },
+    onMutate: () => {
+      toast({
+        title: "Actualizando en Stripe…",
+        description: "Sincronizando los cambios con tu cuenta de Stripe.",
+        duration: 8000,
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
       setEditingProduct(null);
-      toast({ title: "Producto actualizado", description: "Los cambios deberían reflejarse en pocos segundos." });
+      toast({
+        title: "Los cambios pueden tardar hasta 60 segundos en aparecer en el sitio.",
+        description: "Cambios guardados correctamente en Stripe.",
+        duration: 9000,
+      });
     },
-    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
+    onError: (err: unknown) => toast({ title: "Error", description: errorMessage(err), variant: "destructive" }),
   });
 
   function startEdit(product: Product) {

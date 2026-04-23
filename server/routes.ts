@@ -253,17 +253,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ─── Admin helpers ────────────────────────────────────────────────────────
 
-  function requireAdminPassword(req: any, res: any, next: any) {
+  const requireAdminPassword: import("express").RequestHandler = (req, res, next) => {
     const adminPassword = process.env.ADMIN_PASSWORD;
     if (!adminPassword) {
       return res.status(503).json({ message: "Admin access not configured. Set ADMIN_PASSWORD environment variable." });
     }
-    const provided = req.headers["x-admin-password"] as string;
-    if (!provided || provided !== adminPassword) {
+    const provided = req.headers["x-admin-password"];
+    if (typeof provided !== "string" || provided !== adminPassword) {
       return res.status(401).json({ message: "Unauthorized" });
     }
     next();
-  }
+  };
 
   registerUploadRoutes(app, requireAdminPassword);
 
