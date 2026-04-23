@@ -13,7 +13,7 @@ import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import {
   Lock, Eye, EyeOff, FileText, Image as ImageIcon, Package, Plus, Pencil, Trash2, Save,
-  ArrowLeft, LogOut, LayoutDashboard, ExternalLink, RefreshCw, AlertCircle, GripVertical,
+  ArrowLeft, LogOut, LayoutDashboard, ExternalLink, GripVertical,
 } from "lucide-react";
 import type { BlogPost, Product, HeroSlide } from "@shared/schema";
 import { ImageUpload } from "@/components/image-upload";
@@ -51,10 +51,6 @@ async function adminFetch(path: string, password: string, options: RequestInit =
 function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
   return "Error desconocido";
-}
-
-function errorCode(err: unknown): string | undefined {
-  return err instanceof AdminFetchError ? err.code : undefined;
 }
 
 function autoSlug(title: string) {
@@ -183,11 +179,6 @@ function BlogEditor({ password }: { password: string }) {
     queryFn: () => adminFetch("/api/admin/blog", password),
   });
 
-  const { data: syncStatus } = useQuery<{ configured: boolean; source?: string }>({
-    queryKey: ["/api/admin/sync-articles/status"],
-    queryFn: () => adminFetch("/api/admin/sync-articles/status", password),
-  });
-
   function clearDraft() {
     if (draftKey) localStorage.removeItem(draftKey);
   }
@@ -227,22 +218,6 @@ function BlogEditor({ password }: { password: string }) {
       toast({ title: "Artículo eliminado" });
     },
     onError: (err: unknown) => toast({ title: "Error", description: errorMessage(err), variant: "destructive" }),
-  });
-
-  const syncMutation = useMutation<{ created: number; skipped: number }>({
-    mutationFn: () => adminFetch("/api/admin/sync-articles", password, { method: "POST" }),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/blog"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/blog"] });
-      toast({ title: "Sincronización completada", description: `${data.created} nuevos, ${data.skipped} ya existían.` });
-    },
-    onError: (err: unknown) => {
-      if (errorCode(err) === "BABYLOVE_NOT_CONFIGURED") {
-        toast({ title: "Configura tu clave AI", description: "Pide al admin que añada BABYLOVE_API_KEY.", variant: "destructive" });
-      } else {
-        toast({ title: "Error de sincronización", description: errorMessage(err), variant: "destructive" });
-      }
-    },
   });
 
   function startCreate() {
@@ -460,21 +435,10 @@ function BlogEditor({ password }: { password: string }) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-foreground">Artículos del Blog</h2>
-        <div className="flex gap-2">
-          {syncStatus?.configured ? (
-            <Button variant="outline" onClick={() => syncMutation.mutate()} disabled={syncMutation.isPending} className="gap-2" data-testid="button-sync-articles">
-              <RefreshCw className={`h-4 w-4 ${syncMutation.isPending ? "animate-spin" : ""}`} /> {syncMutation.isPending ? "Sincronizando..." : "Sincronizar AI"}
-            </Button>
-          ) : null}
-          <Button onClick={startCreate} className="bg-primary hover:bg-primary/90 text-white gap-2" data-testid="button-new-blog-post">
-            <Plus className="h-4 w-4" /> Nuevo artículo
-          </Button>
-        </div>
+        <Button onClick={startCreate} className="bg-primary hover:bg-primary/90 text-white gap-2" data-testid="button-new-blog-post">
+          <Plus className="h-4 w-4" /> Nuevo artículo
+        </Button>
       </div>
-
-      {syncStatus && !syncStatus.configured && (
-        <BabyloveKeyPanel password={password} />
-      )}
 
       {isLoading ? (
         <div className="space-y-3">{[1, 2, 3].map((i) => <div key={i} className="h-16 bg-muted/40 rounded-xl animate-pulse" />)}</div>
@@ -980,69 +944,4 @@ export default function MarketingPortal() {
 
   if (!password) return <Login onLogin={setPassword} />;
   return <Dashboard password={password} onLogout={() => { sessionStorage.removeItem(PW_KEY); setPassword(null); }} />;
-}
-
-function BabyloveKeyPanel({ password }: { password: string }) {
-  const { toast } = useToast();
-  const [keyValue, setKeyValue] = useState("");
-  const [saving, setSaving] = useState(false);
-
-  async function save() {
-    const trimmed = keyValue.trim();
-    if (trimmed.length < 8) {
-      toast({ title: "Clave demasiado corta", description: "Pega la clave completa.", variant: "destructive" });
-      return;
-    }
-    setSaving(true);
-    try {
-      const res = await fetch("/api/admin/sync-articles/key", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", "X-Admin-Password": password },
-        body: JSON.stringify({ value: trimmed }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "Error al guardar");
-      }
-      setKeyValue("");
-      await queryClient.invalidateQueries({ queryKey: ["/api/admin/sync-articles/status"] });
-      toast({ title: "Clave guardada", description: "La sincronización AI ya está activa." });
-    } catch (err) {
-      toast({ title: "Error", description: err instanceof Error ? err.message : "No se pudo guardar.", variant: "destructive" });
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  return (
-    <div className="mb-4 flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-900" data-testid="banner-babylove-missing">
-      <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-      <div className="text-xs flex-1">
-        <p className="font-medium">Sincronización AI no configurada</p>
-        <p className="mt-0.5 mb-2">Pega tu clave de BabyLoveGrowth abajo para activar la importación. La clave se guarda de forma segura en el servidor sin redeploy.</p>
-        <div className="flex flex-col sm:flex-row gap-2 max-w-lg">
-          <Input
-            type="password"
-            value={keyValue}
-            onChange={(e) => setKeyValue(e.target.value)}
-            placeholder="blg_xxxxxxxxxxxxxxxxxxxxxxxx"
-            className="h-8 text-xs bg-white border-amber-300"
-            data-testid="input-babylove-key"
-          />
-          <Button
-            size="sm"
-            onClick={save}
-            disabled={saving}
-            className="h-8 text-xs bg-amber-600 hover:bg-amber-700 text-white"
-            data-testid="button-save-babylove-key"
-          >
-            {saving ? "Guardando…" : "Guardar clave"}
-          </Button>
-        </div>
-        <p className="mt-2 text-[11px] text-amber-800/80">
-          Alternativa: añade <code className="bg-amber-100 px-1 rounded">BABYLOVE_API_KEY</code> en los secretos del proyecto (tiene prioridad sobre la clave guardada aquí).
-        </p>
-      </div>
-    </div>
-  );
 }
