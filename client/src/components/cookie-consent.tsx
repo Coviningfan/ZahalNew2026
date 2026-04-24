@@ -4,7 +4,8 @@ import { Cookie, Settings, X } from "lucide-react";
 import { Link } from "wouter";
 
 const CONSENT_KEY = "zahal-cookie-consent";
-const CONSENT_VERSION = "1";
+const CONSENT_VERSION = "2";
+const COOKIE_CONSENT_OPEN_EVENT = "zahal-open-cookie-consent";
 
 type ConsentState = {
   version: string;
@@ -17,6 +18,7 @@ type ConsentState = {
 function gtag(...args: any[]) {
   const w = window as any;
   w.dataLayer = w.dataLayer || [];
+  w.gtag = gtag;
   w.dataLayer.push(arguments);
 }
 
@@ -34,6 +36,12 @@ function getStoredConsent(): ConsentState | null {
 
 function storeConsent(consent: ConsentState) {
   localStorage.setItem(CONSENT_KEY, JSON.stringify(consent));
+}
+
+function syncConsentState(setAnalytics: (value: boolean) => void, setMarketing: (value: boolean) => void) {
+  const existing = getStoredConsent();
+  setAnalytics(existing?.analytics ?? true);
+  setMarketing(existing?.marketing ?? true);
 }
 
 function setConsentDefaults() {
@@ -81,6 +89,15 @@ export function initConsentOnLoad() {
   }
 }
 
+export function openCookieConsent(showDetails = true) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(
+    new CustomEvent(COOKIE_CONSENT_OPEN_EVENT, {
+      detail: { showDetails },
+    }),
+  );
+}
+
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -93,6 +110,20 @@ export default function CookieConsent() {
       const timer = setTimeout(() => setVisible(true), 1200);
       return () => clearTimeout(timer);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleOpen = (event: Event) => {
+      const customEvent = event as CustomEvent<{ showDetails?: boolean }>;
+      syncConsentState(setAnalytics, setMarketing);
+      setShowDetails(customEvent.detail?.showDetails ?? true);
+      setVisible(true);
+    };
+
+    window.addEventListener(COOKIE_CONSENT_OPEN_EVENT, handleOpen as EventListener);
+    return () => {
+      window.removeEventListener(COOKIE_CONSENT_OPEN_EVENT, handleOpen as EventListener);
+    };
   }, []);
 
   const accept = useCallback((analyticsOn: boolean, marketingOn: boolean) => {
