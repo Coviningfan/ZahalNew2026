@@ -13,6 +13,41 @@ declare global {
   }
 }
 
+const GOOGLE_ADS_PURCHASE_SEND_TO = import.meta.env.VITE_GOOGLE_ADS_PURCHASE_SEND_TO || "";
+const TRACKED_PURCHASE_PREFIX = "zahal_purchase_tracked_";
+
+type CheckoutVerification = {
+  valid?: boolean;
+  amount_total?: number | null;
+  currency?: string | null;
+};
+
+function trackPurchase(sessionId: string, data: CheckoutVerification) {
+  if (typeof window.gtag !== "function") return;
+
+  const trackedKey = `${TRACKED_PURCHASE_PREFIX}${sessionId}`;
+  if (sessionStorage.getItem(trackedKey) === "1") return;
+
+  const value = typeof data.amount_total === "number" ? data.amount_total / 100 : 0;
+  const currency = (data.currency || "MXN").toUpperCase();
+
+  if (GOOGLE_ADS_PURCHASE_SEND_TO) {
+    window.gtag("event", "conversion", {
+      send_to: GOOGLE_ADS_PURCHASE_SEND_TO,
+      value,
+      currency,
+      transaction_id: sessionId,
+    });
+  }
+
+  window.gtag("event", "purchase", {
+    transaction_id: sessionId,
+    value,
+    currency,
+  });
+
+  sessionStorage.setItem(trackedKey, "1");
+}
 export default function CheckoutSuccess() {
   const { clearCart } = useCart();
   const searchString = useSearch();
@@ -30,16 +65,11 @@ export default function CheckoutSuccess() {
 
     fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
       .then(r => r.json())
-      .then(data => {
+      .then((data: CheckoutVerification) => {
         setIsValid(data.valid === true);
         if (data.valid === true) {
           clearCart();
-          // Fire Google Ads purchase conversion
-          if (typeof window.gtag === "function") {
-            window.gtag("event", "conversion_event_purchase_1", {
-              transaction_id: sessionId,
-            });
-          }
+          trackPurchase(sessionId, data);
         }
       })
       .catch(() => {

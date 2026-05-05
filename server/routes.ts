@@ -512,7 +512,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!sessionId) return res.status(400).json({ valid: false });
       const stripe = getStripeClient();
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-      res.json({ valid: session.payment_status === "paid" });
+      res.json({
+        valid: session.payment_status === "paid",
+        payment_status: session.payment_status,
+        amount_total: session.amount_total,
+        currency: session.currency,
+      });
     } catch (error) {
       console.error("Session verify error:", error);
       res.json({ valid: false });
