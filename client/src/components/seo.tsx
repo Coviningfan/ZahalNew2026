@@ -11,9 +11,20 @@ interface SEOProps {
   ogType?: string;
   noindex?: boolean;
   jsonLd?: JsonLdSchema | JsonLdSchema[];
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  tags?: string[];
 }
 
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
+
+function absoluteUrl(value?: string): string {
+  if (!value) return DEFAULT_OG_IMAGE;
+  if (/^https?:\/\//i.test(value)) return value;
+  if (value.startsWith("/")) return `${BASE_URL}${value}`;
+  return `${BASE_URL}/${value.replace(/^\/+/, "")}`;
+}
 
 export default function SEO({
   title,
@@ -23,10 +34,14 @@ export default function SEO({
   ogType = "website",
   noindex = false,
   jsonLd,
+  publishedTime,
+  modifiedTime,
+  author,
+  tags = [],
 }: SEOProps) {
   const fullTitle = title.includes("Zahal") ? title : `${title} | Zahal`;
   const url = `${BASE_URL}${path}`;
-  const image = ogImage || DEFAULT_OG_IMAGE;
+  const image = absoluteUrl(ogImage);
 
   const jsonLdString = jsonLd
     ? JSON.stringify(
@@ -51,6 +66,18 @@ export default function SEO({
       <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+      {ogType === "article" && publishedTime && (
+        <meta property="article:published_time" content={publishedTime} />
+      )}
+      {ogType === "article" && modifiedTime && (
+        <meta property="article:modified_time" content={modifiedTime} />
+      )}
+      {ogType === "article" && author && (
+        <meta property="article:author" content={author} />
+      )}
+      {ogType === "article" && tags.map((tag) => (
+        <meta key={tag} property="article:tag" content={tag} />
+      ))}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
