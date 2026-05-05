@@ -519,30 +519,40 @@ const emptySlide: HeroSlide = {
   hideBadge: false,
 };
 
-function parseBgVerticalPercent(pos: string): number {
-  // "center 80%" or "center center" → 80 or 50
-  const parts = (pos || "center center").trim().split(/\s+/);
-  const v = parts[1] || "50%";
-  if (v === "center") return 50;
-  if (v === "top") return 0;
-  if (v === "bottom") return 100;
-  const m = v.match(/(\d+)%/);
-  return m ? parseInt(m[1]) : 50;
+function readBgPercent(token: string | undefined, axis: "x" | "y"): number {
+  if (!token || token === "center") return 50;
+  if (axis === "x" && token === "left") return 0;
+  if (axis === "x" && token === "right") return 100;
+  if (axis === "y" && token === "top") return 0;
+  if (axis === "y" && token === "bottom") return 100;
+  const match = token.match(/(\d+)%/);
+  if (!match) return 50;
+  return Math.min(100, Math.max(0, parseInt(match[1], 10)));
 }
 
-function buildBgPosition(verticalPercent: number): string {
-  return `center ${verticalPercent}%`;
+function parseBgPositionPercent(pos: string): { x: number; y: number } {
+  const parts = (pos || "center center").trim().split(/\s+/);
+  return {
+    x: readBgPercent(parts[0], "x"),
+    y: readBgPercent(parts[1], "y"),
+  };
+}
+
+function buildBgPosition(horizontalPercent: number, verticalPercent: number): string {
+  return `${horizontalPercent}% ${verticalPercent}%`;
 }
 
 function BannerManager({ password }: { password: string }) {
   const { toast } = useToast();
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [serverSnapshot, setServerSnapshot] = useState<string | null>(null);
+  const [draggingSlide, setDraggingSlide] = useState<number | null>(null);
 
   const { data: bannerData, isLoading } = useQuery<{ key: string; value: string | null }>({
     queryKey: ["/api/admin/settings", "hero_banners"],
     queryFn: () => adminFetch("/api/admin/settings/hero_banners", password),
   });
+  const invalidSlideIndex = slides.findIndex((slide) => !slide.title.trim() || !slide.bgImage.trim());
 
   // Rehydrate from server data whenever it actually changes (e.g., after reset/save invalidation).
   useEffect(() => {
@@ -603,14 +613,18 @@ function BannerManager({ password }: { password: string }) {
     setSlides((s) => s.filter((_, i) => i !== idx));
   }
 
-  function moveSlide(idx: number, dir: -1 | 1) {
+  function moveSlideTo(from: number, to: number) {
     setSlides((s) => {
+      if (from === to || from < 0 || to < 0 || from >= s.length || to >= s.length) return s;
       const next = [...s];
-      const j = idx + dir;
-      if (j < 0 || j >= next.length) return s;
-      [next[idx], next[j]] = [next[j], next[idx]];
+      const [slide] = next.splice(from, 1);
+      next.splice(to, 0, slide);
       return next;
     });
+  }
+
+  function moveSlide(idx: number, dir: -1 | 1) {
+    moveSlideTo(idx, idx + dir);
   }
 
   if (isLoading) return <div className="space-y-3">{[1, 2].map((i) => <div key={i} className="h-32 bg-muted/40 rounded-xl animate-pulse" />)}</div>;
@@ -627,11 +641,16 @@ function BannerManager({ password }: { password: string }) {
             Restaurar por defecto
           </Button>
           <Button variant="outline" onClick={addSlide} className="gap-1"><Plus className="h-4 w-4" /> Agregar slide</Button>
-          <Button onClick={() => saveMutation.mutate()} className="bg-primary hover:bg-primary/90 text-white gap-2" disabled={saveMutation.isPending || slides.length === 0} data-testid="button-save-banners">
+          <Button onClick={() => saveMutation.mutate()} className="bg-primary hover:bg-primary/90 text-white gap-2" disabled={saveMutation.isPending || slides.length === 0 || invalidSlideIndex >= 0} data-testid="button-save-banners">
             <Save className="h-4 w-4" /> {saveMutation.isPending ? "Guardando..." : "Guardar"}
           </Button>
         </div>
       </div>
+      {invalidSlideIndex >= 0 && slides.length > 0 && (
+        <p className="text-xs text-amber-600 mt-2">
+          Completa titulo e imagen en el slide {invalidSlideIndex + 1} antes de guardar.
+        </p>
+      )}
 
       {slides.length === 0 ? (
         <div className="bg-card border border-border/40 rounded-xl p-8 text-center mt-6">
@@ -640,12 +659,30 @@ function BannerManager({ password }: { password: string }) {
           <p className="text-xs text-muted-foreground">Pulsa "Agregar slide" para personalizarlos.</p>
         </div>
       ) : (
-        <div className="space-y-4 mt-4">
+        <div className="grid xl:grid-cols-2 gap-4 mt-4">
           {slides.map((slide, idx) => (
-            <div key={idx} className="bg-card border border-border/40 rounded-xl p-5" data-testid={`banner-slide-${idx}`}>
+            <div
+              key={idx}
+              className={`bg-card border border-border/40 rounded-xl p-5 transition ${draggingSlide === idx ? "opacity-60 ring-2 ring-primary" : ""}`}
+              data-testid={`banner-slide-${idx}`}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => {
+                event.preventDefault();
+                if (draggingSlide !== null) moveSlideTo(draggingSlide, idx);
+                setDraggingSlide(null);
+              }}
+            >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <GripVertical className="h-4 w-4 text-muted-foreground" />
+                  <div
+                    draggable
+                    onDragStart={() => setDraggingSlide(idx)}
+                    onDragEnd={() => setDraggingSlide(null)}
+                    className="cursor-grab active:cursor-grabbing text-muted-foreground"
+                    title="Arrastrar para ordenar"
+                  >
+                    <GripVertical className="h-4 w-4" />
+                  </div>
                   <span className="text-sm font-semibold text-foreground">Slide {idx + 1}</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -664,13 +701,23 @@ function BannerManager({ password }: { password: string }) {
                     <ImageUpload value={slide.bgImage} onChange={(url) => update(idx, "bgImage", url)} password={password} />
                   </div>
                   <div>
-                    <Label className="text-xs mb-1 block">Posición vertical de la imagen ({parseBgVerticalPercent(slide.bgPosition || "")}%)</Label>
+                    <Label className="text-xs mb-1 block">Posicion horizontal de la imagen ({parseBgPositionPercent(slide.bgPosition || "").x}%)</Label>
                     <Slider
                       min={0}
                       max={100}
                       step={5}
-                      value={[parseBgVerticalPercent(slide.bgPosition || "")]}
-                      onValueChange={([v]) => update(idx, "bgPosition", buildBgPosition(v))}
+                      value={[parseBgPositionPercent(slide.bgPosition || "").x]}
+                      onValueChange={([v]) => update(idx, "bgPosition", buildBgPosition(v, parseBgPositionPercent(slide.bgPosition || "").y))}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs mb-1 block">Posicion vertical de la imagen ({parseBgPositionPercent(slide.bgPosition || "").y}%)</Label>
+                    <Slider
+                      min={0}
+                      max={100}
+                      step={5}
+                      value={[parseBgPositionPercent(slide.bgPosition || "").y]}
+                      onValueChange={([v]) => update(idx, "bgPosition", buildBgPosition(parseBgPositionPercent(slide.bgPosition || "").x, v))}
                     />
                   </div>
                 </div>

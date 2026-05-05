@@ -28,6 +28,26 @@ const finalizeSchema = z.object({
   contentType: z.string().min(1),
 });
 
+async function findMediaReferences(url: string): Promise<string[]> {
+  const references: string[] = [];
+  const posts = await storage.listBlogPosts(true);
+  for (const post of posts) {
+    if (post.coverImage === url) {
+      references.push(`Portada de blog: ${post.title}`);
+    }
+    if (post.content.includes(url)) {
+      references.push(`Contenido de blog: ${post.title}`);
+    }
+  }
+
+  const heroBanners = await storage.getSetting("hero_banners");
+  if (heroBanners?.includes(url)) {
+    references.push("Banners del inicio");
+  }
+
+  return references;
+}
+
 /**
  * Admin-gated upload pipeline backed by Replit Object Storage.
  *
@@ -73,7 +93,27 @@ export function registerUploadRoutes(app: Express, requireAdminPassword: Request
           message: "Tipo de archivo no permitido.",
         });
       }
-      const url = await objectStorageService.trySetObjectEntityAclPolicy(data.rawURL, {
+
+      const normalizedPath = objectStorageService.normalizeObjectEntityPath(data.rawURL);
+      if (!normalizedPath.startsWith("/objects/")) {
+        return res.status(400).json({ message: "Ruta de archivo invalida." });
+      }
+
+      const objectFile = await objectStorageService.getObjectEntityFile(normalizedPath);
+      const [metadata] = await objectFile.getMetadata();
+      const uploadedContentType = typeof metadata.contentType === "string" ? metadata.contentType : data.contentType;
+      const uploadedSize = Number(metadata.size ?? data.size);
+
+      if (!ALLOWED_MIME.has(uploadedContentType)) {
+        await objectFile.delete({ ignoreNotFound: true }).catch(() => {});
+        return res.status(400).json({ message: "El archivo subido no es una imagen permitida." });
+      }
+      if (!Number.isFinite(uploadedSize) || uploadedSize > MAX_BYTES) {
+        await objectFile.delete({ ignoreNotFound: true }).catch(() => {});
+        return res.status(400).json({ message: "El archivo subido supera el limite de 5 MB." });
+      }
+
+      const url = await objectStorageService.trySetObjectEntityAclPolicy(normalizedPath, {
         owner: "admin",
         visibility: "public",
       });
@@ -113,6 +153,15 @@ export function registerUploadRoutes(app: Express, requireAdminPassword: Request
       if (Number.isNaN(id)) return res.status(400).json({ message: "ID inválido" });
       const assets = await storage.listMediaAssets();
       const target = assets.find((a) => a.id === id);
+      if (target?.url) {
+        const references = await findMediaReferences(target.url);
+        if (references.length > 0) {
+          return res.status(409).json({
+            message: "No se puede eliminar: la imagen sigue en uso.",
+            references,
+          });
+        }
+      }
       if (target?.url?.startsWith("/objects/")) {
         // Strict: fail the whole request if the object cannot be deleted so we
         // never leave orphaned storage blobs.

@@ -33,11 +33,16 @@ export async function uploadAdminImage(file: File, adminPassword: string): Promi
   const { uploadURL, rawURL } = (await reqRes.json()) as { uploadURL: string; rawURL: string };
 
   // 2) PUT file directly to GCS
-  const putRes = await fetch(uploadURL, {
-    method: "PUT",
-    body: file,
-    headers: { "Content-Type": file.type },
-  });
+  let putRes: Response;
+  try {
+    putRes = await fetch(uploadURL, {
+      method: "PUT",
+      body: file,
+      headers: { "Content-Type": file.type },
+    });
+  } catch {
+    throw new Error("No se pudo subir a Object Storage. Revisa la conexion y que storage.googleapis.com este permitido.");
+  }
   if (!putRes.ok) {
     throw new Error(`La subida a almacenamiento falló (${putRes.status}).`);
   }
