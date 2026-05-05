@@ -17,7 +17,7 @@ app.use((req, res, next) => {
     "style-src 'self' 'unsafe-inline'",
     "font-src 'self'",
     "img-src 'self' data: https: blob:",
-    `connect-src 'self' https://api.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.google.com https://googleads.g.doubleclick.net https://*.replit.dev https://*.replit.app wss://*.replit.dev wss://*.replit.app`,
+    `connect-src 'self' https://api.stripe.com https://storage.googleapis.com https://www.google-analytics.com https://analytics.google.com https://www.google.com https://googleads.g.doubleclick.net https://*.replit.dev https://*.replit.app wss://*.replit.dev wss://*.replit.app`,
     "frame-src https://js.stripe.com https://hooks.stripe.com https://www.googletagmanager.com https://googleads.g.doubleclick.net",
   ].join("; ");
 

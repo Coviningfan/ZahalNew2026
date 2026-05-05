@@ -1,7 +1,9 @@
-import type { Express } from "express";
+import fs from "fs";
+import path from "path";
+import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { checkoutSchema, contactMessageSchema, newsletterSchema, blogPostSchema, heroSlidesSchema } from "@shared/schema";
+import { checkoutSchema, contactMessageSchema, newsletterSchema, blogPostSchema, heroSlidesSchema, type BlogPost } from "@shared/schema";
 import { registerUploadRoutes } from "./uploads";
 import { getStripeClient, getStripePublishableKey } from "./stripeClient";
 import { z } from "zod";
@@ -91,6 +93,109 @@ function isKnownSpaRoute(path: string): boolean {
   if (path.startsWith("/productos/") && path.split("/").length === 3) return true;
   if (path.startsWith("/blog/") && path.split("/").length === 3) return true;
   return false;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function escapeScriptJson(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
+function getBaseUrl(req: Request): string {
+  return (process.env.BASE_URL || `${req.protocol}://${req.get("host")}`).replace(/\/+$/, "");
+}
+
+function absoluteUrl(req: Request, value?: string | null): string {
+  const baseUrl = getBaseUrl(req);
+  if (!value) return `${baseUrl}/og-image.png`;
+  if (/^https?:\/\//i.test(value)) return value;
+  if (value.startsWith("/")) return `${baseUrl}${value}`;
+  return `${baseUrl}/${value.replace(/^\/+/, "")}`;
+}
+
+function isoDate(value: Date | string): string {
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+}
+
+function stripDefaultSeoTags(html: string): string {
+  return html
+    .replace(/\s*<title>[\s\S]*?<\/title>/i, "")
+    .replace(/\s*<meta\s+name=["']description["'][^>]*>\s*/gi, "")
+    .replace(/\s*<meta\s+name=["']robots["'][^>]*>\s*/gi, "")
+    .replace(/\s*<link\s+rel=["']canonical["'][^>]*>\s*/gi, "")
+    .replace(/\s*<meta\s+property=["']og:(type|title|description|url|site_name|locale|image|image:width|image:height)["'][^>]*>\s*/gi, "")
+    .replace(/\s*<meta\s+name=["']twitter:(card|title|description|image)["'][^>]*>\s*/gi, "");
+}
+
+async function renderBlogPostHtml(req: Request, post: BlogPost): Promise<string> {
+  const indexPath = path.resolve(import.meta.dirname, "public", "index.html");
+  const template = await fs.promises.readFile(indexPath, "utf-8");
+  const baseUrl = getBaseUrl(req);
+  const url = `${baseUrl}/blog/${post.slug}`;
+  const title = post.seoTitle || `${post.title} | Blog Zahal`;
+  const description = post.seoDescription || post.excerpt || post.title;
+  const image = absoluteUrl(req, post.coverImage);
+  const publishedTime = isoDate(post.createdAt);
+  const modifiedTime = isoDate(post.updatedAt);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description,
+    image,
+    datePublished: publishedTime,
+    dateModified: modifiedTime,
+    author: {
+      "@type": "Person",
+      name: post.author || "Zahal",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Zahal Productos Naturales",
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/favicon-512x512.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    keywords: [...(post.categories || []), ...(post.tags || [])].join(", "),
+  };
+
+  const tags = [
+    `<title>${escapeHtml(title)}</title>`,
+    `<meta name="description" content="${escapeHtml(description)}" />`,
+    `<meta name="robots" content="index, follow" />`,
+    `<link rel="canonical" href="${escapeHtml(url)}" />`,
+    `<meta property="og:title" content="${escapeHtml(title)}" />`,
+    `<meta property="og:description" content="${escapeHtml(description)}" />`,
+    `<meta property="og:url" content="${escapeHtml(url)}" />`,
+    `<meta property="og:type" content="article" />`,
+    `<meta property="og:site_name" content="Zahal Productos Naturales" />`,
+    `<meta property="og:locale" content="es_MX" />`,
+    `<meta property="og:image" content="${escapeHtml(image)}" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="article:published_time" content="${escapeHtml(publishedTime)}" />`,
+    `<meta property="article:modified_time" content="${escapeHtml(modifiedTime)}" />`,
+    `<meta property="article:author" content="${escapeHtml(post.author || "Zahal")}" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${escapeHtml(title)}" />`,
+    `<meta name="twitter:description" content="${escapeHtml(description)}" />`,
+    `<meta name="twitter:image" content="${escapeHtml(image)}" />`,
+    `<script type="application/ld+json">${escapeScriptJson(jsonLd)}</script>`,
+  ].join("\n    ");
+
+  return stripDefaultSeoTags(template).replace("</head>", `    ${tags}\n  </head>`);
 }
 
 // ─── Shipping config ──────────────────────────────────────────────────────────
@@ -638,6 +743,10 @@ ${allPages.map(p => `  <url>
     try {
       const post = await storage.getBlogPost(req.params.slug);
       if (!post || !post.published) mark404(res);
+      else if (process.env.NODE_ENV === "production") {
+        const html = await renderBlogPostHtml(req, post);
+        return res.status(200).set({ "Content-Type": "text/html" }).send(html);
+      }
     } catch { }
     next();
   });

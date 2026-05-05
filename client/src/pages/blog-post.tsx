@@ -4,9 +4,17 @@ import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import SEO from "@/components/seo";
 import MarkdownContent from "@/components/markdown-content";
+import { BASE_URL, SITE_NAME } from "@/lib/config";
 import { Calendar, User, ArrowLeft, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { BlogPost } from "@shared/schema";
+
+function absoluteUrl(value?: string): string {
+  if (!value) return `${BASE_URL}/og-image.png`;
+  if (/^https?:\/\//i.test(value)) return value;
+  if (value.startsWith("/")) return `${BASE_URL}${value}`;
+  return `${BASE_URL}/${value.replace(/^\/+/, "")}`;
+}
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -64,13 +72,52 @@ export default function BlogPostPage() {
     );
   }
 
+  const description = post.seoDescription || post.excerpt || post.title;
+  const publishedTime = new Date(post.createdAt).toISOString();
+  const modifiedTime = new Date(post.updatedAt).toISOString();
+  const postUrl = `${BASE_URL}/blog/${post.slug}`;
+  const imageUrl = absoluteUrl(post.coverImage);
+  const articleTags = [...(post.categories || []), ...(post.tags || [])];
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description,
+    image: imageUrl,
+    datePublished: publishedTime,
+    dateModified: modifiedTime,
+    author: {
+      "@type": "Person",
+      name: post.author || "Zahal",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/favicon-512x512.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
+    keywords: articleTags.join(", "),
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
         title={post.seoTitle || `${post.title} — Blog Zahal`}
-        description={post.seoDescription || post.excerpt || post.title}
+        description={description}
         path={`/blog/${post.slug}`}
         ogImage={post.coverImage || undefined}
+        ogType="article"
+        publishedTime={publishedTime}
+        modifiedTime={modifiedTime}
+        author={post.author}
+        tags={articleTags}
+        jsonLd={articleJsonLd}
       />
       <Navigation />
 
