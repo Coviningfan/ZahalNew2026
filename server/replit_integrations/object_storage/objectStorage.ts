@@ -154,6 +154,37 @@ export class ObjectStorageService {
     });
   }
 
+  // Uploads an object entity through the server and returns its public object
+  // path. This avoids browser-to-storage CORS issues for admin uploads.
+  async uploadObjectEntityBuffer({
+    buffer,
+    contentType,
+    aclPolicy,
+  }: {
+    buffer: Buffer;
+    contentType: string;
+    aclPolicy: ObjectAclPolicy;
+  }): Promise<string> {
+    let privateObjectDir = this.getPrivateObjectDir();
+    if (privateObjectDir.endsWith("/")) {
+      privateObjectDir = privateObjectDir.slice(0, -1);
+    }
+
+    const entityId = `uploads/${randomUUID()}`;
+    const fullPath = `${privateObjectDir}/${entityId}`;
+    const { bucketName, objectName } = parseObjectPath(fullPath);
+    const bucket = objectStorageClient.bucket(bucketName);
+    const objectFile = bucket.file(objectName);
+
+    await objectFile.save(buffer, {
+      resumable: false,
+      metadata: { contentType },
+    });
+    await setObjectAclPolicy(objectFile, aclPolicy);
+
+    return `/objects/${entityId}`;
+  }
+
   // Deletes an object by its public /objects/<id> path. Safe to call on a
   // missing object; resolves without error.
   async deleteObjectEntity(objectPath: string): Promise<void> {

@@ -1,4 +1,5 @@
 import type { Express, Request, Response, RequestHandler } from "express";
+import multer from "multer";
 import { z } from "zod";
 import { storage } from "./storage";
 import {
@@ -14,6 +15,13 @@ const ALLOWED_MIME = new Set([
   "image/avif",
 ]);
 const MAX_BYTES = 5 * 1024 * 1024;
+const memoryUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: MAX_BYTES,
+    files: 1,
+  },
+});
 
 const requestUrlSchema = z.object({
   name: z.string().min(1).max(255),
@@ -48,6 +56,21 @@ async function findMediaReferences(url: string): Promise<string[]> {
   return references;
 }
 
+const uploadSingleImage: RequestHandler = (req, res, next) => {
+  memoryUpload.single("file")(req, res, (error: unknown) => {
+    if (error instanceof multer.MulterError) {
+      if (error.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).json({ message: "El archivo supera el limite de 5 MB." });
+      }
+      return res.status(400).json({ message: "No se pudo leer el archivo subido." });
+    }
+    if (error) {
+      return res.status(400).json({ message: "No se pudo leer el archivo subido." });
+    }
+    next();
+  });
+};
+
 /**
  * Admin-gated upload pipeline backed by Replit Object Storage.
  *
@@ -63,6 +86,45 @@ async function findMediaReferences(url: string): Promise<string[]> {
  */
 export function registerUploadRoutes(app: Express, requireAdminPassword: RequestHandler) {
   const objectStorageService = new ObjectStorageService();
+
+  // Same-origin upload endpoint for admin images. This avoids browser CORS
+  // failures when direct signed-URL PUT uploads are blocked by storage.
+  app.post("/api/admin/upload-image", requireAdminPassword, uploadSingleImage, async (req: Request, res: Response) => {
+    try {
+      const file = req.file;
+      if (!file) {
+        return res.status(400).json({ message: "Selecciona una imagen para subir." });
+      }
+      if (!ALLOWED_MIME.has(file.mimetype)) {
+        return res.status(400).json({
+          message: "Tipo de archivo no permitido. Usa JPG, PNG, WEBP o AVIF.",
+        });
+      }
+      if (file.size > MAX_BYTES) {
+        return res.status(400).json({ message: "El archivo supera el limite de 5 MB." });
+      }
+
+      const url = await objectStorageService.uploadObjectEntityBuffer({
+        buffer: file.buffer,
+        contentType: file.mimetype,
+        aclPolicy: {
+          owner: "admin",
+          visibility: "public",
+        },
+      });
+      const asset = await storage.createMediaAsset({
+        url,
+        filename: file.originalname.slice(0, 255),
+        mimeType: file.mimetype,
+        size: String(file.size),
+      });
+
+      res.json({ url, asset });
+    } catch (error) {
+      console.error("[uploads] upload-image failed", error);
+      res.status(500).json({ message: "No se pudo subir la imagen." });
+    }
+  });
 
   // 1) Request a presigned upload URL.
   app.post("/api/admin/upload-url", requireAdminPassword, async (req: Request, res: Response) => {

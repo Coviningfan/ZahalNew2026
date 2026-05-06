@@ -1,6 +1,6 @@
 /**
- * Upload an image via the admin presigned-URL pipeline backed by Object Storage.
- * Returns the canonical /objects/<id> URL once finalized.
+ * Upload an image through the admin API backed by Replit Object Storage.
+ * Returns the canonical /objects/<id> URL once saved and made public.
  */
 export async function uploadAdminImage(file: File, adminPassword: string): Promise<string> {
   const allowed = ["image/jpeg", "image/png", "image/webp", "image/avif"];
@@ -8,60 +8,25 @@ export async function uploadAdminImage(file: File, adminPassword: string): Promi
     throw new Error("Tipo de archivo no permitido. Usa JPG, PNG, WEBP o AVIF.");
   }
   if (file.size > 5 * 1024 * 1024) {
-    throw new Error("El archivo supera el límite de 5 MB.");
+    throw new Error("El archivo supera el limite de 5 MB.");
   }
 
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    "x-admin-password": adminPassword,
-  };
+  const form = new FormData();
+  form.append("file", file, file.name);
 
-  // 1) Request presigned URL
-  const reqRes = await fetch("/api/admin/upload-url", {
+  const res = await fetch("/api/admin/upload-image", {
     method: "POST",
-    headers,
-    body: JSON.stringify({
-      name: file.name,
-      size: file.size,
-      contentType: file.type,
-    }),
+    headers: {
+      "x-admin-password": adminPassword,
+    },
+    body: form,
   });
-  if (!reqRes.ok) {
-    const data = await reqRes.json().catch(() => ({}));
-    throw new Error(data.message || "No se pudo preparar la subida.");
-  }
-  const { uploadURL, rawURL } = (await reqRes.json()) as { uploadURL: string; rawURL: string };
 
-  // 2) PUT file directly to GCS
-  let putRes: Response;
-  try {
-    putRes = await fetch(uploadURL, {
-      method: "PUT",
-      body: file,
-      headers: { "Content-Type": file.type },
-    });
-  } catch {
-    throw new Error("No se pudo subir a Object Storage. Revisa la conexion y que storage.googleapis.com este permitido.");
-  }
-  if (!putRes.ok) {
-    throw new Error(`La subida a almacenamiento falló (${putRes.status}).`);
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.message || "No se pudo subir la imagen.");
   }
 
-  // 3) Finalize: set ACL to public, persist asset row, get canonical URL
-  const finRes = await fetch("/api/admin/upload-finalize", {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      rawURL,
-      filename: file.name,
-      size: file.size,
-      contentType: file.type,
-    }),
-  });
-  if (!finRes.ok) {
-    const data = await finRes.json().catch(() => ({}));
-    throw new Error(data.message || "No se pudo finalizar la subida.");
-  }
-  const { url } = (await finRes.json()) as { url: string };
+  const { url } = (await res.json()) as { url: string };
   return url;
 }
